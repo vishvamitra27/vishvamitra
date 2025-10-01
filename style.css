@@ -1,0 +1,261 @@
+/* General */
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #222;
+}
+
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  height: 60px;             /* navbar stays slim */
+  overflow: hidden;
+}
+
+/* Logo */
+.logo img {
+  height: 200px;             /* make logo bigger */
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin-top: -8px;         /* lift logo slightly */
+  margin-bottom: -8px;      /* overlap navbar without stretching it */
+}
+
+
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #14A800;
+}
+
+.navbar nav a {
+  font-weight: 600;
+  color: #001E00;
+  text-decoration: none;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.commission {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-size: 1rem;
+}
+
+.search-bar button {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: #14A800;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+/* CTA Button */
+.cta {
+  margin-top: 1rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: #14A800;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.9rem 2rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #0f7a00;
+}
+
+/* Services */
+.services {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: #F4F4F9; /* Updated background to match the image */
+}
+
+.services h2 {
+  margin-bottom: 2rem;
+}
+
+.service-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* Increased gap for better visual spacing */
+  flex-wrap: wrap;
+}
+
+.service-card {
+  /* Updated size and style to match the image */
+  width: 250px;
+  height: 250px;
+  background: #e8ecf4; /* Light blue/gray for card background */
+  border-radius: 10px; /* Increased border radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.2em; /* Slightly larger text */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Styles for the clickable service cards */
+.service-card.service-link {
+  text-decoration: none;
+  color: #222;
+  cursor: pointer;
+}
+
+.service-card.service-link:hover {
+  transform: translateY(-5px); /* Lift the card slightly on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles for the Coming Soon card (placeholder) */
+.service-card.coming-soon {
+  opacity: 0.7; /* Make it slightly less prominent */
+  pointer-events: none; /* Make it unclickable */
+  cursor: default;
+}
+
+
+/* Ads */
+.ads {
+  padding: 3rem 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.ad-box {
+  width: 80%;
+  max-width: 600px;
+  background: #E4EBF5;
+  border-radius: 8px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.ad-box h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Footer */
+.footer {
+  padding: 1rem;
+  background: #001E00;
+  color: #fff;
+  text-align: center;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  .search-bar input {
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .search-bar button {
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  .service-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Adjusted gap for vertical stacking */
+  }
+
+  .service-card {
+    /* Set a reasonable width for mobile cards when stacked */
+    width: 80%;
+    max-width: 300px;
+    height: 180px; /* Adjust height slightly */
+  }
+
+  .ad-box {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .service-card {
+    height: 120px;
+    font-size: 1.1em;
+  }
+}
+
+.ads {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+.ad-box {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+.ad-banner {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
