@@ -1,0 +1,288 @@
+/* =========================================
+   1. General & Typography
+   ========================================= */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* =========================================
+   2. Navbar
+   ========================================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 70px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #14A800;
+}
+
+.navbar nav a {
+  font-weight: 600;
+  color: #001E00;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: color 0.3s;
+}
+
+.navbar nav a:hover, 
+.navbar nav a.active {
+  color: #14A800;
+}
+
+/* =========================================
+   3. Hero Section
+   ========================================= */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #001E00;
+}
+
+.commission {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #555;
+  font-weight: 400;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 auto 1.5rem auto;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px 0 0 5px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-bar button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  background: #14A800;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-primary {
+  display: inline-block;
+  background: #14A800;
+  color: #fff;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.btn-primary:hover, .search-bar button:hover {
+  background: #0f7a00;
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   4. Dynamic Ad Section
+   ========================================= */
+.ad-container {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ad-banner {
+  background: linear-gradient(135deg, #001E00 0%, #14A800 100%);
+  border-radius: 15px;
+  color: #ffffff;
+  display: flex;
+  align-items: stretch; /* Ensures content and image match height */
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(20, 168, 0, 0.2);
+}
+
+.ad-content {
+  flex: 1.2;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.ad-content h3 {
+  font-size: 2rem;
+  margin: 0 0 15px 0;
+  line-height: 1.2;
+}
+
+.ad-content p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 30px;
+}
+
+.btn-ad {
+  display: inline-block;
+  background: #ffffff;
+  color: #14A800;
+  padding: 12px 35px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 700;
+  width: fit-content;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.btn-ad:hover {
+  transform: translateY(-3px);
+  background: #f8f8f8;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* The "Image-Proof" Container */
+.ad-image-box {
+  flex: 1;
+  min-height: 350px; /* Minimum height for the section */
+  overflow: hidden;
+  position: relative;
+}
+
+.ad-image-box img {
+  width: 100%;
+  height: 100%;
+  /* This ensures ANY image dimension fills the box perfectly without distortion */
+  object-fit: cover; 
+  object-position: center; 
+  display: block;
+}
+
+/* =========================================
+   5. Services Section
+   ========================================= */
+.services {
+  padding: 5rem 2rem;
+  text-align: center;
+  background: #F4F4F9;
+}
+
+.services h2 {
+  margin-bottom: 3rem;
+  font-size: 2.2rem;
+  color: #001E00;
+}
+
+.service-grid {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  width: 280px;
+  height: 280px;
+  background: #e8ecf4;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.3rem;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: #222;
+  padding: 20px;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: #14A800;
+}
+
+.coming-soon {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* =========================================
+   6. Footer
+   ========================================= */
+.footer {
+  padding: 2rem;
+  background: #001E00;
+  color: #fff;
+  text-align: center;
+}
+
+/* =========================================
+   7. Responsive Design
+   ========================================= */
+@media (max-width: 900px) {
+  .ad-banner {
+    flex-direction: column;
+  }
+  
+  .ad-image-box {
+    width: 100%;
+    height: 250px; /* Fixed height for image on mobile */
+    order: 1; /* Image appears on top for mobile users */
+  }
+  
+  .ad-content {
+    text-align: center;
+    padding: 40px 20px;
+    align-items: center;
+    order: 2;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .service-card {
+    width: 100%;
+    height: 180px;
+  }
+  
+  .search-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-bar input, .search-bar button {
+    border-radius: 5px;
+  }
+}
