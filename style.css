@@ -164,11 +164,6 @@ body {
   background: #f5f5f5;
 }
 
-.ads {
-  padding: 3rem 2rem;
-  display: flex;
-  justify-content: center;
-}
 
 .ad-box {
   width: 80%;
@@ -264,4 +259,5 @@ body {
   border-radius: 10px;
   margin-bottom: 1rem;
 }
+
 
