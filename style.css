@@ -329,3 +329,53 @@ body {
   box-shadow: 0 12px 28px rgba(34, 197, 94, 0.6);
 }
 
+
+
+.ad-container {
+  background: linear-gradient(135deg, #0b5a00, #1fa000);
+  padding: 16px;
+  border-radius: 22px;
+  display: flex;
+  gap: 18px;
+}
+
+.ad-part {
+  flex: 1;
+  aspect-ratio: 4 / 3;        /* looks good on desktop */
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.ad-part img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* desktop crop is acceptable */
+}
+
+/* ================================
+   MOBILE VIEW FIX
+================================ */
+@media (max-width: 768px) {
+
+  .ad-container {
+    flex-direction: column;
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .ad-part {
+    border-radius: 14px;
+    background: transparent;  /* 🔥 remove white bg */
+    padding: 0;               /* 🔥 remove inner space */
+    height: auto;             /* 🔥 auto height */
+  }
+
+  .ad-part img {
+    width: 100%;
+    height: auto;             /* 🔥 image decides height */
+    display: block;           /* 🔥 removes bottom gap */
+    object-fit: unset;        /* 🔥 no crop, no contain */
+  }
+}
+
