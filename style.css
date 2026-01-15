@@ -341,7 +341,7 @@ body {
 
 .ad-part {
   flex: 1;
-  aspect-ratio: 4 / 3;      /* DESKTOP only */
+  aspect-ratio: 4 / 3;        /* DESKTOP card shape */
   border-radius: 18px;
   overflow: hidden;
   background: #ffffff;
@@ -349,13 +349,13 @@ body {
 
 .ad-part img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;        /* DESKTOP crop */
+  height: 100%;               /* 🔥 DESKTOP FIX */
+  object-fit: cover;
   display: block;
 }
 
 /* ================================
-   MOBILE VIEW FIX (SAFE)
+   MOBILE VIEW FIX (ISOLATED)
 ================================ */
 @media (max-width: 768px) {
 
@@ -366,15 +366,17 @@ body {
   }
 
   .ad-part {
-    aspect-ratio: auto;     /* 🔥 IMPORTANT: disable desktop ratio */
+    aspect-ratio: auto;       /* disable desktop ratio */
     background: transparent;
     border-radius: 14px;
   }
 
   .ad-part img {
-    width: 100%;
-    height: auto;           /* natural height */
-    object-fit: contain;    /* 🔥 no crop */
+    height: auto;             /* 🔥 MOBILE ONLY */
+    object-fit: contain;
   }
 }
+
+   
+
 
