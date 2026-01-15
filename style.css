@@ -281,7 +281,7 @@ body {
     flex-direction: column;
     gap: 10px;
   }
-
+}
 .footer {
   background: linear-gradient(135deg, #022c16, #064e3b);
   padding: 40px 20px 30px;
@@ -378,5 +378,6 @@ body {
 }
 
    
+
 
 
