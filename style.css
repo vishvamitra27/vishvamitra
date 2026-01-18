@@ -358,6 +358,13 @@ body {
   }
 }
 
+@media (min-width: 1024px) {
+  .single-ad img {
+    max-height: 420px;     /* desktop control */
+    object-fit: contain;  /* no crop */
+  }
+}
+
 /* Scrolling Text Ad – Soft Dark Navy */
 .scroll-ad {
   margin-top: 14px;
@@ -395,6 +402,7 @@ body {
     animation-duration: 14s;
   }
 }
+
 
 
 
