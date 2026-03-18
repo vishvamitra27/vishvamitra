@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vishvamitra - Local Services Platform | Home</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  
+</head>
+
+<body>
+<div class="ugadi-banner">
+  🌸 Happy Ugadi! Wishing you prosperity and success 🌿
+</div>
+  <!-- Header -->
+  <header>
+    <nav class="navbar" data-aos="fade-down">
+      <div class="logo">Vishvamitra</div>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="nav-list">
+  <li><a href="index.html" class="nav-link">Home</a></li>
+  <li><a href="services.html" class="nav-link">Services</a></li>
+
+  <!-- Auth controlled -->
+  <li><a href="dashboard.html" id="dashboardLink" class="nav-link" style="display:none;">Dashboard</a></li>
+  <li><a href="admin.html" id="adminLink" class="nav-link" style="display:none;">Admin</a></li>
+  <li><a href="contact.html" class="nav-link">Contact</a></li>
+  <li><a href="login.html" id="loginLink" class="nav-link">Login</a></li>
+  <li><a href="#" id="logoutLink" class="nav-link" style="display:none;">Logout</a></li>
+</ul>
+
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" data-aos="fade-up">
+    <h1>Discover Trusted Local Services Near You</h1>
+    <p>Celebrating new beginnings this Ugadi 🌿</p>
+    <div class="search-bar">
+  <input id="homeSearch" type="text" placeholder="Search for Restaurants, Electricians, Tutors..." />
+  <button class="btn-primary" onclick="homeSearch()">Search</button>
+</div>
+    <div class="cta">
+      <a href="contact.html" class="btn-outline">List Your Business (Get Started)</a>
+    </div>
+  </section>
+
+<div class="ad-container">
+  <div class="single-ad">
+    <img src="ugadhi.jpg" alt="Sankranti Wishes">
+  </div>
+</div>
+
+
+
+<div class="news-ticker">
+  <div class="ticker-track">
+    <div class="ticker-content">
+      విద్య • వివాహం • వైద్యం • వ్యవసాయం • పర్యాటక రంగం • సంవత్సరం పాటు ఉచిత ప్రకటనలు • సంప్రదించండి •
+    </div>
+  </div>
+</div>
+
+
+<section class="services" data-aos="fade-up">
+  <h2>Featured Services</h2>
+  <div class="services" id="featuredServices"></div>
+</section>
+
+  <!-- Services Section -->
+  <section class="services" data-aos="fade-up">
+    <h2>Explore Listing Types</h2>
+    <div class="service-grid">
+      <a href="paid-services.html" class="service-card service-link" data-aos="zoom-in">
+        <div class="service-name">Paid Services</div>
+      </a>
+      <a href="free-services.html" class="service-card service-link" data-aos="zoom-in" data-aos-delay="100">
+        <div class="service-name">Free Services</div>
+      </a>
+      <div class="service-card coming-soon" data-aos="zoom-in" data-aos-delay="200">
+        <div class="service-name">Verified Business Badges (Coming Soon)</div>
+      </div>
+    </div>
+  </section>
+
+
+<footer class="footer">
+  <p>&copy; 2025 Vishvamitra. All rights reserved.</p>
+
+  <div class="social-links">
+    <a href="https://www.facebook.com/profile.php?id=61585787019425" 
+       title="Vishvamitra" 
+       target="_blank" 
+       rel="noopener noreferrer">
+      <img src="facebook.png" alt="Facebook">
+    </a>
+
+    <a href="https://www.instagram.com/vishvamitra_services/" 
+       title="Vishvamitra" 
+       target="_blank" 
+       rel="noopener noreferrer">
+      <img src="instagram.png" alt="Instagram">
+    </a>
+  </div>
+</footer>
+
+  <!-- Scripts -->
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { getFirestore, collection, query, where, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4pVmGDasFAADaiYctht55jE2NvIpHSto",
+  authDomain: "vishvamitra-79627.firebaseapp.com",
+  projectId: "vishvamitra-79627"
+};
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const box = document.getElementById("featuredServices");
+
+const q = query(collection(db,"listings"), where("status","==","active"), limit(6));
+
+onSnapshot(q, snap => {
+  box.innerHTML = "";
+  snap.forEach(d => {
+    const l = d.data();
+    box.innerHTML += `
+      <div class="listing-card">
+        <h3>${l.name}</h3>
+        <p>📍 ${l.location}</p>
+        <a href="listing-details.html?id=${d.id}" class="btn-primary">View</a>
+      </div>
+    `;
+  });
+});
+</script>
+
+  <!-- Firebase modular SDK -->
+  <script type="module" src="auth.js"></script>
+
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    // Mobile toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navList = document.querySelector('.nav-list');
+    mobileMenu.addEventListener('click', () => navList.classList.toggle('active'));
+
+    // Highlight active page
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  </script>
+<script>
+  const links = document.querySelectorAll("a[href$='.html']");
+  links.forEach(link => {
+    link.addEventListener("mouseenter", () => {
+      const prefetch = document.createElement("link");
+      prefetch.rel = "prefetch";
+      prefetch.href = link.href;
+      document.head.appendChild(prefetch);
+    });
+  });
+</script>
+<script>
+function homeSearch(){
+  const q = document.getElementById("homeSearch").value.trim();
+  if(q){
+    window.location.href = `services.html?search=${encodeURIComponent(q)}`;
+  } else {
+    window.location.href = "services.html";
+  }
+}
+</script>
+
+
+<div id="ugadiPopup" class="popup-overlay">
+  <div class="popup-box">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    
+    <h2>🌸 Happy Ugadi</h2>
+    <p>Wishing you happiness, success, and new beginnings ✨</p>
+    
+    <button class="popup-btn" onclick="closePopup()">Explore</button>
+  </div>
+</div>
+
+<script>
+window.onload = () => {
+  // Check if popup already shown
+  if (!localStorage.getItem("ugadiShown")) {
+    setTimeout(() => {
+      document.getElementById("ugadiPopup").classList.add("show");
+      localStorage.setItem("ugadiShown", "true");
+    }, 500);
+  }
+};
+
+function closePopup() {
+  document.getElementById("ugadiPopup").classList.remove("show");
+}
+</script>
+</body>
+</html>

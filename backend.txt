@@ -1,0 +1,63 @@
+                    +-----------------+
+                    |   Visitors      |
+                    | (Search / View) |
+                    +--------+--------+
+                             |
+                             v
+                    +-----------------+
+                    |  Frontend       |
+                    | (Your Existing  |
+                    |  Vishvamitra UI)|
+                    +--------+--------+
+                             |
+                             v
+                    +-----------------+
+                    |  Backend        |
+                    | (Node.js /      |
+                    |  Django / Laravel)
+                    +--------+--------+
+                             |
+           -----------------------------------
+           |                                 |
+           v                                 v
+    +--------------+                  +-----------------+
+    | Business     |                  | Admin Dashboard |
+    | Submissions  |                  | (Approve /      |
+    | (Pending)    |                  | Reject / Edit) |
+    +--------------+                  +-----------------+
+           |                                 |
+           v                                 |
+    +--------------+                         |
+    | Database     | <-----------------------+
+    | (Businesses,|
+    |  Users,     |
+    |  Admins)    |
+    +--------------+
+
+
+
+
+
+
+
+
+SAMPLE ADMIN DASHBOARD
+
+
++--------------------------------------------------+
+| Admin Dashboard                                  |
++--------------------------------------------------+
+| Filter: [All | Pending | Approved | Rejected]  |
++--------------------------------------------------+
+| Business Name | Category | Status   | Actions  |
+|-------------------------------------------------|
+| Cafe XYZ      | Food     | Pending  | [Approve] [Reject] [Edit] |
+| Bookstore ABC | Retail   | Approved | [Edit] [Delete]            |
+| Salon 123     | Services | Pending  | [Approve] [Reject] [Edit] |
++--------------------------------------------------+
+
+
+
+
+
+

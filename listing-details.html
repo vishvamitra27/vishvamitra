@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Listing Details | Vishvamitra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body{
+  font-family:'Poppins',sans-serif;
+  margin:0;
+  background:#f9f9f9;
+}
+
+/* Container */
+.container{
+  max-width:800px;
+  margin:40px auto;
+  padding:20px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* Heading */
+#listingName{
+  color:#14a800;
+  font-size:28px;
+  line-height:1.2;
+  margin-bottom:6px;
+}
+
+/* Location */
+.location{
+  color:#666;
+  margin-bottom:12px;
+}
+
+/* Actions */
+.actions{
+  margin-top:12px;
+}
+
+/* Call Button */
+.call-btn{
+  background:linear-gradient(135deg,#14a800,#0f8f00);
+  color:white;
+  padding:14px;
+  border-radius:10px;
+  text-decoration:none;
+  display:block;
+  text-align:center;
+  font-size:16px;
+  font-weight:500;
+  box-shadow:0 6px 16px rgba(20,168,0,0.3);
+  transition:0.2s;
+}
+
+.call-btn:hover{
+  transform:translateY(-1px);
+}
+
+/* Details Card */
+.details-card{
+  background:#f8fafc;
+  padding:16px;
+  border-radius:10px;
+  margin-top:20px;
+  border:1px solid #e5e7eb;
+}
+
+/* Description */
+.description{
+  margin-top:25px;
+}
+
+.description h3{
+  margin-bottom:8px;
+}
+
+/* Back Button */
+.back-btn{
+  display:inline-block;
+  margin-top:25px;
+  padding:10px 16px;
+  background:#14a800;
+  color:white;
+  border-radius:6px;
+  text-decoration:none;
+}
+
+.back-btn:hover{
+  background:#119600;
+}
+
+/* Mobile Optimization */
+@media (max-width:768px){
+
+  .container{
+    margin:20px;
+    padding:16px;
+  }
+
+  #listingName{
+    font-size:24px;
+  }
+
+  .call-btn{
+    font-size:16px;
+  }
+
+}
+  </style>
+
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Vishvamitra</div>
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="dashboard.html" id="dashboardLink" class="nav-link">Dashboard</a></li>
+        <li><a href="login.html" id="loginLink" class="nav-link">Login</a></li>
+        <li><a href="#" id="logoutLink" class="nav-link" style="display:none;">Logout</a></li>
+
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Listing Details Container -->
+  <div class="container" id="listingContainer">
+
+  <!-- HEADER -->
+  <div class="listing-header">
+    <h1 id="listingName">Loading...</h1>
+    <p class="location">📍 <span id="listingLocation"></span></p>
+
+    <div class="actions">
+      <a id="callBtn" class="call-btn">📞 Call</a>
+    </div>
+  </div>
+
+  <!-- DETAILS CARD -->
+  <div class="details-card">
+    <p><strong>Category:</strong> <span id="listingCategory"></span></p>
+    <p><strong>Type:</strong> <span id="listingType"></span></p>
+    <p><strong>Price:</strong> ₹<span id="listingPrice"></span></p>
+  </div>
+
+  <!-- DESCRIPTION -->
+  <div class="description">
+    <h3>About</h3>
+    <p id="listingDescription"></p>
+  </div>
+
+  <a href="services.html" class="back-btn">Back to Services</a>
+
+</div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4pVmGDasFAADaiYctht55jE2NvIpHSto",
+      authDomain: "vishvamitra-79627.firebaseapp.com",
+      projectId: "vishvamitra-79627",
+      storageBucket: "vishvamitra-79627.firebasestorage.app",
+      messagingSenderId: "436224322843",
+      appId: "1:436224322843:web:a4d074a5eb8ad99866f7be"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Get listing ID from URL
+   const params = new URLSearchParams(window.location.search);
+   const listingId = params.get('id');
+
+   const container = document.getElementById('listingContainer');
+   container.style.display = "none";
+
+
+    db.collection("listings").doc(listingId).get().then(doc => {
+      if(doc.exists && doc.data().status === "active"){
+        const data = doc.data();
+        document.getElementById('listingName').innerText = data.name;
+        document.getElementById('listingCategory').innerText = data.category;
+        document.getElementById('listingLocation').innerText = data.location;
+        document.getElementById('listingType').innerText = data.type || 'N/A';
+        document.getElementById('listingDescription').innerText = data.description || "N/A";
+
+        const callBtn = document.getElementById("callBtn");
+        if(data.phone){
+        callBtn.href = `tel:${data.phone}`;
+        } else {
+         callBtn.style.display = "none";
+        }
+        document.getElementById('listingPrice').innerText = data.price ?? 0;
+        document.getElementById('listingType').innerText = (data.type || "free").toUpperCase();
+        container.style.display = "block";
+
+
+      } else {
+        container.innerHTML = "<p style='text-align:center; color:#555;'>Listing not found.</p>";
+      }
+    });
+
+    // Mobile toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navList = document.querySelector('.nav-list');
+    mobileMenu.addEventListener('click', () => navList.classList.toggle('active'));
+
+    // Highlight active page
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll('.nav-link').forEach(link => {
+      if(link.getAttribute('href') === currentPage){
+        link.classList.add('active');
+      }
+    });
+  </script>
+<script type="module" src="auth.js"></script>
+
+</body>
+</html>

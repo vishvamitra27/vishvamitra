@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Vishvamitra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+  }
+  .auth-container {
+    max-width: 400px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+  h2 { margin-bottom: 1rem; color: #14a800; }
+  label { display:block; text-align:left; margin-top:1rem; }
+  input { width:100%; padding:.7rem; margin-top:.3rem; }
+  button {
+    width:100%; padding:.8rem; border:none;
+    background:#14a800; color:#fff; font-weight:600;
+    border-radius:5px; margin-top:1rem; cursor:pointer;
+  }
+
+  .google-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  background:#14a800;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.google-btn img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  background:white;
+  border-radius:50%;
+  padding:3px;
+}
+
+.google-btn:hover{
+  background:#119600;
+}
+
+  input:focus{
+  outline:none;
+  border:1px solid #14a800;
+}
+
+#loginBtn:hover{
+  background:#119600;
+}
+
+.password-box{
+  position:relative;
+}
+
+.password-box input{
+  width:100%;
+  padding:.7rem;
+}
+
+#togglePassword{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-size:18px;
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="logo">Vishvamitra</div>
+    <div class="menu-toggle" id="mobile-menu">
+      <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+    </div>
+    <ul class="nav-list">
+      <li><a href="index.html" class="nav-link">Home</a></li>
+      <li><a href="services.html" class="nav-link">Services</a></li>
+      <li><a href="dashboard.html" id="dashboardLink" class="nav-link" style="display:none;">Dashboard</a></li>
+      <li><a href="admin.html" id="adminLink" class="nav-link" style="display:none;">Admin</a></li>
+      <li><a href="contact.html" class="nav-link">Contact</a></li>
+      <li><a href="login.html" class="nav-link">Login</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="auth-container">
+  <h2>Login to Your Account</h2>
+
+  <form id="login-form">
+    <label>Email</label>
+    <input type="email" id="loginEmail" required />
+    <label>Password</label>
+<div class="password-box">
+  <input type="password" id="loginPassword" required />
+  <span id="togglePassword">👁</span>
+</div>
+    <button type="submit" id="loginBtn">Login</button>
+  </form>
+<div class="divider"><span>OR</span></div>
+  <button class="google-btn" id="googleLogin">
+  <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo">
+  Continue with Google
+  </button>
+
+  <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+</div>
+
+<!-- ✅ MODULAR ONLY -->
+<script type="module">
+  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc
+  } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD4pVmGDasFAADaiYctht55jE2NvIpHSto",
+    authDomain: "vishvamitra-79627.firebaseapp.com",
+    projectId: "vishvamitra-79627",
+    storageBucket: "vishvamitra-79627.firebasestorage.app",
+    messagingSenderId: "436224322843",
+    appId: "1:436224322843:web:a4d074a5eb8ad99866f7be"
+  };
+
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) window.location.href = "dashboard.html";
+  });
+
+  const loginBtn = document.getElementById("loginBtn");
+
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Logging in...";
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+  } catch (err) {
+    alert("Login failed: " + err.message);
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
+  }
+});
+
+  document.getElementById("googleLogin").addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+
+  try {
+    const result = await signInWithPopup(auth, provider);
+
+    await setDoc(
+      doc(db, "users", result.user.uid),
+      { email: result.user.email },
+      { merge: true }
+    );
+
+    window.location.href = "dashboard.html";
+
+  } catch (err) {
+    alert("Google login failed: " + err.message);
+  }
+});
+
+const togglePassword = document.getElementById("togglePassword");
+const passwordInput = document.getElementById("loginPassword");
+
+togglePassword.addEventListener("click", () => {
+
+  const type = passwordInput.type === "password" ? "text" : "password";
+  passwordInput.type = type;
+
+  togglePassword.textContent = type === "password" ? "👁" : "🙈";
+
+});
+</script>
+
+<script>
+  const mobileMenu = document.getElementById("mobile-menu");
+  const navList = document.querySelector(".nav-list");
+  mobileMenu.addEventListener("click", () => navList.classList.toggle("active"));
+</script>
+<script>
+  const currentPage =
+    location.pathname.split("/").pop() || "index.html";
+
+  document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
+</script>
+
+
+</body>
+</html>

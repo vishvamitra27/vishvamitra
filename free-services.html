@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paid Services - Vishvamitra</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .illustration {
+      max-width: 400px;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="logo">Vishvamitra</div>
+
+      <!-- Hamburger menu -->
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+
+      <ul class="nav-list">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="services.html" class="nav-link">Services</a></li>
+        <li><a href="dashboard.html" id="dashboardLink" class="nav-link">Dashboard</a></li>
+        <li><a href="admin.html" id="adminLink" class="nav-link" style="display:none;">Admin</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+        <li><a href="login.html" id="loginLogout" class="nav-link">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main>
+    <img src="work-in-progress.png" alt="Work in Progress" class="illustration" />
+    <h1>Paid Services</h1>
+    <p>This page is under development. Soon you’ll find amazing services here!</p>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Vishvamitra. All rights reserved.</p>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Mobile toggle
+      const mobileMenu = document.getElementById('mobile-menu');
+      const navList = document.querySelector('.nav-list');
+      mobileMenu.addEventListener('click', () => navList.classList.toggle('active'));
+
+      // Highlight active page
+      const currentPage = window.location.pathname.split("/").pop();
+      document.querySelectorAll('.nav-link').forEach(link => {
+        if(link.getAttribute('href') === currentPage){
+          link.classList.add('active');
+        }
+      });
+
+      // Login/Logout toggle
+      const loginLogout = document.getElementById('loginLogout');
+      const dashboardLink = document.getElementById('dashboardLink');
+      let isLoggedIn = false; // Change to true when user logs in
+      if(isLoggedIn){
+        dashboardLink.style.display = 'inline';
+        loginLogout.textContent = 'Logout';
+        loginLogout.href = '#';
+        loginLogout.addEventListener('click', () => alert("Logged out!"));
+      } else {
+        dashboardLink.style.display = 'none';
+        loginLogout.textContent = 'Login';
+        loginLogout.href = 'login.html';
+      }
+    });
+  </script>
+
+</body>
+</html>

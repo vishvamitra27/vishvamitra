@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel | Vishvamitra</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#f4f6f9;
+}
+
+/* Layout */
+.admin-container{
+  display:flex;
+  min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+  width:230px;
+  background:#0f172a;
+  color:white;
+  padding:25px 18px;
+}
+
+.sidebar h2{
+  margin-bottom:25px;
+  font-size:20px;
+}
+
+.sidebar a{
+  display:block;
+  padding:12px 10px;
+  border-radius:6px;
+  margin-bottom:6px;
+  text-decoration:none;
+  color:#cbd5e1;
+  transition:0.2s;
+}
+
+.sidebar a:hover{
+  background:#1e293b;
+  color:white;
+}
+
+/* Close button (hidden on desktop) */
+.close-sidebar{
+  display:none;
+  position:absolute;
+  top:15px;
+  right:15px;
+  background:none;
+  border:none;
+  color:white;
+  font-size:24px;
+  cursor:pointer;
+}
+
+/* Main Content */
+.main-content{
+  flex:1;
+  padding:40px;
+}
+
+.main-content h1{
+  margin:20px 0 15px 0;
+}
+
+/* Listing Cards */
+.admin-card{
+  background:white;
+  padding:22px;
+  border-radius:10px;
+  margin-bottom:18px;
+  border:1px solid #e5e7eb;
+  transition:0.2s;
+}
+
+.admin-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* Buttons */
+.action-btn{
+  background:#22c55e;
+  border:none;
+  padding:8px 14px;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+  margin-right:8px;
+}
+
+.action-btn:hover{
+  background:#16a34a;
+}
+
+.delete-btn{
+  background:#e53935;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.delete-btn:hover{
+  background:#c62828;
+}
+
+/* Mobile Header */
+.mobile-header{
+  display:none;
+  background:#0f172a;
+  color:white;
+  padding:14px;
+  align-items:center;
+  gap:10px;
+  font-weight:600;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:1001;
+}
+
+.mobile-header button{
+  background:none;
+  border:none;
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* Mobile Layout */
+@media (max-width:768px){
+
+  .mobile-header{
+    display:flex;
+  }
+
+  .admin-container{
+    flex-direction:column;
+  }
+
+  .sidebar{
+  position:fixed;
+  top:0;
+  left:-240px;
+  height:100vh;
+  width:230px;
+  transition:0.3s ease;
+  z-index:1100;
+}
+
+  .sidebar.active{
+    left:0;
+  }
+
+  .close-sidebar{
+    display:block;
+  }
+
+  .main-content{
+    padding:20px;
+    margin-top:10px;
+  }
+
+}
+
+  </style>
+</head>
+<body>
+<div class="mobile-header">
+  <button id="menuBtn">☰</button>
+  <span>Admin Panel</span>
+</div>
+
+<div class="admin-container">
+
+  <div class="sidebar">
+
+  <button class="close-sidebar" id="closeSidebar">✕</button>
+
+  <h2>Admin Panel</h2>
+    <a href="#">Listings</a>
+    <a href="#">Users (Coming Soon)</a>
+    <a href="#">Ads (Coming Later)</a>
+    <a href="index.html">Back to Site</a>
+  </div>
+
+  <div class="main-content">
+    <h1>Admin Dashboard</h1>
+    <h2>All Listings</h2>
+    <div id="adminListings"></div>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  deleteDoc, 
+  doc, 
+  getDoc, 
+  updateDoc, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD4pVmGDasFAADaiYctht55jE2NvIpHSto",
+  authDomain: "vishvamitra-79627.firebaseapp.com",
+  projectId: "vishvamitra-79627"
+};
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const box = document.getElementById("adminListings");
+
+/* LOAD LISTINGS */
+async function loadListings() {
+
+  box.innerHTML = "Loading listings...";
+
+  const snap = await getDocs(collection(db, "listings"));
+
+  box.innerHTML = "";
+
+  snap.forEach(d => {
+    const l = d.data();
+
+    box.innerHTML += `
+      <div class="admin-card">
+        <h3>${l.name}</h3>
+        <p>📍 ${l.location}</p>
+        <p>Status: <strong>${l.status}</strong></p>
+
+        <button class="action-btn"
+          onclick="toggleStatus('${d.id}', '${l.status}')">
+          ${l.status === "active" ? "Deactivate" : "Activate"}
+        </button>
+
+        <button class="delete-btn"
+          onclick="deleteListing('${d.id}')">
+          Delete
+        </button>
+      </div>
+    `;
+  });
+
+}
+
+/* ROLE CHECK */
+onAuthStateChanged(auth, async (user) => {
+
+  if (!user) {
+    location.replace("login.html");
+    return;
+  }
+
+  const userDoc = await getDoc(doc(db, "users", user.uid));
+
+  if (!userDoc.exists() || userDoc.data().role !== "admin") {
+    location.replace("index.html");
+    return;
+  }
+
+  loadListings();   // ✅ now it runs properly
+});
+
+/* DELETE */
+window.deleteListing = async (id) => {
+  if(confirm("Delete this listing?")){
+    await deleteDoc(doc(db, "listings", id));
+    loadListings(); // reload after delete
+  }
+};
+
+/* TOGGLE STATUS */
+window.toggleStatus = async (id, currentStatus) => {
+  const newStatus = currentStatus === "active" ? "inactive" : "active";
+
+  await updateDoc(doc(db, "listings", id), {
+    status: newStatus
+  });
+
+  loadListings(); // reload after status change
+};
+</script>
+<script>
+const menuBtn = document.getElementById("menuBtn");
+const sidebar = document.querySelector(".sidebar");
+const closeBtn = document.getElementById("closeSidebar");
+
+menuBtn.onclick = () => {
+  sidebar.classList.add("active");
+};
+
+closeBtn.onclick = () => {
+  sidebar.classList.remove("active");
+};
+</script>
+</body>
+</html>

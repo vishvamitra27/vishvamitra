@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Local Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #222;
+    }
+    .contact-section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .contact-section h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .contact-section p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    iframe {
+  width: 100%;
+  height: 700px;
+  border: none;
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
+      margin-top: 30px;
+    }
+/* Contact page: keep content below mobile menu */
+.contact-section {
+  position: relative;
+  z-index: 1;
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <div class="logo">Vishvamitra</div>
+
+      <div class="menu-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+
+      <ul class="nav-list">
+  <li><a href="index.html" class="nav-link">Home</a></li>
+  <li><a href="services.html" class="nav-link">Services</a></li>
+
+  <!-- Auth controlled -->
+  <li><a href="dashboard.html" id="dashboardLink" class="nav-link" style="display:none;">Dashboard</a></li>
+  <li><a href="admin.html" id="adminLink" class="nav-link" style="display:none;">Admin</a></li>
+  <li><a href="contact.html" class="nav-link">Contact</a></li>
+  <li><a href="login.html" id="loginLink" class="nav-link">Login</a></li>
+  <li><a href="#" id="logoutLink" class="nav-link" style="display:none;">Logout</a></li>
+</ul>
+    </nav>
+  </header>
+
+  <section class="contact-section">
+    <h1>Contact Us</h1>
+    <p>If you’re a business or customer, use the form below to get started:</p>
+
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfaAx66Xcq-gCc-GFHRCucYNFfiBRsdeRGa7rjRlQouLza7bg/viewform?embedded=true">Loading…</iframe>
+  </section>
+
+  <footer>
+    © 2025 Local Connect. All rights reserved.
+  </footer>
+
+ <script>
+  // Mobile Menu Toggle
+  const mobileMenu = document.getElementById("mobile-menu");
+  const navList = document.querySelector(".nav-list");
+
+  if (mobileMenu && navList) {
+    mobileMenu.addEventListener("click", () => {
+      navList.classList.toggle("active");
+    });
+  }
+
+  // Highlight active page
+  const currentPage = location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll(".nav-link").forEach(link => {
+    if (link.getAttribute("href") === currentPage) {
+      link.classList.add("active");
+    }
+  });
+</script>
+
+
+
+ </script>
+<script type="module" src="auth.js"></script>
+
+
+</body>
+</html>
