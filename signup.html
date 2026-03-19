@@ -221,6 +221,43 @@
     }
   });
 </script>
+
+<script>
+const dashboardLink = document.getElementById("dashboardLink");
+const adminLink = document.getElementById("adminLink");
+const loginLogout = document.getElementById("loginLogout");
+
+// 🔥 THIS IS THE MAIN FIX
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
+    // ✅ Logged in → show dashboard
+    dashboardLink.style.display = "block";
+
+    // 🔍 Check admin role from Firestore
+    const doc = await db.collection("users").doc(user.uid).get();
+    const data = doc.data();
+
+    if (data && data.role === "admin") {
+      adminLink.style.display = "block";
+    } else {
+      adminLink.style.display = "none";
+    }
+
+    // Change Login → Logout
+    loginLogout.textContent = "Logout";
+    loginLogout.href = "#";
+    loginLogout.onclick = () => auth.signOut();
+
+  } else {
+    // ❌ Not logged in → hide both
+    dashboardLink.style.display = "none";
+    adminLink.style.display = "none";
+
+    loginLogout.textContent = "Login";
+    loginLogout.href = "login.html";
+  }
+});
+</script>
   <script>
     const mobileMenu = document.getElementById('mobile-menu');
     const navList = document.querySelector('.nav-list');
