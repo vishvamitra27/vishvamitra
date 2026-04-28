@@ -5,35 +5,232 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vendor Setup | Vishvamitra</title>
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .vendor-setup-page {
+      min-height: calc(100vh - 64px);
+      background: linear-gradient(145deg, #f0fdf4 0%, #f5f7fb 60%, #fff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+    .vendor-setup-card {
+      width: 100%;
+      max-width: 460px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+      padding: 2.5rem 2.2rem 2rem;
+    }
+    .vs-icon-wrap {
+      width: 56px;
+      height: 56px;
+      background: #e8f9e8;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+    }
+    .vendor-setup-card h2 {
+      text-align: center;
+      color: #14a800;
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin: 0 0 0.35rem;
+    }
+    .vs-subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.88rem;
+      margin: 0 0 1.8rem;
+    }
+    .vs-steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.8rem;
+    }
+    .vs-step {
+      width: 28px;
+      height: 4px;
+      border-radius: 99px;
+      background: #e5e7eb;
+    }
+    .vs-step.active {
+      background: #14a800;
+      width: 42px;
+    }
+    #vendorForm label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+    #vendorForm .field-wrap {
+      position: relative;
+      margin-bottom: 1.1rem;
+    }
+    #vendorForm .field-icon {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #9ca3af;
+      pointer-events: none;
+      display: flex;
+    }
+    #vendorForm input,
+    #vendorForm select {
+      width: 100%;
+      padding: 0.75rem 0.85rem 0.75rem 2.6rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.93rem;
+      color: #111;
+      background: #fafafa;
+      box-sizing: border-box;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    #vendorForm select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+    #vendorForm input:focus,
+    #vendorForm select:focus {
+      border-color: #14a800;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(20,168,0,0.1);
+    }
+    #vendorForm input::placeholder { color: #b0b7c3; }
+    #saveBtn {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      background: #14a800;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 10px;
+      margin-top: 0.6rem;
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    #saveBtn:hover:not(:disabled) {
+      background: #0f8f00;
+      box-shadow: 0 4px 14px rgba(20,168,0,0.28);
+    }
+    #saveBtn:active:not(:disabled) { transform: scale(0.98); }
+    #saveBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .vs-error {
+      display: none;
+      color: #dc2626;
+      font-size: 0.83rem;
+      margin-top: -6px;
+      margin-bottom: 10px;
+    }
+    .vs-error.visible { display: block; }
+    .vs-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 1.2rem;
+    }
+    .vs-note a { color: #14a800; font-weight: 600; text-decoration: none; }
+    @media (max-width: 480px) {
+      .vendor-setup-card { padding: 1.8rem 1.2rem 1.5rem; }
+    }
+  </style>
 </head>
-<body class="centered-page">
+<body>
 
-<div class="form-container" style="max-width:380px;width:90%;margin:0;">
-  <h2>Complete Your Vendor Profile</h2>
-  <form id="vendorForm" novalidate>
-    <label for="businessName">Business Name</label>
-    <input type="text" id="businessName" required placeholder="Your business name" />
+<header><div id="navbar-root"></div></header>
 
-    <label for="phone">Phone Number</label>
-    <input type="tel" id="phone" required placeholder="+91 XXXXX XXXXX" />
+<div class="vendor-setup-page">
+  <div class="vendor-setup-card">
 
-    <label for="category">Category</label>
-    <select id="category">
-      <option value="Plumbing">Plumbing</option>
-      <option value="Electrician">Electrician</option>
-      <option value="Salon">Salon</option>
-      <option value="Food &amp; Beverages">Food &amp; Beverages</option>
-      <option value="Retail">Retail</option>
-      <option value="Health &amp; Wellness">Health &amp; Wellness</option>
-      <option value="Education">Education</option>
-      <option value="Other">Other</option>
-    </select>
+    <div class="vs-icon-wrap">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14a800" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
 
-    <button type="submit" class="btn-submit" id="saveBtn">Save &amp; Continue</button>
-  </form>
+    <h2>Complete Your Vendor Profile</h2>
+    <p class="vs-subtitle">Set up your business details to start listing your services</p>
+
+    <div class="vs-steps">
+      <div class="vs-step"></div>
+      <div class="vs-step active"></div>
+      <div class="vs-step"></div>
+    </div>
+
+    <form id="vendorForm" novalidate>
+
+      <label for="businessName">Business Name</label>
+      <div class="field-wrap">
+        <span class="field-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        </span>
+        <input type="text" id="businessName" required placeholder="Your business name" autocomplete="organization" />
+      </div>
+
+      <label for="phone">Phone Number</label>
+      <div class="field-wrap">
+        <span class="field-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.43 2 2 0 0 1 3.59 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.56a16 16 0 0 0 6.29 6.29l.62-.62a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        <input type="tel" id="phone" required placeholder="+91 XXXXX XXXXX" autocomplete="tel" />
+      </div>
+
+      <label for="category">Business Category</label>
+      <div class="field-wrap">
+        <span class="field-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+        </span>
+        <select id="category" required>
+          <option value="" disabled selected>Select a category</option>
+          <option value="Plumbing">Plumbing</option>
+          <option value="Electrician">Electrician</option>
+          <option value="Salon">Salon</option>
+          <option value="Food &amp; Beverages">Food &amp; Beverages</option>
+          <option value="Retail">Retail</option>
+          <option value="Health &amp; Wellness">Health &amp; Wellness</option>
+          <option value="Education">Education</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <p class="vs-error" id="formError" role="alert"></p>
+
+      <button type="submit" id="saveBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save &amp; Continue
+      </button>
+    </form>
+
+    <p class="vs-note">
+      Not a vendor? <a href="role-select.html">Go back</a>
+    </p>
+
+  </div>
 </div>
 
+<script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
 <script type="module">
   import { onAuthReady, saveVendorProfile } from "../scripts/auth-service.js";
@@ -45,20 +242,37 @@
     if (!user) navigate(P.LOGIN, { replace: true });
   });
 
+  const errorEl = document.getElementById("formError");
+
+  function showErr(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add("visible");
+  }
+  function hideErr() {
+    errorEl.classList.remove("visible");
+  }
+
   document.getElementById("vendorForm").addEventListener("submit", async (e) => {
     e.preventDefault();
+    hideErr();
+
+    const name     = document.getElementById("businessName").value.trim();
+    const phone    = document.getElementById("phone").value.trim();
+    const category = document.getElementById("category").value;
+
+    if (!name)     { showErr("Please enter your business name."); return; }
+    if (!phone)    { showErr("Please enter a phone number."); return; }
+    if (!category) { showErr("Please select a category."); return; }
+
     const btn = document.getElementById("saveBtn");
     setButtonLoading(btn, "Saving…");
     try {
-      await saveVendorProfile(
-        document.getElementById("businessName").value.trim(),
-        document.getElementById("phone").value.trim(),
-        document.getElementById("category").value
-      );
+      await saveVendorProfile(name, phone, category);
       showToast("Profile saved. Welcome!", { kind: "success" });
       navigate(P.VENDOR_DASHBOARD, { replace: true });
     } catch (err) {
       showToast(toUserMessage(err), { kind: "error" });
+      showErr(toUserMessage(err));
       resetButton(btn, "Save & Continue");
     }
   });
