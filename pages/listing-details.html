@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Listing Details | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<!-- SKELETON -->
+<div id="skeletonWrap" class="ld-skeleton-wrap">
+  <div class="ld-skeleton-banner"></div>
+  <div class="ld-skeleton-body">
+    <div class="ld-skeleton-line" style="width:55%;height:18px;"></div>
+    <div class="ld-skeleton-line" style="width:35%;height:13px;margin-top:10px;"></div>
+    <div class="ld-skeleton-line" style="width:75%;height:13px;margin-top:10px;"></div>
+    <div class="ld-skeleton-line" style="width:45%;height:13px;margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- MAIN LISTING DETAIL -->
+<div id="listingWrap" style="display:none;">
+
+  <!-- BANNER -->
+  <div class="ld-banner">
+    <div class="ld-banner-bg" id="bannerBg"></div>
+    <div class="ld-banner-overlay"></div>
+    <div class="ld-banner-content">
+      <div class="ld-banner-left">
+        <span class="ld-type-badge" id="bannerType"></span>
+        <h1 class="ld-biz-name" id="bannerName"></h1>
+        <div class="ld-new-badge">New listing</div>
+        <p class="ld-banner-sub" id="bannerLocation"></p>
+        <p class="ld-banner-sub" id="bannerPhone"></p>
+      </div>
+      <div class="ld-banner-actions">
+        <a id="callBtnBanner" class="ld-btn-call" href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Call Now
+        </a>
+        <a href="services.html" class="ld-btn-back">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          All Services
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHOTO STRIP -->
+  <div class="ld-photo-strip" id="photoStrip"></div>
+
+  <!-- TAB BAR -->
+  <div class="ld-tabs-bar">
+    <div class="ld-tabs-inner">
+      <button class="ld-tab active" data-tab="overview">Overview</button>
+      <button class="ld-tab" data-tab="contact">Contact</button>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="ld-body">
+
+    <!-- SIDEBAR -->
+    <aside class="ld-sidebar">
+      <div class="ld-sidebar-section" id="sideAddrSection">
+        <div class="ld-sidebar-label">Address</div>
+        <div class="ld-sidebar-value" id="sideAddress"></div>
+      </div>
+      <div class="ld-sidebar-section" id="sidePhoneSection">
+        <div class="ld-sidebar-label">Phone</div>
+        <div class="ld-sidebar-value">
+          <a class="ld-phone-link" id="sidePhone" href="#"></a>
+        </div>
+      </div>
+      <div class="ld-sidebar-section">
+        <div class="ld-sidebar-label">Category</div>
+        <div class="ld-sidebar-value" id="sideCategory"></div>
+      </div>
+      <div class="ld-sidebar-section">
+        <div class="ld-sidebar-label">Listing Type</div>
+        <div class="ld-sidebar-value"><span class="ld-type-pill" id="sideTypePill"></span></div>
+      </div>
+      <div class="ld-sidebar-section" id="sidePriceSection">
+        <div class="ld-sidebar-label">Price / Fee</div>
+        <div class="ld-sidebar-value" id="sidePrice"></div>
+      </div>
+      <div class="ld-sidebar-section">
+        <div class="ld-sidebar-label">Status</div>
+        <div class="ld-sidebar-value"><span class="ld-active-dot"></span> Active</div>
+      </div>
+    </aside>
+
+    <!-- MAIN PANEL -->
+    <main class="ld-main">
+
+      <!-- Overview tab -->
+      <div id="panelOverview">
+        <div class="ld-card">
+          <h2 class="ld-card-title">About</h2>
+          <p class="ld-description" id="mainDesc"></p>
+        </div>
+      </div>
+
+      <!-- Contact tab -->
+      <div id="panelContact" style="display:none;">
+        <div class="ld-card">
+          <h2 class="ld-card-title">Contact Details</h2>
+          <div class="ld-contact-list">
+            <div class="ld-contact-row" id="cRowPhone">
+              <span class="ld-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+              <a class="ld-contact-link" id="cPhone" href="#"></a>
+            </div>
+            <div class="ld-contact-row">
+              <span class="ld-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <span id="cAddr"></span>
+            </div>
+            <div class="ld-contact-row">
+              <span class="ld-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              </span>
+              <span id="cCategory"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ERROR STATE -->
+<div id="errorWrap" style="display:none;" class="ld-error-wrap">
+  <p class="ld-error-msg">Listing not found or no longer active.</p>
+  <a href="services.html" class="btn-primary">Browse Services</a>
+</div>
+
+<!-- Lightbox -->
+<div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;display:none;align-items:center;justify-content:center;cursor:zoom-out;" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <button id="lightboxClose" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:32px;cursor:pointer;line-height:1;" aria-label="Close">&times;</button>
+  <img id="lightboxImg" src="" alt="" style="max-width:92vw;max-height:88vh;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6);object-fit:contain;" />
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { getListingById }           from "../scripts/listings.js";
+  import { toUserMessage, showToast } from "../scripts/utils.js";
+  import { reportError }              from "../scripts/core/errors.js";
+
+  const params    = new URLSearchParams(location.search);
+  const listingId = params.get("id");
+  const skeleton  = document.getElementById("skeletonWrap");
+  const wrap      = document.getElementById("listingWrap");
+  const errWrap   = document.getElementById("errorWrap");
+
+  const $ = id => document.getElementById(id);
+  function txt(id, v) { const el = $(id); if (el) el.textContent = v; }
+  function show(el)   { el.style.display = ""; }
+  function hide(el)   { el.style.display = "none"; }
+
+  if (!listingId) {
+    hide(skeleton); show(errWrap);
+  } else {
+    let listing = null;
+    try {
+      listing = await getListingById(listingId);
+    } catch (err) {
+      reportError("listingDetails.fetch", err);
+      showToast(toUserMessage(err), { kind: "error" });
+    }
+
+    hide(skeleton);
+
+    if (!listing || listing.status !== "active") {
+      show(errWrap);
+    } else {
+      document.title = `${listing.name} | Vishvamitra`;
+      const isPaid    = listing.type === "paid";
+      const typeLabel = isPaid ? "Paid" : "Free";
+
+      txt("bannerName", listing.name || "Unnamed Business");
+
+      // Location with SVG pin inline
+      const locEl = $("bannerLocation");
+      if (listing.location) locEl.textContent = listing.location;
+      else hide(locEl);
+
+      // Phone
+      if (listing.phone) txt("bannerPhone", listing.phone);
+      else hide($("bannerPhone"));
+
+      const bannerType = $("bannerType");
+      bannerType.textContent = typeLabel + " Listing";
+      bannerType.classList.add(isPaid ? "paid" : "free");
+
+      const callBtn = $("callBtnBanner");
+      if (listing.phone) callBtn.href = `tel:${listing.phone}`;
+      else hide(callBtn);
+
+      if (listing.image) $("bannerBg").style.backgroundImage = `url('${listing.image}')`;
+
+      // Photo strip
+      const strip = $("photoStrip");
+      if (listing.image) {
+        strip.innerHTML = `
+          <div class="ld-photo-item">
+            <img src="${listing.image}" alt="${listing.name}" loading="lazy"/>
+          </div>
+          <div class="ld-photo-placeholder" id="vendorPhotoHint">Add more photos from your dashboard</div>`;
+      } else {
+        strip.classList.add("empty");
+      }
+
+      // Show "add more photos" hint only to the vendor who owns this listing
+      import("../scripts/auth-service.js").then(({ onAuthReady }) => {
+        onAuthReady((user) => {
+          if (user && listing.vendorId && user.uid === listing.vendorId) {
+            const hint = $("vendorPhotoHint");
+            if (hint) hint.classList.add("visible");
+          }
+        });
+      });
+
+      txt("sideAddress",  listing.location || "Not specified");
+      txt("sideCategory", listing.category || "General");
+      const pill = $("sideTypePill");
+      pill.textContent = typeLabel;
+      pill.classList.add(isPaid ? "paid" : "free");
+
+      if (listing.phone) {
+        $("sidePhone").textContent = listing.phone;
+        $("sidePhone").href        = `tel:${listing.phone}`;
+      } else {
+        hide($("sidePhoneSection"));
+      }
+
+      txt("sidePrice", isPaid && listing.price ? "₹" + listing.price : "Free");
+      txt("mainDesc", listing.description || "No description provided for this listing.");
+
+      if (listing.phone) {
+        $("cPhone").textContent = listing.phone;
+        $("cPhone").href        = `tel:${listing.phone}`;
+      } else {
+        hide($("cRowPhone"));
+      }
+      txt("cAddr",     listing.location || "—");
+      txt("cCategory", listing.category || "—");
+
+      show(wrap);
+    }
+  }
+
+  // Lightbox for photo strip images
+  document.getElementById("photoStrip").addEventListener("click", (e) => {
+    const img = e.target.closest(".ld-photo-item img");
+    if (!img) return;
+    const lb    = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightboxImg");
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lb.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  });
+
+  function closeLightbox() {
+    document.getElementById("lightbox").style.display = "none";
+    document.body.style.overflow = "";
+  }
+
+  document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+  document.getElementById("lightbox").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeLightbox();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeLightbox();
+  });
+
+  // Tab switching
+  document.querySelectorAll(".ld-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".ld-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      const overview = $("panelOverview");
+      const contact  = $("panelContact");
+      tab.dataset.tab === "overview" ? (show(overview), hide(contact)) : (hide(overview), show(contact));
+    });
+  });
+</script>
+
+</body>
+</html>

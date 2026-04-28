@@ -1,0 +1,248 @@
+/* ============================================================
+   styles/admin.css
+   Admin panel specific styles.
+   ============================================================ */
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.sidebar {
+  width: 230px;
+  background: #0f172a;
+  color: white;
+  padding: 25px 18px;
+  flex-shrink: 0;
+}
+
+.sidebar h2 {
+  margin-bottom: 25px;
+  font-size: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  color: #cbd5e1;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: #1e293b;
+  color: white;
+}
+
+.close-sidebar {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* ── Main content ───────────────────────────────────────────── */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  background: #f4f6f9;
+}
+
+.main-content h1 {
+  margin: 20px 0 8px;
+  color: #111;
+}
+
+/* ── KPI grid for admin ─────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.kpi-card         { border-left: 5px solid #22c55e; }
+.kpi-card.yellow  { border-left-color: #f59e0b; }
+.kpi-card.blue    { border-left-color: #3b82f6; }
+.kpi-card.red     { border-left-color: #ef4444; }
+
+/* ── Section panels ─────────────────────────────────────────── */
+.section-panel          { display: none; }
+.section-panel.active   { display: block; }
+
+/* ── Filter bar ─────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-bar select,
+.filter-bar input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: .9rem;
+}
+
+.filter-bar input { flex: 1; min-width: 180px; }
+
+/* ── Admin cards ────────────────────────────────────────────── */
+.admin-card {
+  background: white;
+  padding: 22px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  border: 1px solid #e5e7eb;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+.admin-card h3 { margin: 0 0 6px; color: #111; }
+.admin-card p  { margin: 3px 0; font-size: .9rem; color: #444; }
+
+.uid-label {
+  font-size: .8rem !important;
+  color: #aaa !important;
+}
+
+/* ── Role badges ────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.badge-active   { background: #d4edda; color: #155724; }
+.badge-pending  { background: #fff3cd; color: #856404; }
+.badge-inactive { background: #f8d7da; color: #721c24; }
+.badge-admin    { background: #e0e7ff; color: #3730a3; }
+.badge-vendor   { background: #d1fae5; color: #065f46; }
+.badge-user     { background: #f3f4f6; color: #374151; }
+
+/* ── Admin action buttons ───────────────────────────────────── */
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-btn {
+  background: #22c55e;
+  border: none;
+  padding: 7px 13px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  transition: background 0.2s;
+}
+
+.action-btn:hover        { background: #16a34a; }
+.action-btn.deactivate   { background: #f59e0b; }
+.action-btn.deactivate:hover { background: #d97706; }
+.action-btn.blue         { background: #3b82f6; }
+.action-btn.blue:hover   { background: #2563eb; }
+.action-btn:disabled     { opacity: .4; cursor: not-allowed; }
+
+.delete-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 7px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover { background: #c62828; }
+
+.role-select {
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: #888;
+}
+
+/* ── Mobile header ──────────────────────────────────────────── */
+.mobile-header {
+  display: none;
+  background: #0f172a;
+  color: white;
+  padding: 14px;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
+  box-sizing: border-box;
+}
+
+.mobile-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .mobile-header    { display: flex; }
+
+  .admin-container  { flex-direction: column; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -240px;
+    height: 100vh;
+    width: 230px;
+    transition: left 0.3s ease;
+    z-index: 1100;
+  }
+
+  .sidebar.active   { left: 0; }
+  .close-sidebar    { display: block; }
+
+  .main-content {
+    padding: 20px;
+    margin-top: 56px;
+  }
+}

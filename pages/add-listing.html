@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Listing | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<div id="formWrap" style="visibility:hidden;">
+  <div class="form-container">
+    <h2 id="form-title">Add New Listing</h2>
+
+    <form id="listingForm" novalidate>
+      <label for="businessName">Business Name</label>
+      <input type="text" id="businessName" placeholder="Enter your business name" required />
+
+      <label for="category">Category</label>
+      <select id="category" required>
+        <option value="">Select category</option>
+        <option value="food-beverages">Food &amp; Beverages</option>
+        <option value="retail-shopping">Retail &amp; Shopping</option>
+        <option value="health-wellness">Health &amp; Wellness</option>
+        <option value="education-training">Education &amp; Training</option>
+        <option value="professional-services">Professional Services</option>
+        <option value="home-garden">Home &amp; Garden</option>
+        <option value="automotive">Automotive</option>
+        <option value="technology-it">Technology &amp; IT</option>
+        <option value="real-estate">Real Estate</option>
+        <option value="travel-tourism">Travel &amp; Tourism</option>
+        <option value="arts-entertainment">Arts &amp; Entertainment</option>
+        <option value="financial-services">Financial Services</option>
+        <option value="custom">Custom</option>
+      </select>
+
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Write a short description…" required></textarea>
+
+      <label for="location">Location</label>
+      <input type="text" id="location" placeholder="Enter business location" required />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="Enter contact number" required />
+
+      <label for="type">Listing Type</label>
+      <select id="type" required>
+        <option value="">Select type</option>
+        <option value="free">Free</option>
+        <option value="paid">Paid</option>
+      </select>
+
+      <label for="imageInput">
+        Business Image
+        <span style="font-weight:400;color:#888;">(optional, max 2 MB)</span>
+      </label>
+      <input type="file" id="imageInput" accept="image/*" />
+      <p id="uploadProgress" style="display:none;margin:8px 0 0;color:#4b7bd8;font-size:0.95rem;"></p>
+
+      <p class="error-msg" id="formError" role="alert"></p>
+      <button type="submit" class="btn-submit" id="submitBtn">Submit Listing</button>
+    </form>
+  </div>
+
+  <footer class="footer">© 2025 Vishvamitra. All rights reserved.</footer>
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { onAuthReady, currentUser }       from "../scripts/auth-service.js";
+  import { addListing, updateListing,
+           getListingById }                 from "../scripts/listings.js";
+  import { showError, hideError,
+           setButtonLoading, resetButton, toUserMessage, showToast } from "../scripts/utils.js";
+  import { navigate } from "../scripts/core/router.js";
+  import { P } from "../scripts/core/routes.js";
+
+  let editId = null;
+  const uploadProgressEl = document.getElementById("uploadProgress");
+
+  function hideUploadProgress() {
+    uploadProgressEl.textContent = "";
+    uploadProgressEl.style.display = "none";
+  }
+
+  function showUploadProgress(percent) {
+    uploadProgressEl.style.display = "block";
+    uploadProgressEl.textContent = `Uploading image... ${percent}%`;
+  }
+
+  onAuthReady(async (user) => {
+    if (!user) return;
+
+    document.getElementById("formWrap").style.visibility = "visible";
+
+    editId = new URLSearchParams(location.search).get("editId");
+
+    if (editId) {
+      document.getElementById("form-title").textContent = "Edit Listing";
+      document.getElementById("submitBtn").textContent  = "Update Listing";
+
+      const listing = await getListingById(editId);
+      const errEl   = document.getElementById("formError");
+
+      if (!listing) {
+        showError(errEl, "Listing not found.");
+        return;
+      }
+      if (listing.vendorId && listing.vendorId !== user.uid) {
+        showError(errEl, "You can only edit your own listings.");
+        setTimeout(() => navigate(P.VENDOR_DASHBOARD, { replace: true }), 1500);
+        return;
+      }
+
+      document.getElementById("businessName").value = listing.name        || "";
+      document.getElementById("category").value     = listing.category    || "";
+      document.getElementById("description").value  = listing.description || "";
+      document.getElementById("location").value     = listing.location    || "";
+      document.getElementById("phone").value        = listing.phone       || "";
+      document.getElementById("type").value         = listing.type        || "";
+    }
+  });
+
+  document.getElementById("listingForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const user = currentUser();
+    if (!user) {
+      showToast("Please sign in to continue.", { kind: "warning" });
+      navigate(P.LOGIN);
+      return;
+    }
+
+    const btn     = document.getElementById("submitBtn");
+    const errorEl = document.getElementById("formError");
+    hideError(errorEl);
+    hideUploadProgress();
+    setButtonLoading(btn, editId ? "Updating…" : "Submitting…");
+
+    const data = {
+      name:        document.getElementById("businessName").value.trim(),
+      category:    document.getElementById("category").value,
+      description: document.getElementById("description").value.trim(),
+      location:    document.getElementById("location").value.trim(),
+      phone:       document.getElementById("phone").value.trim(),
+      type:        document.getElementById("type").value,
+    };
+    const imageFile = document.getElementById("imageInput").files[0] || null;
+    const onUploadProgress = imageFile ? showUploadProgress : undefined;
+
+    try {
+      if (editId) {
+        await updateListing(editId, data, imageFile, onUploadProgress);
+      } else {
+        await addListing(data, user.uid, imageFile, onUploadProgress);
+      }
+      showToast(editId ? "Listing updated." : "Submitted for review.", { kind: "success" });
+      hideUploadProgress();
+      navigate(P.VENDOR_DASHBOARD);
+    } catch (err) {
+      hideUploadProgress();
+      showError(errorEl, toUserMessage(err));
+      showToast(toUserMessage(err), { kind: "error" });
+      resetButton(btn, editId ? "Update Listing" : "Submit Listing");
+    }
+  });
+</script>
+
+</body>
+</html>

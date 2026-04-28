@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Vishvamitra connects you with trusted local businesses, vendors, and services in your area." />
+  <meta name="theme-color" content="#14a800" />
+  <title>Vishvamitra – Local Services Platform</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ── Top announcement bar ─────────────────────────────── -->
+<div class="top-bar">
+  <span class="top-bar-dot"></span>
+  Welcome to Vishvamitra
+  <span class="top-bar-dot"></span>
+</div>
+
+<!-- ── Navbar ────────────────────────────────────────────── -->
+<header><div id="navbar-root"></div></header>
+
+<!-- ── Hero ─────────────────────────────────────────────── -->
+<section class="home-hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-inner" data-aos="fade-up">
+    <div class="hero-eyebrow">
+      <span class="eyebrow-dot"></span>
+      Trusted Local Services Platform
+    </div>
+    <h1 class="hero-title">Discover Trusted<br/><span class="hero-accent">Local Services</span> Near You</h1>
+    <p class="hero-sub">Find restaurants, electricians, tutors, salons and more — all in your area</p>
+
+    <div class="home-search-bar">
+      <div class="search-input-wrap">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="homeSearch" type="text" placeholder="Search for restaurants, electricians, tutors…" autocomplete="off" />
+      </div>
+      <button id="searchBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+      </button>
+    </div>
+
+    <div class="hero-actions">
+      <a href="services.html" class="hero-btn-primary">Browse All Services</a>
+      <a href="contact.html" class="hero-btn-ghost">List Your Business</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num" id="statListings">10+</span>
+        <span class="stat-label">Local Listings</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">Free</span>
+        <span class="stat-label">Basic Listing</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-num">24/7</span>
+        <span class="stat-label">Always Available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Scrolling ticker ──────────────────────────────────── -->
+<div class="home-ticker">
+  <div class="ticker-label">Latest</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner">
+      విద్య &nbsp;•&nbsp; వివాహం &nbsp;•&nbsp; వైద్యం &nbsp;•&nbsp; వ్యవసాయం &nbsp;•&nbsp; పర్యాటక రంగం &nbsp;•&nbsp; సంవత్సరం పాటు ఉచిత ప్రకటనలు &nbsp;•&nbsp; సంప్రదించండి &nbsp;•&nbsp;
+      విద్య &nbsp;•&nbsp; వివాహం &nbsp;•&nbsp; వైద్యం &nbsp;•&nbsp; వ్యవసాయం &nbsp;•&nbsp; పర్యాటక రంగం &nbsp;•&nbsp; సంవత్సరం పాటు ఉచిత ప్రకటనలు &nbsp;•&nbsp; సంప్రదించండి &nbsp;•&nbsp;
+    </div>
+  </div>
+</div>
+
+<!-- ── Ad / Promo banner ─────────────────────────────────── -->
+<div class="home-promo" data-aos="fade-up">
+  <div class="promo-inner">
+    <img src="../assets/images/banner.svg" alt="Ugadi Wishes from Vishvamitra"
+         width="1100" height="420" loading="lazy" class="promo-img" />
+  </div>
+</div>
+
+<!-- ── Featured listings ─────────────────────────────────── -->
+<section class="home-section" data-aos="fade-up">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">Hand-picked for you</div>
+      <h2 class="section-title">Featured Services</h2>
+    </div>
+    <a href="services.html" class="section-link">
+      View all
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </a>
+  </div>
+  <div id="featuredServices" class="featured-grid">
+    <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+    <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+    <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+    <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+  </div>
+</section>
+
+<!-- ── Listing types ─────────────────────────────────────── -->
+<section class="home-section home-section-alt" data-aos="fade-up">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">What we offer</div>
+      <h2 class="section-title">Explore Listing Types</h2>
+    </div>
+  </div>
+  <div class="listing-types-grid">
+
+    <a href="paid-services.html" class="lt-card lt-paid" data-aos="fade-up" data-aos-delay="0">
+      <div class="lt-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      </div>
+      <h3>Paid Services</h3>
+      <p>Premium listings with enhanced visibility and features</p>
+      <span class="lt-tag">Featured placement</span>
+    </a>
+
+    <a href="free-services.html" class="lt-card lt-free" data-aos="fade-up" data-aos-delay="100">
+      <div class="lt-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <h3>Free Services</h3>
+      <p>Get discovered by local customers at no cost</p>
+      <span class="lt-tag">Always free</span>
+    </a>
+
+    <div class="lt-card lt-coming" data-aos="fade-up" data-aos-delay="200">
+      <div class="lt-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+      </div>
+      <h3>Verified Badges</h3>
+      <p>Stand out with an official Vishvamitra verified badge</p>
+      <span class="lt-tag lt-coming-tag">Coming soon</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Why Vishvamitra ────────────────────────────────────── -->
+<section class="home-section" data-aos="fade-up">
+  <div class="section-header centered">
+    <div>
+      <div class="section-eyebrow">Why choose us</div>
+      <h2 class="section-title">Built for Local Communities</h2>
+    </div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card" data-aos="fade-up" data-aos-delay="0">
+      <div class="why-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <h4>Verified Listings</h4>
+      <p>Every business is reviewed before going live on the platform</p>
+    </div>
+    <div class="why-card" data-aos="fade-up" data-aos-delay="80">
+      <div class="why-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <h4>Hyperlocal Focus</h4>
+      <p>Discover services and businesses right in your neighbourhood</p>
+    </div>
+    <div class="why-card" data-aos="fade-up" data-aos-delay="160">
+      <div class="why-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <h4>Direct Contact</h4>
+      <p>Call or message vendors directly — no middleman fees</p>
+    </div>
+    <div class="why-card" data-aos="fade-up" data-aos-delay="240">
+      <div class="why-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h4>Free to Browse</h4>
+      <p>Search and find any service with no account required</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA Banner ─────────────────────────────────────────── -->
+<section class="home-cta" data-aos="fade-up">
+  <div class="home-cta-inner">
+    <h2>Ready to grow your business?</h2>
+    <p>Join hundreds of local vendors already on Vishvamitra</p>
+    <a href="contact.html" class="cta-btn">List Your Business — It's Free</a>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">Vishvamitra</div>
+      <p class="footer-tagline">Connecting local communities<br/>with trusted services</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=61585787019425" target="_blank" rel="noopener noreferrer" title="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/vishvamitra_services/" target="_blank" rel="noopener noreferrer" title="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="services.html">All Services</a>
+        <a href="paid-services.html">Paid Listings</a>
+        <a href="free-services.html">Free Listings</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">Contact Us</a>
+        <a href="contact.html">List a Business</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Vishvamitra. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- ── Ugadi Popup ────────────────────────────────────────── -->
+<div id="ugadiPopup" class="popup-overlay" role="dialog" aria-modal="true" aria-label="Ugadi Greeting">
+  <div class="popup-box">
+    <button class="close-btn" id="closePopupBtn" aria-label="Close">&times;</button>
+    <h2>Happy Ugadi</h2>
+    <p>Wishing you happiness, success, and new beginnings</p>
+    <button class="popup-btn" id="exploreBtn">Explore</button>
+  </div>
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { subscribeToFeaturedListings } from "../scripts/listings.js";
+  import { initUgadiPopup, closePopup, initPrefetch, toUserMessage, showToast } from "../scripts/utils.js";
+  import { navigate } from "../scripts/core/router.js";
+  import { P }        from "../scripts/core/routes.js";
+  import { reportError } from "../scripts/core/errors.js";
+
+  // ── Featured listings ──────────────────────────────────
+  const box   = document.getElementById("featuredServices");
+  const unsub = subscribeToFeaturedListings(
+    (listings) => {
+      box.innerHTML = "";
+      if (!listings.length) {
+        box.innerHTML = "<p style='text-align:center;color:#888;grid-column:1/-1;'>No listings yet.</p>";
+        return;
+      }
+      listings.forEach(l => {
+        const card = document.createElement("div");
+        card.className = "listing-card";
+        card.innerHTML = `
+          ${l.image
+            ? `<div class="c-img-wrap"><img class="c-img" src="${l.image}" alt="${l.name||''}" loading="lazy"/></div>`
+            : `<div class="c-img-wrap c-img-placeholder"></div>`}
+          <div class="c-card-body">
+            <span class="c-type-pill ${l.type === 'paid' ? 'paid' : 'free'}">${l.type === 'paid' ? 'Paid' : 'Free'}</span>
+            <h3 class="c-name"></h3>
+            <p class="c-loc"></p>
+          </div>
+          <div class="c-card-footer">
+            <a class="c-view-btn" href="listing-details.html?id=${l.id}">View Details</a>
+          </div>`;
+        card.querySelector(".c-name").textContent = l.name     || "Unnamed";
+        card.querySelector(".c-loc").textContent  = l.location || "";
+        box.appendChild(card);
+      });
+    },
+    6,
+    (err) => {
+      reportError("home.featured", err);
+      showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+      box.innerHTML = "<p style='text-align:center;color:#888;grid-column:1/-1;'>Could not load listings.</p>";
+    }
+  );
+
+  window.addEventListener("pagehide", () => unsub());
+
+  // ── Search ─────────────────────────────────────────────
+  function runSearch() {
+    const q = document.getElementById("homeSearch").value.trim();
+    navigate(q ? `${P.SERVICES}?search=${encodeURIComponent(q)}` : P.SERVICES);
+  }
+  document.getElementById("searchBtn").addEventListener("click", runSearch);
+  document.getElementById("homeSearch").addEventListener("keydown", e => { if (e.key === "Enter") runSearch(); });
+
+  // ── Ugadi popup ────────────────────────────────────────
+  initUgadiPopup("ugadiPopup");
+  document.getElementById("closePopupBtn").addEventListener("click", () => closePopup("ugadiPopup"));
+  document.getElementById("exploreBtn").addEventListener("click",    () => closePopup("ugadiPopup"));
+
+  // ── Prefetch ───────────────────────────────────────────
+  initPrefetch();
+</script>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>AOS.init({ duration: 700, once: true, offset: 60 });</script>
+
+</body>
+</html>

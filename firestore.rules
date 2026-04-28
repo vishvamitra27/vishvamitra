@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Keep in sync with vm3/scripts/role.js → ADMIN_EMAILS
+    function adminEmails() {
+      return ['vishvamitra27@gmail.com'];
+    }
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    // True when users/{request.auth.uid} has role "admin" (e.g. promoted in admin panel).
+    // Aligns with vm3/scripts/role.js → isOperatorAdmin()
+    function isFirestoreRoleAdmin() {
+      let me = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      return me.exists && me.data.role == 'admin';
+    }
+
+    function isAdminEmail() {
+      return signedIn()
+        && request.auth.token.email != null
+        && request.auth.token.email in adminEmails();
+    }
+
+    function isAdmin() {
+      return isAdminEmail() || isFirestoreRoleAdmin();
+    }
+
+    // ── users: own doc for onboarding (role-select, vendor-setup, profile) ──
+    match /users/{userId} {
+      allow read:   if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── listings: public reads for active; vendors own their rows; admin all ──
+    match /listings/{listingId} {
+      function listingVendor() {
+        return resource.data.vendorId;
+      }
+
+      allow read: if resource.data.status == 'active'
+        || (signedIn() && listingVendor() == request.auth.uid)
+        || isAdmin();
+
+      allow create: if signedIn()
+        && request.resource.data.vendorId == request.auth.uid
+        && request.resource.data.status == 'pending';
+
+      allow update: if isAdmin()
+        || (signedIn() && listingVendor() == request.auth.uid);
+
+      allow delete: if isAdmin()
+        || (signedIn() && listingVendor() == request.auth.uid);
+    }
+  }
+}

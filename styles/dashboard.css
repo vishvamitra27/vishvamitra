@@ -1,0 +1,164 @@
+/* ============================================================
+   styles/dashboard.css
+   Vendor dashboard and user-dashboard specific styles.
+   Imports main.css for shared base styles.
+   ============================================================ */
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.dashboard {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 1rem;
+}
+
+.welcome {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #111;
+}
+
+/* ── KPI override for dashboard pages ──────────────────────── */
+.kpi-card.pending-kpi {
+  border-left-color: #ffc107;
+}
+
+/* ── Action buttons row ─────────────────────────────────────── */
+.dashboard-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+
+.dashboard-buttons button {
+  padding: .8rem 1.8rem;
+  border: none;
+  border-radius: 8px;
+  background: #14a800;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.25s;
+}
+
+.dashboard-buttons button:hover { background: #119600; }
+
+/* ── Listings grid ──────────────────────────────────────────── */
+.listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.listing-card {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  text-align: left;
+}
+
+.listing-card h3 {
+  margin: 0 0 8px;
+  color: #111;
+}
+
+/* ── Status tags ────────────────────────────────────────────── */
+.status-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.status-active  { background: #d4edda; color: #155724; }
+.status-review  { background: #fff3cd; color: #856404; }
+.status-inactive { background: #f8d7da; color: #721c24; }
+
+/* ── Card action buttons ────────────────────────────────────── */
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+.card-actions button {
+  padding: 7px 14px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  transition: opacity 0.2s;
+}
+
+.card-actions button:hover { opacity: 0.85; }
+
+.btn-edit   { background: #007bff; }
+.btn-delete { background: #dc3545; }
+
+/* ── Type badge ─────────────────────────────────────────────── */
+.card-type-badge {
+  display: inline-block;
+  background: #eee;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: .8rem;
+  font-weight: 600;
+  color: #444;
+}
+
+/* ── Empty state ────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  grid-column: 1 / -1;
+  color: #666;
+}
+
+.empty-state h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+/* ── User dashboard specific ────────────────────────────────── */
+.section-title {
+  margin: 30px 0 15px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.recommendation-grid .listing-card {
+  padding: 20px;
+}
+
+.btn-view {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #14a800;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: .9rem;
+  transition: background 0.2s;
+}
+
+.btn-view:hover { background: #119600; }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .dashboard { margin: 20px auto; }
+  .welcome   { font-size: 1.4rem; }
+  .listings  { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Setup | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body class="centered-page">
+
+<div class="form-container" style="max-width:380px;width:90%;margin:0;">
+  <h2>Complete Your Vendor Profile</h2>
+  <form id="vendorForm" novalidate>
+    <label for="businessName">Business Name</label>
+    <input type="text" id="businessName" required placeholder="Your business name" />
+
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" required placeholder="+91 XXXXX XXXXX" />
+
+    <label for="category">Category</label>
+    <select id="category">
+      <option value="Plumbing">Plumbing</option>
+      <option value="Electrician">Electrician</option>
+      <option value="Salon">Salon</option>
+      <option value="Food &amp; Beverages">Food &amp; Beverages</option>
+      <option value="Retail">Retail</option>
+      <option value="Health &amp; Wellness">Health &amp; Wellness</option>
+      <option value="Education">Education</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <button type="submit" class="btn-submit" id="saveBtn">Save &amp; Continue</button>
+  </form>
+</div>
+
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { onAuthReady, saveVendorProfile } from "../scripts/auth-service.js";
+  import { setButtonLoading, resetButton, toUserMessage, showToast } from "../scripts/utils.js";
+  import { navigate } from "../scripts/core/router.js";
+  import { P } from "../scripts/core/routes.js";
+
+  onAuthReady((user) => {
+    if (!user) navigate(P.LOGIN, { replace: true });
+  });
+
+  document.getElementById("vendorForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById("saveBtn");
+    setButtonLoading(btn, "Saving…");
+    try {
+      await saveVendorProfile(
+        document.getElementById("businessName").value.trim(),
+        document.getElementById("phone").value.trim(),
+        document.getElementById("category").value
+      );
+      showToast("Profile saved. Welcome!", { kind: "success" });
+      navigate(P.VENDOR_DASHBOARD, { replace: true });
+    } catch (err) {
+      showToast(toUserMessage(err), { kind: "error" });
+      resetButton(btn, "Save & Continue");
+    }
+  });
+</script>
+
+</body>
+</html>

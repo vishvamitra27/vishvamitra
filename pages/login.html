@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<div class="auth-container">
+  <h2>Login to Your Account</h2>
+
+  <form id="login-form" novalidate>
+    <label for="loginEmail">Email</label>
+    <input type="email" id="loginEmail" placeholder="email@example.com"
+           required autocomplete="email" />
+
+    <label for="loginPassword">Password</label>
+    <div class="password-box">
+      <input type="password" id="loginPassword" placeholder="••••••••"
+             required autocomplete="current-password" />
+      <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+        <!-- Eye icon (visible) -->
+        <svg id="iconEye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <!-- Eye-off icon (hidden) -->
+        <svg id="iconEyeOff" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+      </button>
+    </div>
+
+    <p class="error-msg" id="loginError" role="alert"></p>
+    <button type="submit" class="btn-submit" id="loginBtn">Login</button>
+  </form>
+
+  <div class="divider">OR</div>
+
+  <button class="google-btn" id="googleLogin" type="button">
+    <img src="https://developers.google.com/identity/images/g-logo.png"
+         alt="Google logo" width="22" height="22" />
+    Continue with Google
+  </button>
+
+  <p style="margin-top:1rem;font-size:.9rem;">
+    Don't have an account?
+    <a href="signup.html" style="color:#14a800;font-weight:600;">Sign up</a>
+  </p>
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { loginWithEmail, loginWithGoogle } from "../scripts/auth-service.js";
+  import { showError, hideError,
+           setButtonLoading, resetButton,
+           friendlyAuthError, toUserMessage } from "../scripts/utils.js";
+
+  const loginBtn = document.getElementById("loginBtn");
+  const errorEl  = document.getElementById("loginError");
+
+  // ── Email / password ─────────────────────────────────────
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideError(errorEl);
+    const email    = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    setButtonLoading(loginBtn, "Logging in…");
+    try {
+      await loginWithEmail(email, password);
+    } catch (err) {
+      showError(errorEl, toUserMessage(err) || friendlyAuthError(err.code));
+      resetButton(loginBtn, "Login");
+    }
+  });
+
+  // ── Google ────────────────────────────────────────────────
+  document.getElementById("googleLogin").addEventListener("click", async () => {
+    hideError(errorEl);
+    try {
+      await loginWithGoogle();
+    } catch (err) {
+      if (err.code !== "auth/popup-closed-by-user")
+        showError(errorEl, toUserMessage(err));
+    }
+  });
+
+  // ── Password toggle ───────────────────────────────────────
+  document.getElementById("togglePassword").addEventListener("click", () => {
+    const inp     = document.getElementById("loginPassword");
+    const show    = inp.type === "password";
+    inp.type      = show ? "text" : "password";
+    document.getElementById("iconEye").style.display    = show ? "none"  : "";
+    document.getElementById("iconEyeOff").style.display = show ? ""      : "none";
+  });
+</script>
+
+</body>
+</html>

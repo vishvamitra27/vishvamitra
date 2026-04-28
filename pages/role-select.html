@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Select Your Role | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="role-select-page">
+
+<div class="rs-wrap">
+  <!-- Top bar -->
+  <div class="rs-topbar">
+    <a href="index.html" class="rs-logo-text">Vishvamitra</a>
+    <button class="rs-back-btn" id="rsBackBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back
+    </button>
+  </div>
+
+  <div class="rs-content">
+    <h1 class="rs-title">How would you like to<br/>use Vishvamitra?</h1>
+    <p class="rs-sub">Choose your role to get started. You can only pick one.</p>
+
+    <div class="rs-cards">
+
+      <!-- User card -->
+      <button class="rs-card" id="btnUser">
+        <div class="rs-card-icon rs-icon-user">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="rs-card-body">
+          <h3>Browse as a User</h3>
+          <p>Discover local services, businesses and vendors near you</p>
+          <ul class="rs-perks">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Search all listings</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contact vendors directly</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Free forever</li>
+          </ul>
+          <div class="rs-card-cta">Get Started as User</div>
+        </div>
+      </button>
+
+      <!-- Vendor card -->
+      <button class="rs-card rs-card-vendor" id="btnVendor">
+        <div class="rs-card-badge">Popular</div>
+        <div class="rs-card-icon rs-icon-vendor">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="rs-card-body">
+          <h3>List my Business</h3>
+          <p>Reach thousands of local customers and grow your business</p>
+          <ul class="rs-perks">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Create your business profile</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Get discovered by customers</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Free listing available</li>
+          </ul>
+          <div class="rs-card-cta">Get Started as Vendor</div>
+        </div>
+      </button>
+
+    </div>
+
+    <p class="rs-error" id="roleError" role="alert"></p>
+  </div>
+</div>
+
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { onAuthReady, setUserRole } from "../scripts/auth-service.js";
+  import { showError }                from "../scripts/utils.js";
+  import { navigate }                 from "../scripts/core/router.js";
+  import { P }                        from "../scripts/core/routes.js";
+  import { toUserMessage }            from "../scripts/core/errors.js";
+
+  const errorEl = document.getElementById("roleError");
+
+  onAuthReady((user) => {
+    if (!user) navigate(P.LOGIN, { replace: true });
+  });
+
+  async function chooseRole(role, btn) {
+    document.querySelectorAll(".rs-card").forEach(b => { b.disabled = true; b.classList.remove("rs-card-selected"); });
+    btn.classList.add("rs-card-selected");
+    try {
+      await setUserRole(role);
+      navigate(role === "vendor" ? P.VENDOR_SETUP : P.USER_DASHBOARD, { replace: true });
+    } catch (err) {
+      showError(errorEl, toUserMessage(err));
+      document.querySelectorAll(".rs-card").forEach(b => { b.disabled = false; });
+      btn.classList.remove("rs-card-selected");
+    }
+  }
+
+  document.getElementById("btnUser").addEventListener("click",   (e) => chooseRole("user",   e.currentTarget));
+  document.getElementById("btnVendor").addEventListener("click", (e) => chooseRole("vendor", e.currentTarget));
+
+  // Back = sign out so auth.js doesn't redirect back to role-select
+  document.getElementById("rsBackBtn").addEventListener("click", async () => {
+    const { auth }    = await import("../scripts/firebase-core.js");
+    const { signOut } = await import("https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js");
+    await signOut(auth);
+    navigate(P.HOME, { replace: true });
+  });
+</script>
+
+</body>
+</html>

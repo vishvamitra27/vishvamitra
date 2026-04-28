@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<!-- ── FILTER BAR ──────────────────────────────────────────── -->
+<div class="sv-filter-bar">
+  <div class="sv-filter-inner">
+    <div class="sv-search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input class="sv-search-input" type="text" id="searchInput" placeholder="Search businesses, services…" autocomplete="off" />
+    </div>
+    <select class="sv-cat-select" id="categoryFilter">
+      <option value="">All Categories</option>
+      <option value="food-beverages">Food &amp; Beverages</option>
+      <option value="retail-shopping">Retail &amp; Shopping</option>
+      <option value="health-wellness">Health &amp; Wellness</option>
+      <option value="education-training">Education &amp; Training</option>
+      <option value="professional-services">Professional Services</option>
+      <option value="home-garden">Home &amp; Garden</option>
+      <option value="automotive">Automotive</option>
+      <option value="technology-it">Technology &amp; IT</option>
+      <option value="real-estate">Real Estate</option>
+      <option value="travel-tourism">Travel &amp; Tourism</option>
+      <option value="arts-entertainment">Arts &amp; Entertainment</option>
+      <option value="financial-services">Financial Services</option>
+      <option value="custom">Custom</option>
+    </select>
+    <button class="sv-search-btn" id="filterBtn">Search</button>
+  </div>
+</div>
+
+<!-- ── PAGE BODY ───────────────────────────────────────────── -->
+<div class="sv-page-wrap">
+  <div class="sv-meta">
+    <span id="svMetaText">Loading listings…</span>
+  </div>
+
+  <div class="sv-grid" id="servicesGrid">
+    <div class="sv-skeleton"><div class="sv-skeleton-img"></div><div class="sv-skeleton-body"><div class="sv-skeleton-line" style="width:70%"></div><div class="sv-skeleton-line" style="width:45%"></div><div class="sv-skeleton-line" style="width:55%"></div></div></div>
+    <div class="sv-skeleton"><div class="sv-skeleton-img"></div><div class="sv-skeleton-body"><div class="sv-skeleton-line" style="width:60%"></div><div class="sv-skeleton-line" style="width:40%"></div><div class="sv-skeleton-line" style="width:65%"></div></div></div>
+    <div class="sv-skeleton"><div class="sv-skeleton-img"></div><div class="sv-skeleton-body"><div class="sv-skeleton-line" style="width:75%"></div><div class="sv-skeleton-line" style="width:50%"></div><div class="sv-skeleton-line" style="width:45%"></div></div></div>
+    <div class="sv-skeleton"><div class="sv-skeleton-img"></div><div class="sv-skeleton-body"><div class="sv-skeleton-line" style="width:65%"></div><div class="sv-skeleton-line" style="width:35%"></div><div class="sv-skeleton-line" style="width:60%"></div></div></div>
+  </div>
+
+  <div class="sv-load-more-wrap" id="loadMoreWrap" style="display:none;">
+    <button class="sv-load-more-btn" id="loadMoreBtn">Load More</button>
+  </div>
+</div>
+
+<footer class="footer"><p>© 2026 Vishvamitra. All rights reserved.</p></footer>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { getListings }                            from "../scripts/listings.js";
+  import { initPrefetch, toUserMessage, showToast } from "../scripts/utils.js";
+  import { reportError }                            from "../scripts/core/errors.js";
+
+  const PAGE_SIZE = 12;
+
+  // State
+  let lastDoc    = null;
+  let isLoading  = false;
+  let allLoaded  = false;   // renamed from noMore — never blocks a reset
+  let totalShown = 0;
+  let currentCat = "";
+  let currentKW  = "";
+
+  const grid         = document.getElementById("servicesGrid");
+  const loadMoreWrap = document.getElementById("loadMoreWrap");
+  const loadMoreBtn  = document.getElementById("loadMoreBtn");
+  const metaText     = document.getElementById("svMetaText");
+  const searchInput  = document.getElementById("searchInput");
+  const catSelect    = document.getElementById("categoryFilter");
+
+  // ── Pre-fill from URL params ───────────────────────────────
+  const urlParams = new URLSearchParams(location.search);
+  if (urlParams.get("category")) catSelect.value  = urlParams.get("category");
+  if (urlParams.get("search"))   searchInput.value = urlParams.get("search");
+
+  // ── Stars helper ──────────────────────────────────────────
+  function stars(n = 4) {
+    return [1,2,3,4,5].map(i =>
+      `<span class="sv-card-star${i <= n ? " on" : ""}">★</span>`
+    ).join("");
+  }
+
+  // ── Build one card ────────────────────────────────────────
+  function buildCard(l) {
+    const a = document.createElement("a");
+    a.className = "sv-card";
+    a.href      = `listing-details.html?id=${l.id}`;
+
+    const isPaid    = l.type === "paid";
+    const catLabel  = (l.category || "general").replace(/-/g, " ");
+    const safeName  = (l.name || "").replace(/"/g, "&quot;");
+
+    const imgHTML = l.image
+      ? `<img class="sv-card-img" src="${l.image}" alt="${safeName}" loading="lazy"/>`
+      : `<div class="sv-card-no-img">
+           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.4">
+             <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+             <polyline points="21,15 16,10 5,21"/>
+           </svg>
+           <span>No photo yet</span>
+         </div>`;
+
+    a.innerHTML = `
+      <div class="sv-card-img-wrap">
+        ${imgHTML}
+        <span class="sv-card-badge ${isPaid ? "paid" : "free"}">${isPaid ? "Paid" : "Free"}</span>
+      </div>
+      <div class="sv-card-body">
+        <div class="sv-card-name"></div>
+        <div class="sv-card-stars">${stars(4)}<span class="sv-card-new">New</span></div>
+        <div class="sv-card-loc">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#14a800" style="flex-shrink:0;margin-top:2px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          <span></span>
+        </div>
+        <div class="sv-card-footer">
+          <span class="sv-card-cat"></span>
+          <span class="sv-card-arrow">View →</span>
+        </div>
+      </div>`;
+
+    a.querySelector(".sv-card-name").textContent     = l.name     || "Unnamed";
+    a.querySelector(".sv-card-loc span").textContent = l.location || "Location not set";
+    a.querySelector(".sv-card-cat").textContent      = catLabel;
+    return a;
+  }
+
+  // ── Skeleton helper ───────────────────────────────────────
+  function addSkeletons(n = 4) {
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement("div");
+      d.className = "sv-skeleton";
+      d.innerHTML = `<div class="sv-skeleton-img"></div>
+        <div class="sv-skeleton-body">
+          <div class="sv-skeleton-line" style="width:${60+Math.random()*20|0}%"></div>
+          <div class="sv-skeleton-line" style="width:${35+Math.random()*20|0}%"></div>
+          <div class="sv-skeleton-line" style="width:${45+Math.random()*20|0}%"></div>
+        </div>`;
+      grid.appendChild(d);
+    }
+  }
+
+  // ── Main load function ────────────────────────────────────
+  async function loadListings(reset = false) {
+    // Allow resets even if allLoaded; block only "load more" when done
+    if (isLoading)              return;
+    if (!reset && allLoaded)    return;
+
+    isLoading = true;
+    loadMoreBtn.disabled = true;
+
+    // Read current filter values
+    currentCat = catSelect.value.trim();
+    currentKW  = searchInput.value.trim().toLowerCase();
+
+    if (reset) {
+      lastDoc    = null;
+      allLoaded  = false;
+      totalShown = 0;
+      grid.innerHTML = "";
+      loadMoreWrap.style.display = "none";
+      metaText.textContent = "Loading listings…";
+    }
+
+    addSkeletons(4);
+
+    let listings, newLast;
+    try {
+      // Pass category for server-side filter; keyword is client-side
+      ({ listings, lastDoc: newLast } =
+        await getListings({ category: currentCat, pageSize: PAGE_SIZE, after: lastDoc }));
+    } catch (err) {
+      reportError("services.loadListings", err);
+      showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+      grid.querySelectorAll(".sv-skeleton").forEach(el => el.remove());
+      if (reset) {
+        grid.innerHTML = `<div class="sv-empty">
+          <div class="sv-empty-icon">⚠️</div>
+          <p>Could not load listings. Please try again.</p></div>`;
+      }
+      isLoading = false;
+      return;
+    }
+
+    grid.querySelectorAll(".sv-skeleton").forEach(el => el.remove());
+
+    // Client-side keyword filter
+    const visible = currentKW
+      ? listings.filter(l =>
+          `${l.name} ${l.category} ${l.location} ${l.description || ""}`
+            .toLowerCase().includes(currentKW))
+      : listings;
+
+    if (visible.length === 0 && totalShown === 0) {
+      grid.innerHTML = `<div class="sv-empty">
+        <div class="sv-empty-icon">🔍</div>
+        <p>No listings found${currentKW ? ` for "<strong>${currentKW}</strong>"` : ""}.</p>
+        <p style="font-size:13px;margin-top:6px;color:#9ca3af;">Try a different search or category.</p>
+      </div>`;
+      metaText.textContent = "No results found";
+      loadMoreWrap.style.display = "none";
+      isLoading = false;
+      return;
+    }
+
+    visible.forEach(l => { grid.appendChild(buildCard(l)); totalShown++; });
+
+    lastDoc = newLast;
+
+    const catDisplay = currentCat
+      ? ` in <strong>${currentCat.replace(/-/g, " ")}</strong>` : "";
+    const kwDisplay  = currentKW
+      ? ` matching "<strong>${currentKW}</strong>"` : "";
+    metaText.innerHTML =
+      `Showing <strong>${totalShown}</strong> listing${totalShown !== 1 ? "s" : ""}${catDisplay}${kwDisplay}`;
+
+    if (!newLast || listings.length < PAGE_SIZE) {
+      allLoaded = true;
+      loadMoreWrap.style.display = "none";
+    } else {
+      loadMoreWrap.style.display = "block";
+      loadMoreBtn.disabled = false;
+    }
+
+    isLoading = false;
+  }
+
+  // ── Init ──────────────────────────────────────────────────
+  loadListings(true);
+
+  document.getElementById("filterBtn").addEventListener("click",  () => loadListings(true));
+  document.getElementById("loadMoreBtn").addEventListener("click", () => loadListings(false));
+  searchInput.addEventListener("keydown", e => { if (e.key === "Enter") loadListings(true); });
+  catSelect.addEventListener("change",    () => loadListings(true));
+
+  initPrefetch();
+</script>
+
+</body>
+</html>

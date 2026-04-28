@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Dashboard | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<div id="dashMain" style="visibility:hidden;">
+  <div class="dashboard">
+    <div class="welcome">Welcome, <span id="userName">…</span></div>
+
+    <div class="kpi-overview">
+      <div class="kpi-card">
+        <h4>Saved Listings</h4>
+        <div class="kpi-value" id="savedCount">0</div>
+      </div>
+      <div class="kpi-card">
+        <h4>Recent Views</h4>
+        <div class="kpi-value" id="viewsCount">0</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Recommended for You</h2>
+    <div class="recommendation-grid" id="recommendations">
+      <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+      <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+      <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { onAuthReady }                 from "../scripts/auth-service.js";
+  import { subscribeToFeaturedListings } from "../scripts/listings.js";
+  import { toUserMessage, showToast }    from "../scripts/utils.js";
+  import { reportError }                 from "../scripts/core/errors.js";
+
+  let unsub = null;
+
+  onAuthReady((user) => {
+    if (!user) return;
+
+    document.getElementById("dashMain").style.visibility = "visible";
+    document.getElementById("userName").textContent =
+      user.displayName || user.email?.split("@")[0] || "there";
+
+    if (unsub) unsub();
+    const box = document.getElementById("recommendations");
+
+    unsub = subscribeToFeaturedListings(
+      (listings) => {
+      box.innerHTML = "";
+      if (!listings.length) {
+        box.innerHTML = "<p style='color:#666;grid-column:1/-1;'>No listings available yet.</p>";
+        return;
+      }
+      listings.forEach(l => {
+        const card = document.createElement("div");
+        card.className = "listing-card";
+        card.innerHTML = `
+          <h3 class="c-name"></h3>
+          <p class="c-loc"></p>
+          <a class="btn-view" href="listing-details.html?id=${l.id}">View</a>`;
+        card.querySelector(".c-name").textContent = l.name     || "Unnamed";
+        card.querySelector(".c-loc").textContent  = l.location || "";
+        box.appendChild(card);
+      });
+      },
+      6,
+      (err) => {
+        reportError("userDash.featured", err);
+        showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+      }
+    );
+  });
+
+  window.addEventListener("pagehide", () => { if (unsub) unsub(); });
+</script>
+
+</body>
+</html>

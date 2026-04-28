@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | Vishvamitra</title>
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<div class="auth-container">
+  <h2>Create an Account</h2>
+
+  <form id="signup-form" novalidate>
+    <label for="signupName">Full Name</label>
+    <input type="text"     id="signupName"     placeholder="Enter your name"
+           required autocomplete="name" />
+
+    <label for="signupEmail">Email</label>
+    <input type="email"    id="signupEmail"    placeholder="Enter your email"
+           required autocomplete="email" />
+
+    <label for="signupPassword">Password</label>
+    <input type="password" id="signupPassword" placeholder="Create a password (min 6 chars)"
+           required minlength="6" autocomplete="new-password" />
+
+    <p class="error-msg" id="signupError" role="alert"></p>
+    <button type="submit" class="btn-submit" id="signupBtn">Sign Up</button>
+  </form>
+
+  <div class="divider">OR</div>
+
+  <button class="google-btn" id="googleSignup" type="button">
+    <img src="https://developers.google.com/identity/images/g-logo.png"
+         alt="Google" width="22" height="22" />
+    Continue with Google
+  </button>
+
+  <p style="margin-top:1rem;font-size:.9rem;">
+    Already have an account?
+    <a href="login.html" style="color:#14a800;font-weight:600;">Login</a>
+  </p>
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { signupWithEmail, signupWithGoogle } from "../scripts/auth-service.js";
+  import { showError, hideError,
+           setButtonLoading, resetButton,
+           friendlyAuthError, toUserMessage, showToast } from "../scripts/utils.js";
+  import { navigate } from "../scripts/core/router.js";
+  import { P } from "../scripts/core/routes.js";
+
+  const signupBtn = document.getElementById("signupBtn");
+  const errorEl   = document.getElementById("signupError");
+
+  // ── Email / password ──────────────────────────────────────
+  document.getElementById("signup-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideError(errorEl);
+    const name     = document.getElementById("signupName").value.trim();
+    const email    = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+    setButtonLoading(signupBtn, "Creating Account…");
+    try {
+      await signupWithEmail(name, email, password);
+      showToast("Account created. Please sign in.", { kind: "success" });
+      navigate(P.LOGIN, { replace: true });
+    } catch (err) {
+      showError(errorEl, toUserMessage(err) || friendlyAuthError(err.code));
+      resetButton(signupBtn, "Sign Up");
+    }
+  });
+
+  // ── Google ────────────────────────────────────────────────
+  document.getElementById("googleSignup").addEventListener("click", async () => {
+    hideError(errorEl);
+    const btn = document.getElementById("googleSignup");
+    try {
+      btn.disabled = true;
+      await signupWithGoogle();
+      showToast("Account created. Please sign in.", { kind: "success" });
+      navigate(P.LOGIN, { replace: true });
+    } catch (err) {
+      if (err.code !== "auth/popup-closed-by-user")
+        showError(errorEl, toUserMessage(err));
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
