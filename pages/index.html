@@ -79,11 +79,19 @@
   </div>
 </div>
 
-<!-- ── Ad / Promo banner ─────────────────────────────────── -->
+<!-- ── Ad / Promo banner (dynamic) ──────────────────────── -->
 <div class="home-promo" data-aos="fade-up">
-  <div class="promo-inner">
-    <img src="../assets/images/banner.svg" alt="Ugadi Wishes from Vishvamitra"
-         width="1100" height="420" loading="lazy" class="promo-img" />
+  <div class="promo-inner" id="adCarouselWrap">
+    <!-- Fallback shown while ads load or if none exist -->
+    <img id="adFallbackImg" src="../assets/images/banner.svg"
+         alt="Vishvamitra" width="1100" height="420" loading="lazy" class="promo-img" />
+    <!-- Dynamic carousel injected by JS -->
+    <div id="adCarousel" class="ad-carousel" style="display:none;" aria-label="Advertisement banner" role="region">
+      <div id="adCarouselTrack" class="ad-carousel-track"></div>
+      <div id="adCarouselDots" class="ad-carousel-dots"></div>
+      <button class="ad-carousel-arrow ad-prev" id="adPrev" aria-label="Previous ad">&#8249;</button>
+      <button class="ad-carousel-arrow ad-next" id="adNext" aria-label="Next ad">&#8250;</button>
+    </div>
   </div>
 </div>
 
@@ -245,6 +253,7 @@
 <script type="module">
   import { subscribeToFeaturedListings } from "../scripts/listings.js";
   import { initUgadiPopup, closePopup, initPrefetch, toUserMessage, showToast } from "../scripts/utils.js";
+  import { subscribeToActiveAds } from "../scripts/ads.js";
   import { navigate } from "../scripts/core/router.js";
   import { P }        from "../scripts/core/routes.js";
   import { reportError } from "../scripts/core/errors.js";
@@ -303,6 +312,114 @@
 
   // ── Prefetch ───────────────────────────────────────────
   initPrefetch();
+
+  // ── Ad Carousel ────────────────────────────────────────
+  let _adUnsub = null;
+  let _adTimer = null;
+  let _adIndex = 0;
+  let _ads     = [];
+
+  function initAdCarousel() {
+    _adUnsub = subscribeToActiveAds(
+      (ads) => {
+        _ads = ads;
+        if (!ads.length) {
+          document.getElementById("adFallbackImg").style.display = "";
+          document.getElementById("adCarousel").style.display    = "none";
+          return;
+        }
+        document.getElementById("adFallbackImg").style.display = "none";
+        document.getElementById("adCarousel").style.display    = "";
+        buildCarousel(ads);
+      },
+      (err) => {
+        console.warn("[ads carousel]", err);
+      }
+    );
+    window.addEventListener("pagehide", () => {
+      if (_adUnsub) _adUnsub();
+      clearInterval(_adTimer);
+    });
+  }
+
+  function buildCarousel(ads) {
+    clearInterval(_adTimer);
+    _adIndex = 0;
+    const track = document.getElementById("adCarouselTrack");
+    const dots  = document.getElementById("adCarouselDots");
+    track.innerHTML = "";
+    dots.innerHTML  = "";
+
+    ads.forEach((ad, i) => {
+      const slide = document.createElement("div");
+      slide.className = "ad-slide" + (i === 0 ? " active" : "");
+
+      let media;
+      if (ad.type === "video") {
+        media = document.createElement("video");
+        media.src       = ad.url;
+        media.autoplay  = true;
+        media.loop      = true;
+        media.muted     = true;
+        media.playsInline = true;
+        media.className = "ad-media";
+      } else {
+        media = document.createElement("img");
+        media.src       = ad.url;
+        media.alt       = ad.title || "Advertisement";
+        media.loading   = "lazy";
+        media.className = "ad-media";
+      }
+
+      if (ad.link) {
+        const a = document.createElement("a");
+        a.href   = ad.link;
+        a.target = "_blank";
+        a.rel    = "noopener noreferrer";
+        a.appendChild(media);
+        slide.appendChild(a);
+      } else {
+        slide.appendChild(media);
+      }
+      track.appendChild(slide);
+
+      const dot = document.createElement("button");
+      dot.className = "ad-dot" + (i === 0 ? " active" : "");
+      dot.setAttribute("aria-label", "Go to ad " + (i + 1));
+      dot.addEventListener("click", () => goToSlide(i));
+      dots.appendChild(dot);
+    });
+
+    if (ads.length > 1) {
+      _adTimer = setInterval(() => goToSlide((_adIndex + 1) % ads.length), 5000);
+      document.getElementById("adPrev").style.display = "";
+      document.getElementById("adNext").style.display = "";
+    } else {
+      document.getElementById("adPrev").style.display = "none";
+      document.getElementById("adNext").style.display = "none";
+    }
+  }
+
+  function goToSlide(idx) {
+    const slides = document.querySelectorAll(".ad-slide");
+    const ddots  = document.querySelectorAll(".ad-dot");
+    slides.forEach((s, i) => s.classList.toggle("active", i === idx));
+    ddots.forEach((d, i)  => d.classList.toggle("active", i === idx));
+    _adIndex = idx;
+    clearInterval(_adTimer);
+    if (slides.length > 1) {
+      _adTimer = setInterval(() => goToSlide((_adIndex + 1) % slides.length), 5000);
+    }
+  }
+
+  document.getElementById("adPrev").addEventListener("click", () => {
+    goToSlide((_adIndex - 1 + _ads.length) % _ads.length);
+  });
+  document.getElementById("adNext").addEventListener("click", () => {
+    goToSlide((_adIndex + 1) % _ads.length);
+  });
+
+  initAdCarousel();
 </script>
 
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

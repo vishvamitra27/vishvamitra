@@ -321,3 +321,184 @@ function cleanup() {
   if (unsubListings) unsubListings();
   if (unsubUsers)    unsubUsers();
 }
+
+// ─────────────────────────────────────────────────────────────
+//  ADS PANEL
+// ─────────────────────────────────────────────────────────────
+
+import {
+  subscribeToAllAds, addAd, setAdActive, deleteAd, updateAd
+} from "./ads.js";
+
+let unsubAds   = null;
+let allAds     = [];
+let selectedAdFile = null;
+
+export function initAdsPanel() {
+  // File picker → preview
+  const fileInput = document.getElementById("adFile");
+  const fileLabel = document.getElementById("adFileName");
+  const previewWrap = document.getElementById("adPreviewWrap");
+  const uploadBtn   = document.getElementById("adUploadBtn");
+
+  if (!fileInput) return;
+
+  fileInput.addEventListener("change", () => {
+    selectedAdFile = fileInput.files[0] || null;
+    if (!selectedAdFile) {
+      fileLabel.textContent = "No file chosen";
+      previewWrap.style.display = "none";
+      uploadBtn.disabled = true;
+      return;
+    }
+    fileLabel.textContent = selectedAdFile.name;
+    uploadBtn.disabled = false;
+
+    // Show preview
+    previewWrap.style.display = "block";
+    previewWrap.innerHTML = "";
+    const url = URL.createObjectURL(selectedAdFile);
+    if (selectedAdFile.type.startsWith("video/")) {
+      previewWrap.innerHTML = `<video src="${url}" controls class="ad-preview-media"></video>`;
+    } else {
+      previewWrap.innerHTML = `<img src="${url}" alt="preview" class="ad-preview-media" />`;
+    }
+  });
+
+  // Upload button
+  uploadBtn.addEventListener("click", async () => {
+    const title  = document.getElementById("adTitle").value.trim();
+    const link   = document.getElementById("adLink").value.trim();
+    const order  = document.getElementById("adOrder").value;
+    const active = document.getElementById("adActive").checked;
+
+    if (!title) { showToast("Please enter an ad title.", { kind: "error" }); return; }
+    if (!selectedAdFile) { showToast("Please select a file.", { kind: "error" }); return; }
+
+    uploadBtn.disabled = true;
+    uploadBtn.textContent = "Uploading…";
+
+    const progressBar  = document.getElementById("adUploadProgress");
+    const progressFill = document.getElementById("adProgressFill");
+    progressBar.style.display = "block";
+
+    try {
+      const { auth } = await import("./firebase-core.js");
+      const adminId = auth.currentUser?.uid || "admin";
+
+      await addAd(
+        { title, link, active, order },
+        adminId,
+        selectedAdFile,
+        (pct) => { progressFill.style.width = pct + "%"; }
+      );
+
+      showToast("Ad uploaded successfully!", { kind: "success" });
+      // Reset form
+      document.getElementById("adTitle").value = "";
+      document.getElementById("adLink").value  = "";
+      document.getElementById("adOrder").value = "0";
+      document.getElementById("adActive").checked = true;
+      fileInput.value = "";
+      document.getElementById("adFileName").textContent = "No file chosen";
+      document.getElementById("adPreviewWrap").style.display = "none";
+      selectedAdFile = null;
+      uploadBtn.disabled = true;
+    } catch (err) {
+      reportError("admin.ads.upload", err);
+      showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+    } finally {
+      uploadBtn.textContent = "Upload Ad";
+      progressBar.style.display = "none";
+      progressFill.style.width = "0%";
+    }
+  });
+
+  // Subscribe to all ads
+  unsubAds = subscribeToAllAds(
+    (ads) => { allAds = ads; renderAds(); },
+    (err)  => {
+      reportError("admin.ads.stream", err);
+      showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+    }
+  );
+
+  window.addEventListener("pagehide", () => { if (unsubAds) unsubAds(); });
+}
+
+function renderAds() {
+  const box = document.getElementById("adminAdsList");
+  if (!box) return;
+
+  if (!allAds.length) {
+    box.innerHTML = '<p class="empty-state">No ads yet. Upload one above.</p>';
+    return;
+  }
+
+  box.innerHTML = "";
+  allAds.forEach(ad => box.appendChild(buildAdCard(ad)));
+}
+
+function buildAdCard(ad) {
+  const card = document.createElement("div");
+  card.className = "admin-card ad-admin-card";
+
+  const thumb = ad.type === "video"
+    ? `<video src="${ad.url}" class="ad-card-thumb" muted preload="metadata"></video>`
+    : `<img src="${ad.url}" alt="${ad.title}" class="ad-card-thumb" loading="lazy" />`;
+
+  const activeBadge = ad.active
+    ? `<span class="badge badge-active">Active</span>`
+    : `<span class="badge badge-inactive">Inactive</span>`;
+
+  const typeBadge = ad.type === "video"
+    ? `<span class="badge" style="background:#6366f1;color:#fff;">Video</span>`
+    : `<span class="badge" style="background:#0ea5e9;color:#fff;">Image</span>`;
+
+  card.innerHTML = `
+    <div class="ad-card-left">${thumb}</div>
+    <div class="ad-card-body">
+      <div class="ad-card-meta">${activeBadge} ${typeBadge} <span class="ad-order-tag">Order: ${ad.order ?? 0}</span></div>
+      <h4 class="ad-card-title">${ad.title || "Untitled"}</h4>
+      ${ad.link ? `<p class="ad-card-link"><a href="${ad.link}" target="_blank" rel="noopener">${ad.link}</a></p>` : ""}
+    </div>
+    <div class="ad-card-actions">
+      <button class="ad-toggle-btn ${ad.active ? "btn-warning" : "btn-success"}" data-id="${ad.id}" data-active="${ad.active}">
+        ${ad.active ? "Deactivate" : "Activate"}
+      </button>
+      <button class="ad-delete-btn btn-danger-sm" data-id="${ad.id}" data-path="${ad.storagePath || ""}">Delete</button>
+    </div>`;
+
+  // Toggle active
+  card.querySelector(".ad-toggle-btn").addEventListener("click", async (e) => {
+    const btn      = e.currentTarget;
+    const id       = btn.dataset.id;
+    const wasActive = btn.dataset.active === "true";
+    btn.disabled = true;
+    try {
+      await setAdActive(id, !wasActive);
+    } catch (err) {
+      showToast(toUserMessage(err), { kind: "error" });
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  // Delete
+  card.querySelector(".ad-delete-btn").addEventListener("click", async (e) => {
+    if (!confirm("Delete this ad permanently?")) return;
+    const btn  = e.currentTarget;
+    const id   = btn.dataset.id;
+    const path = btn.dataset.path;
+    btn.disabled = true;
+    try {
+      await deleteAd(id, path);
+      showToast("Ad deleted.", { kind: "success" });
+    } catch (err) {
+      showToast(toUserMessage(err), { kind: "error" });
+      btn.disabled = false;
+    }
+  });
+
+  return card;
+}
