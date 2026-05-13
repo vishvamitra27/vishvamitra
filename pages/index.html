@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#14a800" />
   <title>Vishvamitra – Local Services Platform</title>
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
 </head>
 <body>
@@ -208,7 +208,7 @@
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="footer-logo">Vishvamitra</div>
+      <div class="footer-logo">vishvamitra</div>
       <p class="footer-tagline">Connecting local communities<br/>with trusted services</p>
       <div class="social-links">
         <a href="https://www.facebook.com/profile.php?id=61585787019425" target="_blank" rel="noopener noreferrer" title="Facebook">
@@ -314,61 +314,102 @@
   initPrefetch();
 
   // ── Ad Carousel ────────────────────────────────────────
-  let _adUnsub = null;
-  let _adTimer = null;
-  let _adIndex = 0;
-  let _ads     = [];
+  let _adUnsub  = null;
+  let _adTimer  = null;
+  let _adIndex  = 0;
+  let _ads      = [];
+  let _paused   = false;      // pause on hover
+
+  const SLIDE_INTERVAL = 5000;
 
   function initAdCarousel() {
     _adUnsub = subscribeToActiveAds(
       (ads) => {
         _ads = ads;
+        const fallback  = document.getElementById("adFallbackImg");
+        const carousel  = document.getElementById("adCarousel");
         if (!ads.length) {
-          document.getElementById("adFallbackImg").style.display = "";
-          document.getElementById("adCarousel").style.display    = "none";
+          fallback.style.display = "";
+          carousel.style.display = "none";
           return;
         }
-        document.getElementById("adFallbackImg").style.display = "none";
-        document.getElementById("adCarousel").style.display    = "";
+        fallback.style.display = "none";
+        carousel.style.display = "";
         buildCarousel(ads);
       },
-      (err) => {
-        console.warn("[ads carousel]", err);
-      }
+      (err) => console.warn("[ads carousel]", err)
     );
+
+    // Pause auto-advance on hover to stop any perceived jitter
+    const carousel = document.getElementById("adCarousel");
+    carousel?.addEventListener("mouseenter", () => { _paused = true;  stopTimer(); });
+    carousel?.addEventListener("mouseleave", () => { _paused = false; startTimer(); });
+
     window.addEventListener("pagehide", () => {
       if (_adUnsub) _adUnsub();
-      clearInterval(_adTimer);
+      stopTimer();
     });
   }
 
+  function startTimer() {
+    if (_paused || _ads.length <= 1) return;
+    stopTimer();
+    _adTimer = setInterval(() => {
+      goToSlide((_adIndex + 1) % _ads.length);
+    }, SLIDE_INTERVAL);
+  }
+
+  function stopTimer() {
+    if (_adTimer) { clearInterval(_adTimer); _adTimer = null; }
+  }
+
   function buildCarousel(ads) {
-    clearInterval(_adTimer);
+    stopTimer();
     _adIndex = 0;
+
     const track = document.getElementById("adCarouselTrack");
     const dots  = document.getElementById("adCarouselDots");
+    const prev  = document.getElementById("adPrev");
+    const next  = document.getElementById("adNext");
     track.innerHTML = "";
     dots.innerHTML  = "";
 
     ads.forEach((ad, i) => {
+      // ── Slide (position:absolute, opacity transition) ──
       const slide = document.createElement("div");
       slide.className = "ad-slide" + (i === 0 ? " active" : "");
 
       let media;
+      // Blurred backdrop (fills letterbox gaps, never crops the ad)
+      const bg = document.createElement("div");
+      bg.className = "ad-slide-bg";
+
       if (ad.type === "video") {
         media = document.createElement("video");
-        media.src       = ad.url;
-        media.autoplay  = true;
-        media.loop      = true;
-        media.muted     = true;
+        media.src         = ad.url;
+        media.loop        = true;
+        media.muted       = true;
         media.playsInline = true;
-        media.className = "ad-media";
+        media.className   = "ad-media";
+        if (i === 0) media.autoplay = true;
+        // Video backdrop: use a duplicate blurred video
+        const bgVid = document.createElement("video");
+        bgVid.src         = ad.url;
+        bgVid.loop        = true;
+        bgVid.muted       = true;
+        bgVid.playsInline = true;
+        bgVid.autoplay    = true;
+        bgVid.style.cssText = "position:absolute;inset:-10px;width:calc(100%+20px);height:calc(100%+20px);object-fit:cover;filter:blur(18px) brightness(0.4);transform:scale(1.05);";
+        slide.appendChild(bgVid);
       } else {
         media = document.createElement("img");
-        media.src       = ad.url;
-        media.alt       = ad.title || "Advertisement";
-        media.loading   = "lazy";
+        media.src     = ad.url;
+        media.alt     = ad.title || "Advertisement";
+        media.loading = i === 0 ? "eager" : "lazy";
         media.className = "ad-media";
+        // Image backdrop: CSS background-image blur
+        bg.style.backgroundImage = "url('" + ad.url + "')";
+        slide.appendChild(bg);
       }
 
       if (ad.link) {
@@ -376,6 +417,7 @@
         a.href   = ad.link;
         a.target = "_blank";
         a.rel    = "noopener noreferrer";
+        a.style.cssText = "display:block;height:100%;position:relative;z-index:1;";
         a.appendChild(media);
         slide.appendChild(a);
       } else {
@@ -383,40 +425,50 @@
       }
       track.appendChild(slide);
 
+      // ── Dot ──
       const dot = document.createElement("button");
       dot.className = "ad-dot" + (i === 0 ? " active" : "");
       dot.setAttribute("aria-label", "Go to ad " + (i + 1));
-      dot.addEventListener("click", () => goToSlide(i));
+      dot.addEventListener("click", () => { stopTimer(); goToSlide(i); startTimer(); });
       dots.appendChild(dot);
     });
 
-    if (ads.length > 1) {
-      _adTimer = setInterval(() => goToSlide((_adIndex + 1) % ads.length), 5000);
-      document.getElementById("adPrev").style.display = "";
-      document.getElementById("adNext").style.display = "";
-    } else {
-      document.getElementById("adPrev").style.display = "none";
-      document.getElementById("adNext").style.display = "none";
-    }
+    // Show/hide arrows
+    const multi = ads.length > 1;
+    prev.style.display = multi ? "" : "none";
+    next.style.display = multi ? "" : "none";
+
+    startTimer();
   }
 
   function goToSlide(idx) {
     const slides = document.querySelectorAll(".ad-slide");
     const ddots  = document.querySelectorAll(".ad-dot");
-    slides.forEach((s, i) => s.classList.toggle("active", i === idx));
-    ddots.forEach((d, i)  => d.classList.toggle("active", i === idx));
-    _adIndex = idx;
-    clearInterval(_adTimer);
-    if (slides.length > 1) {
-      _adTimer = setInterval(() => goToSlide((_adIndex + 1) % slides.length), 5000);
-    }
+    if (!slides.length) return;
+
+    // Deactivate current, activate next — opacity CSS handles the crossfade
+    slides[_adIndex]?.classList.remove("active");
+    ddots[_adIndex]?.classList.remove("active");
+
+    _adIndex = (idx + slides.length) % slides.length;
+
+    slides[_adIndex]?.classList.add("active");
+    ddots[_adIndex]?.classList.add("active");
+
+    // Play video if it's a video slide
+    const video = slides[_adIndex]?.querySelector("video");
+    if (video) { video.currentTime = 0; video.play().catch(() => {}); }
   }
 
-  document.getElementById("adPrev").addEventListener("click", () => {
-    goToSlide((_adIndex - 1 + _ads.length) % _ads.length);
+  document.getElementById("adPrev")?.addEventListener("click", () => {
+    stopTimer();
+    goToSlide(_adIndex - 1);
+    startTimer();
   });
-  document.getElementById("adNext").addEventListener("click", () => {
-    goToSlide((_adIndex + 1) % _ads.length);
+  document.getElementById("adNext")?.addEventListener("click", () => {
+    stopTimer();
+    goToSlide(_adIndex + 1);
+    startTimer();
   });
 
   initAdCarousel();

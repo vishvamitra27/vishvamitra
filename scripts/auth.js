@@ -13,6 +13,7 @@ import { P, DASHBOARD_BY_ROLE, ROUTE_GROUPS } from "./core/routes.js";
 import { navigate, currentFilename } from "./core/router.js";
 import { toUserMessage, reportError } from "./core/errors.js";
 import { showToast } from "./core/ui.js";
+import { syncDrawerLink } from "./navbar.js";
 
 const CACHE_KEY = "vm_profile";
 const CACHE_TTL = 5 * 60 * 1000;
@@ -40,19 +41,22 @@ function redirect(filename) {
   navigate(filename, { replace: true });
 }
 
+function setNav(id, display) {
+  document.getElementById(id)?.style.setProperty("display", display);
+  syncDrawerLink(id, display);
+}
+
 function updateNavbar(user, role) {
-  const $ = (id) => document.getElementById(id);
   if (user) {
-    $("loginLink")?.style.setProperty("display", "none");
-    $("logoutLink")?.style.setProperty("display", "inline-block");
-    // Dashboard link only for vendors and users — admins use the Admin panel
-    $("dashboardLink")?.style.setProperty("display", role === "admin" ? "none" : "inline-block");
-    $("adminLink")?.style.setProperty("display", role === "admin" ? "inline-block" : "none");
+    setNav("loginLink",    "none");
+    setNav("logoutLink",   "inline-block");
+    setNav("dashboardLink", role === "admin" ? "none" : "inline-block");
+    setNav("adminLink",     role === "admin" ? "inline-block" : "none");
   } else {
-    $("loginLink")?.style.setProperty("display", "inline-block");
-    $("logoutLink")?.style.setProperty("display", "none");
-    $("dashboardLink")?.style.setProperty("display", "none");
-    $("adminLink")?.style.setProperty("display", "none");
+    setNav("loginLink",    "inline-block");
+    setNav("logoutLink",   "none");
+    setNav("dashboardLink","none");
+    setNav("adminLink",    "none");
   }
 }
 

@@ -62,18 +62,20 @@ export async function getListingById(id) {
  */
 export async function getListings({
   category  = "",
+  type      = "",
   pageSize  = 10,
   after     = null
 } = {}) {
-  return _fetchPage(category, pageSize, after);
+  return _fetchPage(category, type, pageSize, after);
 }
 
-async function _fetchPage(category, pageSize, after) {
+async function _fetchPage(category, type, pageSize, after) {
   const constraints = [
     where("status", "==", "active"),
     orderBy("name"),
     limit(pageSize)
   ];
+  if (type)     constraints.splice(1, 0, where("type",     "==", type));
   if (category) constraints.splice(1, 0, where("category", "==", category));
   if (after)    constraints.push(startAfter(after));
 

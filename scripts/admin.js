@@ -502,3 +502,225 @@ function buildAdCard(ad) {
 
   return card;
 }
+
+
+// ─────────────────────────────────────────────────────────────
+//  MESSAGES PANEL
+// ─────────────────────────────────────────────────────────────
+
+let _allMsgs   = [];
+let _unsubMsgs = null;
+
+const REASON_LABELS = {
+  "list-business":   "List My Business",
+  "upgrade-listing": "Upgrade Listing",
+  "general":         "General Inquiry",
+  "report-issue":    "Report Issue",
+  "advertise":       "Advertise",
+  "other":           "Other",
+};
+
+const STATUS_COLORS = {
+  unread:  { bg: "#fff0f0", color: "#e53e3e", label: "Unread" },
+  read:    { bg: "#f0f9ff", color: "#2563eb", label: "Read"   },
+  replied: { bg: "#edfce8", color: "#14a800", label: "Replied"},
+};
+
+export function initMessagesPanel() {
+  // Subscribe to contacts collection
+  const q = query(collection(db, "contacts"), orderBy("createdAt", "desc"));
+  _unsubMsgs = onSnapshot(q,
+    (snap) => {
+      _allMsgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderMessages();
+      updateMsgBadge();
+    },
+    (err) => {
+      reportError("admin.messages.stream", err);
+      showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+    }
+  );
+
+  // Filters
+  document.getElementById("msgStatusFilter")?.addEventListener("change", renderMessages);
+  document.getElementById("msgReasonFilter")?.addEventListener("change", renderMessages);
+
+  // Modal close on backdrop click
+  document.getElementById("msgModal")?.addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeMsgModal();
+  });
+
+  window.addEventListener("pagehide", () => { if (_unsubMsgs) _unsubMsgs(); });
+}
+
+function updateMsgBadge() {
+  const unread = _allMsgs.filter(m => m.status === "unread").length;
+  const badge  = document.getElementById("msgBadge");
+  if (!badge) return;
+  if (unread > 0) {
+    badge.textContent    = unread;
+    badge.style.display  = "inline-block";
+  } else {
+    badge.style.display  = "none";
+  }
+}
+
+function renderMessages() {
+  const box          = document.getElementById("msgList");
+  const statusFilter = document.getElementById("msgStatusFilter")?.value || "";
+  const reasonFilter = document.getElementById("msgReasonFilter")?.value || "";
+  const countEl      = document.getElementById("msgCount");
+  if (!box) return;
+
+  let filtered = _allMsgs;
+  if (statusFilter) filtered = filtered.filter(m => m.status === statusFilter);
+  if (reasonFilter) filtered = filtered.filter(m => m.reason === reasonFilter);
+
+  if (countEl) countEl.textContent = `${filtered.length} message${filtered.length !== 1 ? "s" : ""}`;
+
+  if (!filtered.length) {
+    box.innerHTML = `<p class="empty-state">No messages found.</p>`;
+    return;
+  }
+
+  box.innerHTML = "";
+  filtered.forEach(msg => box.appendChild(buildMsgRow(msg)));
+}
+
+function buildMsgRow(msg) {
+  const wrap = document.createElement("div");
+  const sc   = STATUS_COLORS[msg.status] || STATUS_COLORS.unread;
+  const ts   = msg.createdAt?.toDate
+    ? msg.createdAt.toDate().toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" })
+    : "—";
+  const reason = REASON_LABELS[msg.reason] || msg.reason || "—";
+  const preview = (msg.message || "").slice(0, 80) + ((msg.message || "").length > 80 ? "…" : "");
+
+  wrap.innerHTML = `
+    <div class="admin-card" style="
+      display:flex; align-items:flex-start; gap:16px;
+      padding:16px 18px; margin-bottom:10px;
+      border-left:4px solid ${sc.color};
+      cursor:pointer; transition:box-shadow .2s, transform .15s;
+      ${msg.status === 'unread' ? 'background:#fffaf9;' : ''}
+    " data-id="${msg.id}">
+      <!-- Avatar -->
+      <div style="width:42px;height:42px;border-radius:50%;background:${sc.bg};
+                  display:flex;align-items:center;justify-content:center;
+                  flex-shrink:0;font-size:16px;font-weight:700;color:${sc.color};">
+        ${(msg.name || "?")[0].toUpperCase()}
+      </div>
+      <!-- Content -->
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <span style="font-size:14px;font-weight:${msg.status==='unread'?'700':'600'};color:#111;">${msg.name || "Unknown"}</span>
+          <span style="font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:${sc.bg};color:${sc.color};">${sc.label}</span>
+          <span style="font-size:11px;padding:2px 9px;border-radius:100px;background:#f5f5f5;color:#666;">${reason}</span>
+        </div>
+        <div style="font-size:12px;color:#888;margin-bottom:6px;">${msg.phone || ""}${msg.email ? " · " + msg.email : ""}</div>
+        <div style="font-size:13px;color:#555;line-height:1.5;">${preview}</div>
+      </div>
+      <!-- Time -->
+      <div style="font-size:11px;color:#aaa;white-space:nowrap;flex-shrink:0;">${ts}</div>
+    </div>`;
+
+  wrap.querySelector("[data-id]").addEventListener("click", () => openMsgModal(msg));
+  return wrap;
+}
+
+function openMsgModal(msg) {
+  const modal   = document.getElementById("msgModal");
+  const content = document.getElementById("msgModalContent");
+  if (!modal || !content) return;
+
+  const sc     = STATUS_COLORS[msg.status] || STATUS_COLORS.unread;
+  const ts     = msg.createdAt?.toDate
+    ? msg.createdAt.toDate().toLocaleDateString("en-IN", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" })
+    : "—";
+  const reason = REASON_LABELS[msg.reason] || msg.reason || "—";
+
+  content.innerHTML = `
+    <!-- Modal header -->
+    <div style="padding:20px 24px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:44px;height:44px;border-radius:50%;background:${sc.bg};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:${sc.color};">
+          ${(msg.name||"?")[0].toUpperCase()}
+        </div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:#111;">${msg.name || "Unknown"}</div>
+          <div style="font-size:12px;color:#888;">${ts}</div>
+        </div>
+      </div>
+      <button id="msgModalClose" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #eee;background:#f7f7f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:#666;">✕</button>
+    </div>
+
+    <!-- Meta info -->
+    <div style="padding:16px 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border-bottom:1px solid #f0f0f0;">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Phone</div>
+        <div style="font-size:14px;font-weight:600;color:#222;">${msg.phone || "—"}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Email</div>
+        <div style="font-size:14px;font-weight:600;color:#222;">${msg.email || "—"}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Reason</div>
+        <div style="font-size:13px;font-weight:600;color:#222;">${reason}</div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Business</div>
+        <div style="font-size:13px;font-weight:600;color:#222;">${msg.business || "—"}</div>
+      </div>
+    </div>
+
+    <!-- Message body -->
+    <div style="padding:20px 24px;border-bottom:1px solid #f0f0f0;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:10px;">Message</div>
+      <div style="font-size:14px;color:#333;line-height:1.75;white-space:pre-wrap;">${msg.message || ""}</div>
+    </div>
+
+    <!-- Actions -->
+    <div style="padding:16px 24px;display:flex;gap:10px;flex-wrap:wrap;">
+      ${msg.phone ? `<a href="tel:${msg.phone}" style="flex:1;min-width:120px;padding:10px;background:#edfce8;color:#14a800;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid #b6f0a8;">📞 Call</a>` : ""}
+      ${msg.email ? `<a href="mailto:${msg.email}" style="flex:1;min-width:120px;padding:10px;background:#e8f4ff;color:#2563eb;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid #b8d8ff;">✉️ Email</a>` : ""}
+      ${msg.status !== "read"    ? `<button class="msg-action-btn" data-action="read"    data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#f0f9ff;color:#2563eb;border:1.5px solid #b8d8ff;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Read</button>` : ""}
+      ${msg.status !== "replied" ? `<button class="msg-action-btn" data-action="replied" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#edfce8;color:#14a800;border:1.5px solid #b6f0a8;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Replied</button>` : ""}
+      <button class="msg-action-btn" data-action="delete" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#fff0f0;color:#e53e3e;border:1.5px solid #ffc0c0;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">🗑 Delete</button>
+    </div>`;
+
+  modal.style.display = "flex";
+
+  // Mark as read automatically on open
+  if (msg.status === "unread") updateMsgStatus(msg.id, "read");
+
+  document.getElementById("msgModalClose")?.addEventListener("click", closeMsgModal);
+
+  content.querySelectorAll(".msg-action-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const action = btn.dataset.action;
+      const id     = btn.dataset.id;
+      if (action === "delete") {
+        if (!confirm("Delete this message?")) return;
+        await deleteDoc(doc(db, "contacts", id)).catch(err => showToast(toUserMessage(err), { kind: "error" }));
+        closeMsgModal();
+      } else {
+        await updateMsgStatus(id, action);
+        closeMsgModal();
+      }
+    });
+  });
+}
+
+function closeMsgModal() {
+  const modal = document.getElementById("msgModal");
+  if (modal) modal.style.display = "none";
+}
+
+async function updateMsgStatus(id, status) {
+  try {
+    await updateDoc(doc(db, "contacts", id), { status });
+  } catch (err) {
+    showToast(toUserMessage(err), { kind: "error" });
+  }
+}

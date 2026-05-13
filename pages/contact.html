@@ -4,26 +4,682 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us | Vishvamitra</title>
+  <meta name="description" content="Get in touch with Vishvamitra. List your business, ask questions, or connect with us on social media." />
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* ── Hero ── */
+    .ct-hero {
+      background: linear-gradient(135deg, #0d1f0d 0%, #14a800 60%, #1eca00 100%);
+      padding: 80px 24px 70px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ct-hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(255,255,255,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(0,0,0,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ct-hero-deco {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .ct-hero-deco-1 {
+      width: 320px; height: 320px;
+      border: 1.5px solid rgba(255,255,255,.08);
+      top: -80px; right: -60px;
+    }
+    .ct-hero-deco-2 {
+      width: 180px; height: 180px;
+      border: 1px solid rgba(255,255,255,.06);
+      bottom: -40px; left: 40px;
+    }
+    .ct-hero-inner { position: relative; max-width: 680px; margin: 0 auto; }
+    .ct-hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.22);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 22px;
+    }
+    .ct-hero-pill-dot {
+      width: 6px; height: 6px;
+      background: #7fff6e;
+      border-radius: 50%;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.5; transform:scale(1.4); }
+    }
+    .ct-hero h1 {
+      font-size: clamp(30px, 5vw, 52px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      letter-spacing: -.02em;
+    }
+    .ct-hero h1 span { color: #b8ffb0; }
+    .ct-hero-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,.82);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 32px;
+    }
+    .ct-hero-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .ct-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.13);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 16px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,.18);
+    }
+
+    /* ── Info cards ── */
+    .ct-info-section {
+      max-width: 1080px;
+      margin: -36px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+    }
+    .ct-info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    @media (max-width: 780px) { .ct-info-grid { grid-template-columns: 1fr; } }
+
+    .ct-info-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.09), 0 1px 3px rgba(0,0,0,.05);
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      transition: transform .22s ease, box-shadow .22s ease;
+      text-decoration: none;
+    }
+    .ct-info-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.13); }
+    .ct-info-icon {
+      width: 50px; height: 50px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ct-info-icon.green  { background: #edfce8; color: #14a800; }
+    .ct-info-icon.blue   { background: #e8f4ff; color: #2563eb; }
+    .ct-info-icon.purple { background: #f2e8ff; color: #7c3aed; }
+    .ct-info-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #999; margin-bottom: 4px; }
+    .ct-info-value { font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 1.4; }
+    .ct-info-hint  { font-size: 12px; color: #888; margin-top: 3px; }
+
+    /* ── Body layout ── */
+    .ct-body {
+      max-width: 1080px;
+      margin: 56px auto 80px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 860px) { .ct-body { grid-template-columns: 1fr; } }
+
+    /* Left panel */
+    .ct-section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #14a800; margin-bottom: 10px; }
+    .ct-left-title { font-size: 28px; font-weight: 800; color: #111; line-height: 1.25; letter-spacing: -.02em; margin-bottom: 14px; }
+    .ct-left-desc { font-size: 14px; color: #666; line-height: 1.75; margin-bottom: 32px; }
+
+    .ct-social-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 12px; }
+    .ct-socials { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .ct-social-link {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 1.5px solid #eee;
+      text-decoration: none;
+      transition: border-color .2s, background .2s, transform .18s;
+    }
+    .ct-social-link:hover { border-color: #14a800; background: #f6fff4; transform: translateX(4px); }
+    .ct-social-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .ct-social-icon.fb { background: #1877f2; }
+    .ct-social-icon.ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .ct-social-name   { font-size: 14px; font-weight: 600; color: #222; }
+    .ct-social-handle { font-size: 12px; color: #999; }
+    .ct-social-arrow  { margin-left: auto; color: #ccc; }
+
+    /* Hours card */
+    .ct-hours-card {
+      background: linear-gradient(135deg, #f8fff6, #edfce8);
+      border: 1.5px solid #d4f5cc;
+      border-radius: 16px;
+      padding: 22px 20px;
+    }
+    .ct-hours-title {
+      font-size: 13px; font-weight: 700; color: #14a800;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
+    }
+    .ct-hours-row {
+      display: flex; justify-content: space-between;
+      font-size: 13px; color: #555;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(20,168,0,.1);
+    }
+    .ct-hours-row:last-child { border-bottom: none; }
+    .ct-hours-row span:last-child { font-weight: 600; color: #222; }
+
+    /* Form card */
+    .ct-form-card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.09), 0 1px 4px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+    .ct-form-header {
+      background: linear-gradient(135deg, #14a800, #1eca00);
+      padding: 28px 32px 24px;
+    }
+    .ct-form-header-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .ct-form-header-sub   { font-size: 13px; color: rgba(255,255,255,.82); }
+
+    /* ── Form body ── */
+    .ct-form-body { padding: 28px 32px 32px; }
+    .ct-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .ct-field-row { grid-template-columns: 1fr; } }
+
+    .ct-field { margin-bottom: 18px; }
+    .ct-field label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: #333; margin-bottom: 6px;
+    }
+    .ct-field label span { color: #e53e3e; margin-left: 2px; }
+    .ct-field input,
+    .ct-field select,
+    .ct-field textarea {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 10px;
+      font-size: 14px; font-family: inherit; color: #222;
+      background: #fafafa;
+      outline: none; box-sizing: border-box;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+    .ct-field input:focus,
+    .ct-field select:focus,
+    .ct-field textarea:focus {
+      border-color: #14a800;
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(20,168,0,.1);
+    }
+    .ct-field input.error,
+    .ct-field select.error,
+    .ct-field textarea.error {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 3px rgba(229,62,62,.08);
+    }
+    .ct-field-err {
+      font-size: 11px; color: #e53e3e;
+      margin-top: 4px; display: none;
+    }
+    .ct-field textarea { resize: vertical; min-height: 120px; }
+
+    /* Submit button */
+    .ct-submit-btn {
+      width: 100%; padding: 14px;
+      background: #14a800; color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 700; font-family: inherit;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 14px rgba(20,168,0,.3);
+      margin-top: 6px;
+    }
+    .ct-submit-btn:hover:not(:disabled) { background: #0e8a00; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(20,168,0,.38); }
+    .ct-submit-btn:disabled { opacity: .65; cursor: not-allowed; }
+
+    /* Spinner */
+    .ct-spinner {
+      width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.4);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .7s linear infinite; display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Success state */
+    .ct-success {
+      display: none; text-align: center; padding: 40px 24px;
+    }
+    .ct-success-icon {
+      width: 64px; height: 64px; background: #edfce8;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .ct-success h3 { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 8px; }
+    .ct-success p  { font-size: 14px; color: #666; line-height: 1.6; }
+    .ct-success-back {
+      margin-top: 20px; display: inline-block;
+      padding: 10px 24px; background: #14a800; color: #fff;
+      border-radius: 100px; font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: background .2s;
+    }
+    .ct-success-back:hover { background: #0e8a00; }
+
+    /* CTA */
+    .ct-cta { max-width: 1080px; margin: 0 auto 80px; padding: 0 24px; }
+    .ct-cta-inner {
+      background: linear-gradient(135deg, #0d1f0d, #14a800);
+      border-radius: 24px;
+      padding: 52px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .ct-cta-inner::before {
+      content: "";
+      position: absolute;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      pointer-events: none;
+    }
+    .ct-cta-inner h2 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; letter-spacing: -.02em; }
+    .ct-cta-inner p  { font-size: 15px; color: rgba(255,255,255,.78); margin-bottom: 28px; }
+    .ct-cta-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      background: #fff;
+      color: #14a800;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    }
+    .ct-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.28); }
+
+    /* Animations */
+    .ct-fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .ct-fade-up.visible { opacity: 1; transform: none; }
+  </style>
 </head>
 <body>
 
 <header><div id="navbar-root"></div></header>
 
-<section class="contact-section">
-  <h1>Contact Us</h1>
-  <p>If you're a business or customer, use the form below to get started:</p>
-  <iframe
-    src="https://docs.google.com/forms/d/e/1FAIpQLSfaAx66Xcq-gCc-GFHRCucYNFfiBRsdeRGa7rjRlQouLza7bg/viewform?embedded=true"
-    title="Contact Form"
-    loading="lazy">Loading…</iframe>
+<!-- ── Hero ────────────────────────────────────────────────── -->
+<section class="ct-hero">
+  <div class="ct-hero-deco ct-hero-deco-1"></div>
+  <div class="ct-hero-deco ct-hero-deco-2"></div>
+  <div class="ct-hero-inner">
+    <div class="ct-hero-pill">
+      <span class="ct-hero-pill-dot"></span>
+      We're here to help
+    </div>
+    <h1>Get in <span>Touch</span><br/>with Vishvamitra</h1>
+    <p class="ct-hero-sub">
+      Whether you want to list your business, ask a question, or just say hello —
+      we'd love to hear from you.
+    </p>
+    <div class="ct-hero-chips">
+      <span class="ct-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Free business listings
+      </span>
+      <span class="ct-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Quick response
+      </span>
+      <span class="ct-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Local community support
+      </span>
+    </div>
+  </div>
 </section>
 
-<footer class="footer"><p>© 2025 Vishvamitra. All rights reserved.</p></footer>
+<!-- ── Info cards ───────────────────────────────────────────── -->
+<div class="ct-info-section ct-fade-up">
+  <div class="ct-info-grid">
+    <a class="ct-info-card" href="https://www.facebook.com/profile.php?id=61585787019425" target="_blank" rel="noopener noreferrer">
+      <div class="ct-info-icon blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </div>
+      <div class="ct-info-text">
+        <div class="ct-info-label">Facebook</div>
+        <div class="ct-info-value">Vishvamitra</div>
+        <div class="ct-info-hint">Follow us for updates &amp; news</div>
+      </div>
+    </a>
+    <a class="ct-info-card" href="https://www.instagram.com/vishvamitra_services/" target="_blank" rel="noopener noreferrer">
+      <div class="ct-info-icon purple">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <div class="ct-info-text">
+        <div class="ct-info-label">Instagram</div>
+        <div class="ct-info-value">@vishvamitra_services</div>
+        <div class="ct-info-hint">See our latest stories &amp; posts</div>
+      </div>
+    </a>
+    <div class="ct-info-card" style="cursor:default;">
+      <div class="ct-info-icon green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="ct-info-text">
+        <div class="ct-info-label">Service Area</div>
+        <div class="ct-info-value">Andhra Pradesh</div>
+        <div class="ct-info-hint">Hyperlocal listings near you</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Two-col body ──────────────────────────────────────────── -->
+<div class="ct-body">
+
+  <!-- Left -->
+  <div class="ct-left ct-fade-up" style="transition-delay:.1s;">
+    <div class="ct-section-label">Why reach out?</div>
+    <h2 class="ct-left-title">We're here for<br/>businesses &amp; customers</h2>
+    <p class="ct-left-desc">
+      Vishvamitra is built to connect local communities with trusted services.
+      Use the form to list your business, report an issue, or simply get in touch.
+      We review every message personally.
+    </p>
+
+    <div class="ct-social-title">Connect on Social Media</div>
+    <div class="ct-socials">
+      <a href="https://www.facebook.com/profile.php?id=61585787019425" target="_blank" rel="noopener noreferrer" class="ct-social-link">
+        <div class="ct-social-icon fb">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </div>
+        <div>
+          <div class="ct-social-name">Facebook</div>
+          <div class="ct-social-handle">Vishvamitra Official</div>
+        </div>
+        <svg class="ct-social-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <a href="https://www.instagram.com/vishvamitra_services/" target="_blank" rel="noopener noreferrer" class="ct-social-link">
+        <div class="ct-social-icon ig">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>
+        </div>
+        <div>
+          <div class="ct-social-name">Instagram</div>
+          <div class="ct-social-handle">@vishvamitra_services</div>
+        </div>
+        <svg class="ct-social-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+
+    <div class="ct-hours-card">
+      <div class="ct-hours-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Platform Info
+      </div>
+      <div class="ct-hours-row"><span>Browse listings</span><span>24 / 7</span></div>
+      <div class="ct-hours-row"><span>Form responses</span><span>Within 24 hrs</span></div>
+      <div class="ct-hours-row"><span>New listing review</span><span>1 – 2 business days</span></div>
+      <div class="ct-hours-row"><span>Free listing</span><span>Always ✓</span></div>
+    </div>
+  </div>
+
+  <!-- Right — Form -->
+  <div class="ct-fade-up" style="transition-delay:.2s;">
+    <div class="ct-form-card">
+      <div class="ct-form-header">
+        <div class="ct-form-header-title">Send us a message</div>
+        <div class="ct-form-header-sub">Fill in the form below — we'll get back to you promptly.</div>
+      </div>
+      <!-- ── Custom Form ── -->
+      <div class="ct-form-body" id="ctFormWrap">
+
+        <!-- Success screen (hidden initially) -->
+        <div class="ct-success" id="ctSuccess">
+          <div class="ct-success-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#14a800" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3>Message Sent!</h3>
+          <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
+          <a href="services.html" class="ct-success-back">Browse Services</a>
+        </div>
+
+        <!-- The form -->
+        <form id="ctForm" novalidate>
+
+          <div class="ct-field-row">
+            <div class="ct-field">
+              <label>Full Name <span>*</span></label>
+              <input type="text" id="cf-name" placeholder="Your name" autocomplete="name"/>
+              <div class="ct-field-err" id="err-name">Please enter your name.</div>
+            </div>
+            <div class="ct-field">
+              <label>Phone Number <span>*</span></label>
+              <input type="tel" id="cf-phone" placeholder="+91 XXXXX XXXXX" autocomplete="tel"/>
+              <div class="ct-field-err" id="err-phone">Please enter a valid phone number.</div>
+            </div>
+          </div>
+
+          <div class="ct-field">
+            <label>Email Address</label>
+            <input type="email" id="cf-email" placeholder="you@example.com" autocomplete="email"/>
+            <div class="ct-field-err" id="err-email">Please enter a valid email address.</div>
+          </div>
+
+          <div class="ct-field">
+            <label>Reason for Contact <span>*</span></label>
+            <select id="cf-reason">
+              <option value="" disabled selected>Select a reason…</option>
+              <option value="list-business">List My Business</option>
+              <option value="upgrade-listing">Upgrade to Paid Listing</option>
+              <option value="general">General Inquiry</option>
+              <option value="report-issue">Report an Issue</option>
+              <option value="advertise">Advertise on Vishvamitra</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="ct-field-err" id="err-reason">Please select a reason.</div>
+          </div>
+
+          <div class="ct-field">
+            <label>Business Name <span style="color:#999;font-weight:400;">(if applicable)</span></label>
+            <input type="text" id="cf-business" placeholder="Your business or shop name"/>
+          </div>
+
+          <div class="ct-field">
+            <label>Message <span>*</span></label>
+            <textarea id="cf-message" placeholder="Tell us more about your request…"></textarea>
+            <div class="ct-field-err" id="err-message">Please enter a message (at least 10 characters).</div>
+          </div>
+
+          <button type="submit" class="ct-submit-btn" id="ctSubmitBtn">
+            <span id="ctBtnText">Send Message</span>
+            <div class="ct-spinner" id="ctSpinner"></div>
+            <svg id="ctBtnIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── CTA ──────────────────────────────────────────────────── -->
+<div class="ct-cta ct-fade-up" style="transition-delay:.15s;">
+  <div class="ct-cta-inner">
+    <h2>Ready to list your business?</h2>
+    <p>Join local vendors already on Vishvamitra — basic listing is completely free.</p>
+    <a href="services.html" class="ct-cta-btn">Browse All Services</a>
+  </div>
+</div>
+
+<!-- ── Footer ───────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">vishvamitra</div>
+      <p class="footer-tagline">Connecting local communities<br/>with trusted services</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=61585787019425" target="_blank" rel="noopener noreferrer" title="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/vishvamitra_services/" target="_blank" rel="noopener noreferrer" title="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="services.html">All Services</a>
+        <a href="paid-services.html">Paid Listings</a>
+        <a href="free-services.html">Free Listings</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">Contact Us</a>
+        <a href="contact.html">List a Business</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Vishvamitra. All rights reserved.</p>
+  </div>
+</footer>
 
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { db } from "../scripts/firebase-core.js";
+  import { collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+  // ── Scroll animations ──
+  const observer = new IntersectionObserver(
+    (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll(".ct-fade-up").forEach(el => observer.observe(el));
+
+  // ── Form helpers ──
+  const $ = id => document.getElementById(id);
+
+  function showErr(id, show) {
+    const el = $(id);
+    if (el) el.style.display = show ? "block" : "none";
+  }
+  function markField(inputId, errId, valid) {
+    const inp = $(inputId);
+    if (!inp) return;
+    inp.classList.toggle("error", !valid);
+    showErr(errId, !valid);
+    return valid;
+  }
+
+  function validate() {
+    const name    = $("cf-name").value.trim();
+    const phone   = $("cf-phone").value.trim();
+    const email   = $("cf-email").value.trim();
+    const reason  = $("cf-reason").value;
+    const message = $("cf-message").value.trim();
+
+    let ok = true;
+    if (!markField("cf-name",    "err-name",    name.length >= 2)) ok = false;
+    if (!markField("cf-phone",   "err-phone",   /^[0-9+\s\-]{7,15}$/.test(phone))) ok = false;
+    if (email && !markField("cf-email", "err-email", /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) ok = false;
+    if (!markField("cf-reason",  "err-reason",  reason !== "")) ok = false;
+    if (!markField("cf-message", "err-message", message.length >= 10)) ok = false;
+    return ok;
+  }
+
+  // ── Submit ──
+  $("ctForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const btn     = $("ctSubmitBtn");
+    const btnText = $("ctBtnText");
+    const spinner = $("ctSpinner");
+    const btnIcon = $("ctBtnIcon");
+
+    btn.disabled      = true;
+    btnText.textContent = "Sending…";
+    spinner.style.display = "block";
+    btnIcon.style.display  = "none";
+
+    try {
+      await addDoc(collection(db, "contacts"), {
+        name:      $("cf-name").value.trim(),
+        phone:     $("cf-phone").value.trim(),
+        email:     $("cf-email").value.trim() || null,
+        reason:    $("cf-reason").value,
+        business:  $("cf-business").value.trim() || null,
+        message:   $("cf-message").value.trim(),
+        createdAt: serverTimestamp(),
+        status:    "unread",
+      });
+
+      // Show success
+      $("ctForm").style.display   = "none";
+      $("ctSuccess").style.display = "block";
+
+    } catch (err) {
+      console.error("Contact submit error:", err);
+      btnText.textContent     = "Send Message";
+      spinner.style.display   = "none";
+      btnIcon.style.display   = "inline";
+      btn.disabled            = false;
+      alert("Something went wrong. Please try again.");
+    }
+  });
+
+  // Clear error on input
+  ["cf-name","cf-phone","cf-email","cf-reason","cf-message"].forEach(id => {
+    $(id)?.addEventListener("input", () => {
+      $(id).classList.remove("error");
+      const errId = "err-" + id.replace("cf-","");
+      showErr(errId, false);
+    });
+  });
+</script>
 
 </body>
 </html>

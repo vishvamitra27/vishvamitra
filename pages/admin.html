@@ -6,7 +6,7 @@
   <title>Admin Panel | Vishvamitra</title>
   <link rel="stylesheet" href="../styles/main.css" />
   <link rel="stylesheet" href="../styles/admin.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 <!-- Auth Guard: must be admin -->
@@ -43,6 +43,11 @@
       <a data-section="ads">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
         Ad Banners
+      </a>
+      <a data-section="messages">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span id="msgBadge" style="display:none;margin-left:auto;background:#e53e3e;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;">0</span>
       </a>
       <a href="index.html">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -152,6 +157,41 @@
         <!-- Ad list -->
         <div id="adminAdsList"><p class="empty-state">Loading ads…</p></div>
       </section>
+
+      <!-- ── Messages panel ── -->
+      <section class="section-panel" id="sectionMessages">
+        <h2>Contact Messages</h2>
+
+        <!-- Filters -->
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;">
+          <select id="msgStatusFilter" style="padding:9px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:13px;font-family:inherit;background:#f7f7f7;outline:none;cursor:pointer;">
+            <option value="">All Messages</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+            <option value="replied">Replied</option>
+          </select>
+          <select id="msgReasonFilter" style="padding:9px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:13px;font-family:inherit;background:#f7f7f7;outline:none;cursor:pointer;">
+            <option value="">All Reasons</option>
+            <option value="list-business">List My Business</option>
+            <option value="upgrade-listing">Upgrade Listing</option>
+            <option value="general">General Inquiry</option>
+            <option value="report-issue">Report Issue</option>
+            <option value="advertise">Advertise</option>
+            <option value="other">Other</option>
+          </select>
+          <span id="msgCount" style="font-size:13px;color:#888;margin-left:auto;"></span>
+        </div>
+
+        <!-- Messages list -->
+        <div id="msgList"><p class="empty-state">Loading messages…</p></div>
+
+        <!-- Message detail modal -->
+        <div id="msgModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+          <div style="background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2);">
+            <div id="msgModalContent"></div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 </div>
@@ -163,7 +203,8 @@
     initAdminPanel,
     renderListings, bindListingActions,
     renderUsers,    bindUserActions,
-    initAdsPanel
+    initAdsPanel,
+    initMessagesPanel
   } from "../scripts/admin.js";
 
   initAdminPanel();
@@ -176,6 +217,7 @@
 
   bindListingActions();
   bindUserActions();
+  initMessagesPanel();
 </script>
 
 </body>
