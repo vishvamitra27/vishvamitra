@@ -123,8 +123,9 @@ onAuthStateChanged(auth, async (user) => {
 document.addEventListener("click", async (e) => {
   const t = e.target;
   const isLogout =
-    t.id === "logoutLink" ||
-    t.id === "logoutBtn"  ||
+    t.id === "logoutLink"   ||
+    t.id === "d-logoutLink" ||
+    t.id === "logoutBtn"    ||
     (t.id === "loginLogout" && t.textContent.trim() === "Logout");
   if (!isLogout) return;
 
