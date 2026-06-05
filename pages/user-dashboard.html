@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Dashboard | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Your Dashboard — Saved Listings | Vishvamitra</title>
+  <meta name="description" content="Your Vishvamitra user dashboard with recommended local services and listings near you." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/user-dashboard.html" />
+  <meta property="og:title" content="Your Dashboard | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/user-dashboard.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../styles/main.css" />
   <link rel="stylesheet" href="../styles/dashboard.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
 <header><div id="navbar-root"></div></header>
 
-<div id="dashMain" style="visibility:hidden;">
+<main id="dashMain" style="visibility:hidden;">
   <div class="dashboard">
-    <div class="welcome">Welcome, <span id="userName">…</span></div>
+    <h1 class="welcome">Welcome, <span id="userName">…</span></h1>
 
     <div class="kpi-overview">
       <div class="kpi-card">
@@ -34,7 +43,7 @@
       <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
     </div>
   </div>
-</div>
+</main>
 
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
@@ -60,7 +69,7 @@
       (listings) => {
       box.innerHTML = "";
       if (!listings.length) {
-        box.innerHTML = "<p style='color:#666;grid-column:1/-1;'>No listings available yet.</p>";
+        box.innerHTML = "<div class='empty-state'><h3>No listings yet</h3><p>New services will appear here as vendors join.</p></div>";
         return;
       }
       listings.forEach(l => {

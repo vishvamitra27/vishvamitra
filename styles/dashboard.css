@@ -7,71 +7,60 @@
 /* ── Layout ─────────────────────────────────────────────────── */
 .dashboard {
   max-width: 1100px;
-  margin: 40px auto;
-  padding: 0 1rem;
+  margin: var(--space-10) auto;
+  padding: 0 var(--page-gutter);
 }
 
 .welcome {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #111;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  margin-bottom: var(--space-6);
+  color: var(--color-text-dark);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
 }
 
 /* ── KPI override for dashboard pages ──────────────────────── */
 .kpi-card.pending-kpi {
-  border-left-color: #ffc107;
+  border-left-color: var(--color-accent);
 }
 
 /* ── Action buttons row ─────────────────────────────────────── */
 .dashboard-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 2rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
 }
-
-.dashboard-buttons button {
-  padding: .8rem 1.8rem;
-  border: none;
-  border-radius: 8px;
-  background: #14a800;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  transition: background 0.25s;
-}
-
-.dashboard-buttons button:hover { background: #119600; }
 
 /* ── Listings grid ──────────────────────────────────────────── */
 .listings {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: var(--space-5);
 }
 
-.listing-card {
-  background: #fff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+.dashboard .listing-card {
+  padding: var(--card-padding);
   text-align: left;
 }
 
-.listing-card h3 {
-  margin: 0 0 8px;
-  color: #111;
+.dashboard .listing-card h3 {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-dark);
 }
 
 /* ── Status tags ────────────────────────────────────────────── */
 .status-tag {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 5px;
-  font-size: .85rem;
-  font-weight: 600;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.02em;
 }
 
 .status-active  { background: #d4edda; color: #155724; }
@@ -80,56 +69,48 @@
 
 /* ── Card action buttons ────────────────────────────────────── */
 .card-actions {
-  margin-top: 12px;
+  margin-top: var(--space-4);
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: var(--space-2);
 }
 
 .card-actions button {
-  padding: 7px 14px;
+  min-height: var(--btn-height-sm);
+  padding: 0 var(--space-4);
   border: none;
-  border-radius: 5px;
-  color: #fff;
-  cursor: pointer;
-  font-family: 'Poppins', sans-serif;
-  font-size: .85rem;
-  transition: opacity 0.2s;
+  border-radius: var(--radius-sm);
+  color: var(--color-on-primary);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  transition: background var(--transition), opacity var(--transition);
 }
 
-.card-actions button:hover { opacity: 0.85; }
+.card-actions button:hover { opacity: 0.92; transform: translateY(-1px); }
 
 .btn-edit   { background: #007bff; }
-.btn-delete { background: #dc3545; }
+.btn-delete { background: var(--color-danger); }
 
 /* ── Type badge ─────────────────────────────────────────────── */
 .card-type-badge {
   display: inline-block;
-  background: #eee;
+  background: var(--color-border);
   padding: 3px 8px;
   border-radius: 6px;
   font-size: .8rem;
   font-weight: 600;
-  color: #444;
+  color: var(--color-muted);
 }
 
-/* ── Empty state ────────────────────────────────────────────── */
-.empty-state {
-  text-align: center;
-  padding: 40px;
-  grid-column: 1 / -1;
-  color: #666;
-}
-
-.empty-state h3 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-}
+/* Empty state: see components.css */
 
 /* ── User dashboard specific ────────────────────────────────── */
 .section-title {
-  margin: 30px 0 15px;
-  font-size: 1.3rem;
-  font-weight: 600;
+  margin: var(--space-8) 0 var(--space-4);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--color-text-dark);
 }
 
 .recommendation-grid {
@@ -143,22 +124,13 @@
 }
 
 .btn-view {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 8px 14px;
-  background: #14a800;
-  color: white;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: .9rem;
-  transition: background 0.2s;
+  margin-top: var(--space-3);
+  width: auto;
 }
-
-.btn-view:hover { background: #119600; }
 
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .dashboard { margin: 20px auto; }
-  .welcome   { font-size: 1.4rem; }
+  .dashboard { margin: var(--space-6) auto; }
+  .welcome   { font-size: var(--text-xl); }
   .listings  { grid-template-columns: 1fr; }
 }

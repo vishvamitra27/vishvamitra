@@ -3,17 +3,48 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Services | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+
+  <title>Browse Local Services &amp; Businesses | Vishvamitra</title>
+  <meta name="description" content="Search and browse local service listings on Vishvamitra — restaurants, shops, professionals, and more across Andhra Pradesh. Filter by category or keyword." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vishvamitra.com/services.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vishvamitra" />
+  <meta property="og:title" content="Browse Local Services &amp; Businesses | Vishvamitra" />
+  <meta property="og:description" content="Search and browse trusted local business listings by category across Andhra Pradesh." />
+  <meta property="og:url" content="https://vishvamitra.com/services.html" />
+  <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@vishvamitra_services" />
+  <meta name="twitter:title" content="Browse Local Services &amp; Businesses | Vishvamitra" />
+  <meta name="twitter:description" content="Search and browse trusted local business listings by category across Andhra Pradesh." />
+  <meta name="twitter:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Local Services Directory",
+    "description": "Browse local business and service listings on Vishvamitra.",
+    "url": "https://vishvamitra.com/services.html",
+    "isPartOf": { "@type": "WebSite", "name": "Vishvamitra", "url": "https://vishvamitra.com/" },
+    "inLanguage": "en-IN"
+  }
+  </script>
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<header><div id="navbar-root"></div></header>
+<div class="sv-sticky-header">
+  <header><div id="navbar-root"></div></header>
 
-<!-- ── FILTER BAR ──────────────────────────────────────────── -->
-<div class="sv-filter-bar">
-  <div class="sv-filter-inner">
+  <!-- ── FILTER BAR ──────────────────────────────────────────── -->
+  <div class="sv-filter-bar">
+    <div class="sv-filter-inner">
     <div class="sv-search-wrap">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -37,11 +68,13 @@
       <option value="custom">Custom</option>
     </select>
     <button class="sv-search-btn" id="filterBtn">Search</button>
+    </div>
   </div>
 </div>
 
 <!-- ── PAGE BODY ───────────────────────────────────────────── -->
-<div class="sv-page-wrap">
+<main id="main-content" class="sv-page-wrap" aria-labelledby="sv-page-title">
+  <h1 id="sv-page-title" class="sv-sr-only">Browse Local Services</h1>
   <div class="sv-meta">
     <span id="svMetaText">Loading listings…</span>
   </div>
@@ -56,7 +89,7 @@
   <div class="sv-load-more-wrap" id="loadMoreWrap" style="display:none;">
     <button class="sv-load-more-btn" id="loadMoreBtn">Load More</button>
   </div>
-</div>
+</main>
 
 <footer class="footer"><p>© 2026 Vishvamitra. All rights reserved.</p></footer>
 
@@ -64,18 +97,21 @@
 <script type="module" src="../scripts/auth.js"></script>
 <script type="module">
   import { getListings }                            from "../scripts/listings.js";
+  import { buildServiceAdCard, filterAds, watchServiceAds } from "../scripts/ad-service-cards.js";
   import { initPrefetch, toUserMessage, showToast } from "../scripts/utils.js";
   import { reportError }                            from "../scripts/core/errors.js";
 
   const PAGE_SIZE = 12;
 
   // State
-  let lastDoc    = null;
-  let isLoading  = false;
-  let allLoaded  = false;   // renamed from noMore — never blocks a reset
-  let totalShown = 0;
-  let currentCat = "";
-  let currentKW  = "";
+  let lastDoc      = null;
+  let isLoading    = false;
+  let allLoaded    = false;
+  let totalShown   = 0;
+  let totalAds     = 0;
+  let currentCat   = "";
+  let currentKW    = "";
+  let activeAds    = [];
 
   const grid         = document.getElementById("servicesGrid");
   const loadMoreWrap = document.getElementById("loadMoreWrap");
@@ -83,6 +119,59 @@
   const metaText     = document.getElementById("svMetaText");
   const searchInput  = document.getElementById("searchInput");
   const catSelect    = document.getElementById("categoryFilter");
+
+  function showAdsInGrid() {
+    return !currentCat;
+  }
+
+  function visibleAds() {
+    if (!showAdsInGrid()) return [];
+    return filterAds(activeAds, currentKW);
+  }
+
+  function renderAdCards() {
+    grid.querySelectorAll(".sv-card-ad").forEach((el) => el.remove());
+    totalAds = 0;
+    if (!showAdsInGrid()) return;
+
+    const ads = visibleAds();
+    const frag = document.createDocumentFragment();
+    ads.forEach((ad, i) => frag.appendChild(buildServiceAdCard(ad, i)));
+    grid.prepend(frag);
+    totalAds = ads.length;
+  }
+
+  function updateMetaText() {
+    const catDisplay = currentCat
+      ? ` in <strong>${currentCat.replace(/-/g, " ")}</strong>` : "";
+    const kwDisplay = currentKW
+      ? ` matching "<strong>${currentKW}</strong>"` : "";
+
+    const parts = [];
+    if (totalAds > 0) {
+      parts.push(`<strong>${totalAds}</strong> sponsored ad${totalAds !== 1 ? "s" : ""}`);
+    }
+    if (totalShown > 0) {
+      parts.push(`<strong>${totalShown}</strong> listing${totalShown !== 1 ? "s" : ""}`);
+    }
+
+    if (!parts.length) {
+      metaText.textContent = "No results found";
+      return;
+    }
+
+    metaText.innerHTML = `Showing ${parts.join(" and ")}${catDisplay}${kwDisplay}`;
+  }
+
+  const unsubAds = watchServiceAds(
+    (ads) => {
+      activeAds = ads;
+      renderAdCards();
+      updateMetaText();
+    },
+    (err) => console.warn("[services.ads]", err)
+  );
+  window.addEventListener("pagehide", () => { if (unsubAds) unsubAds(); });
 
   // ── Pre-fill from URL params ───────────────────────────────
   const urlParams = new URLSearchParams(location.search);
@@ -107,7 +196,7 @@
     const safeName  = (l.name || "").replace(/"/g, "&quot;");
 
     const imgHTML = l.image
-      ? `<img class="sv-card-img" src="${l.image}" alt="${safeName}" loading="lazy"/>`
+      ? `<img class="sv-card-img" src="${l.image}" alt="${safeName}" loading="lazy" decoding="async"/>`
       : `<div class="sv-card-no-img">
            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.4">
              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
@@ -125,7 +214,7 @@
         <div class="sv-card-name"></div>
         <div class="sv-card-stars">${stars(4)}<span class="sv-card-new">New</span></div>
         <div class="sv-card-loc">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="#14a800" style="flex-shrink:0;margin-top:2px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--color-primary)" style="flex-shrink:0;margin-top:2px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
           <span></span>
         </div>
         <div class="sv-card-footer">
@@ -175,6 +264,7 @@
       grid.innerHTML = "";
       loadMoreWrap.style.display = "none";
       metaText.textContent = "Loading listings…";
+      renderAdCards();
     }
 
     addSkeletons(4);
@@ -206,14 +296,21 @@
             .toLowerCase().includes(currentKW))
       : listings;
 
-    if (visible.length === 0 && totalShown === 0) {
+    if (visible.length === 0 && totalShown === 0 && visibleAds().length === 0) {
       grid.innerHTML = `<div class="sv-empty">
         <div class="sv-empty-icon">🔍</div>
         <p>No listings found${currentKW ? ` for "<strong>${currentKW}</strong>"` : ""}.</p>
-        <p style="font-size:13px;margin-top:6px;color:#9ca3af;">Try a different search or category.</p>
+        <p style="font-size:var(--text-sm);margin-top:var(--space-2);color:var(--color-muted-light);">Try a different search or category.</p>
       </div>`;
       metaText.textContent = "No results found";
       loadMoreWrap.style.display = "none";
+      isLoading = false;
+      return;
+    }
+
+    if (visible.length === 0 && totalShown === 0) {
+      renderAdCards();
+      updateMetaText();
       isLoading = false;
       return;
     }
@@ -222,12 +319,7 @@
 
     lastDoc = newLast;
 
-    const catDisplay = currentCat
-      ? ` in <strong>${currentCat.replace(/-/g, " ")}</strong>` : "";
-    const kwDisplay  = currentKW
-      ? ` matching "<strong>${currentKW}</strong>"` : "";
-    metaText.innerHTML =
-      `Showing <strong>${totalShown}</strong> listing${totalShown !== 1 ? "s" : ""}${catDisplay}${kwDisplay}`;
+    updateMetaText();
 
     if (!newLast || listings.length < PAGE_SIZE) {
       allLoaded = true;

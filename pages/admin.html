@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Admin Dashboard | Vishvamitra</title>
+  <meta name="description" content="Vishvamitra administration panel for managing listings, users, advertisements, and contact messages." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/admin.html" />
+  <meta property="og:title" content="Admin Dashboard | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/admin.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../styles/main.css" />
   <link rel="stylesheet" href="../styles/admin.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 <!-- Auth Guard: must be admin -->
@@ -47,7 +56,7 @@
       <a data-section="messages">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Messages
-        <span id="msgBadge" style="display:none;margin-left:auto;background:#e53e3e;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;">0</span>
+        <span id="msgBadge" style="display:none;margin-left:auto;background:var(--color-error);color: var(--color-on-primary);font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;">0</span>
       </a>
       <a href="index.html">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -56,7 +65,7 @@
     </nav>
 
     <!-- Main -->
-    <main class="main-content">
+    <main class="main-content" id="main-content">
       <h1>Admin Dashboard</h1>
 
       <!-- KPIs -->
@@ -155,6 +164,7 @@
         </div>
 
         <!-- Ad list -->
+        <p class="ad-panel-note">Manage homepage carousel and services-page sponsored cards. Deactivate or delete submissions from the advertise form; upload your own media ads above.</p>
         <div id="adminAdsList"><p class="empty-state">Loading ads…</p></div>
       </section>
 
@@ -164,13 +174,13 @@
 
         <!-- Filters -->
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;">
-          <select id="msgStatusFilter" style="padding:9px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:13px;font-family:inherit;background:#f7f7f7;outline:none;cursor:pointer;">
+          <select id="msgStatusFilter" style="padding:9px 14px;border:1.5px solid var(--color-border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--color-surface-muted);outline:none;cursor:pointer;">
             <option value="">All Messages</option>
             <option value="unread">Unread</option>
             <option value="read">Read</option>
             <option value="replied">Replied</option>
           </select>
-          <select id="msgReasonFilter" style="padding:9px 14px;border:1.5px solid #e8e8e8;border-radius:10px;font-size:13px;font-family:inherit;background:#f7f7f7;outline:none;cursor:pointer;">
+          <select id="msgReasonFilter" style="padding:9px 14px;border:1.5px solid var(--color-border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--color-surface-muted);outline:none;cursor:pointer;">
             <option value="">All Reasons</option>
             <option value="list-business">List My Business</option>
             <option value="upgrade-listing">Upgrade Listing</option>
@@ -179,7 +189,7 @@
             <option value="advertise">Advertise</option>
             <option value="other">Other</option>
           </select>
-          <span id="msgCount" style="font-size:13px;color:#888;margin-left:auto;"></span>
+          <span id="msgCount" style="font-size:13px;color:var(--color-muted);margin-left:auto;"></span>
         </div>
 
         <!-- Messages list -->
@@ -187,7 +197,7 @@
 
         <!-- Message detail modal -->
         <div id="msgModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
-          <div style="background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2);">
+          <div style="background: var(--color-white);border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2);">
             <div id="msgModalContent"></div>
           </div>
         </div>
@@ -220,5 +230,6 @@
   initMessagesPanel();
 </script>
 
+  <script type="module" src="../scripts/performance.js"></script>
 </body>
 </html>

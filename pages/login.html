@@ -3,16 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Log In to Your Account | Vishvamitra</title>
+  <meta name="description" content="Log in to your Vishvamitra account to manage listings, access your dashboard, and connect with local customers." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/login.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vishvamitra" />
+  <meta property="og:title" content="Log In to Your Account | Vishvamitra" />
+  <meta property="og:description" content="Secure login for Vishvamitra vendors and users." />
+  <meta property="og:url" content="https://vishvamitra.com/login.html" />
+  <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Log In to Your Account | Vishvamitra" />
+  <meta name="twitter:description" content="Secure login for Vishvamitra vendors and users." />
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
 <header><div id="navbar-root"></div></header>
 
-<div class="auth-container">
-  <h2>Login to Your Account</h2>
+<main class="auth-container" id="main-content">
+  <h1>Log In to Your Account</h1>
 
   <form id="login-form" novalidate>
     <label for="loginEmail">Email</label>
@@ -45,9 +60,9 @@
 
   <p style="margin-top:1rem;font-size:.9rem;">
     Don't have an account?
-    <a href="signup.html" style="color:#14a800;font-weight:600;">Sign up</a>
+    <a href="signup.html" style="color:var(--color-primary);font-weight:600;">Sign up</a>
   </p>
-</div>
+</main>
 
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>

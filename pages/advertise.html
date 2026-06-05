@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Advertise Your Business on Vishvamitra | Local Ads</title>
+  <meta name="description" content="Promote your business with banner or text ads on Vishvamitra. Reach local customers across Andhra Pradesh with affordable hyperlocal advertising." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0f766e" />
+  <link rel="canonical" href="https://vishvamitra.com/advertise.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vishvamitra" />
+  <meta property="og:title" content="Advertise Your Business on Vishvamitra" />
+  <meta property="og:description" content="Submit banner or text ads to reach local customers on Vishvamitra." />
+  <meta property="og:url" content="https://vishvamitra.com/advertise.html" />
+  <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@vishvamitra_services" />
+  <meta name="twitter:title" content="Advertise Your Business on Vishvamitra" />
+  <meta name="twitter:description" content="Submit banner or text ads to reach local customers on Vishvamitra." />
+  <meta name="twitter:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Advertise on Vishvamitra",
+    "description": "Submit advertising requests for Vishvamitra local services platform.",
+    "url": "https://vishvamitra.com/advertise.html",
+    "isPartOf": { "@type": "WebSite", "name": "Vishvamitra", "url": "https://vishvamitra.com/" },
+    "inLanguage": "en-IN"
+  }
+  </script>
+  <link rel="stylesheet" href="../styles/main.css" />
+<style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    /* ── Page hero ─────────────────────────────────────────── */
+    .adv-hero {
+      background: var(--gradient-hero);
+      padding: 72px 24px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .adv-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(255,255,255,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(0,0,0,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .adv-hero-inner { position: relative; max-width: 680px; margin: 0 auto; }
+    .adv-hero-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.22);
+      color: var(--color-on-primary);
+      font-family: 'Poppins', sans-serif; font-size: .78rem; font-weight: 600;
+      letter-spacing: .06em; text-transform: uppercase;
+      padding: 5px 14px; border-radius: 50px; margin-bottom: 20px;
+    }
+    .adv-hero h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(1.75rem, 4.5vw, 2.6rem); font-weight: 800;
+      color: var(--color-on-primary); line-height: 1.18; margin: 0 0 14px;
+    }
+    .adv-hero h1 span { color: var(--color-hero-accent-text); }
+    .adv-hero p {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(.9rem, 2vw, 1.05rem);
+      color: rgba(255,255,255,.82); margin: 0; line-height: 1.6;
+    }
+
+    /* ── Wrapper ───────────────────────────────────────────── */
+    .adv-wrap { max-width: 640px; margin: 48px auto 72px; padding: 0 20px; }
+
+    /* ── Card ──────────────────────────────────────────────── */
+    .adv-card {
+      background: var(--color-white); border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.09);
+      padding: 40px 40px 36px;
+    }
+    .adv-card-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.25rem; font-weight: 800; color: var(--color-hero-dark); margin: 0 0 6px;
+    }
+    .adv-card-sub {
+      font-family: 'Poppins', sans-serif;
+      font-size: .85rem; color: var(--color-muted); margin: 0 0 26px;
+    }
+
+    /* ── Ad type toggle ────────────────────────────────────── */
+    .adv-type-toggle {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      margin-bottom: 28px;
+    }
+    .adv-type-btn {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; padding: 16px 12px;
+      border: 2px solid var(--color-primary-border-soft); border-radius: 10px;
+      background: var(--color-input-bg); cursor: pointer;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .adv-type-btn:hover { border-color: var(--color-primary); background: var(--color-primary-tint); }
+    .adv-type-btn.active {
+      border-color: var(--color-primary); background: var(--color-primary-tint);
+      box-shadow: 0 0 0 3px var(--color-primary-focus-ring);
+    }
+    .adv-type-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--color-primary-border-muted);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .adv-type-btn.active .adv-type-icon { background: var(--color-primary); }
+    .adv-type-btn.active .adv-type-icon svg { stroke: #fff; }
+    .adv-type-name {
+      font-size: .88rem; font-weight: 700; color: var(--color-text-dark);
+    }
+    .adv-type-desc {
+      font-size: .75rem; color: var(--color-muted); text-align: center; line-height: 1.4;
+    }
+
+    /* ── Section divider ───────────────────────────────────── */
+    .adv-section-label {
+      font-family: 'Poppins', sans-serif; font-size: .72rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--color-primary);
+      margin: 22px 0 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .adv-section-label::after {
+      content: ""; flex: 1; height: 1px; background: var(--color-primary-border-muted);
+    }
+
+    /* ── Fields ────────────────────────────────────────────── */
+    .adv-field { margin-bottom: 18px; }
+    .adv-label {
+      display: block; font-family: 'Poppins', sans-serif;
+      font-size: .82rem; font-weight: 600; color: var(--color-text); margin-bottom: 6px;
+    }
+    .adv-label .req { color: var(--color-error); margin-left: 2px; font-size: .75rem; }
+    .adv-input, .adv-textarea {
+      width: 100%; padding: 11px 14px;
+      border: 1.5px solid var(--color-primary-border-soft); border-radius: 8px;
+      font-family: 'Poppins', sans-serif; font-size: .9rem; color: var(--color-text-dark);
+      background: var(--color-input-bg);
+      transition: border-color .2s, box-shadow .2s; outline: none;
+    }
+    .adv-input:focus, .adv-textarea:focus {
+      border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-focus); background: var(--color-white);
+    }
+    .adv-input.error, .adv-textarea.error {
+      border-color: var(--color-error); box-shadow: 0 0 0 3px rgba(229,62,62,.1);
+    }
+    .adv-textarea { resize: vertical; min-height: 110px; }
+    .adv-field-hint {
+      font-family: 'Poppins', sans-serif; font-size: .75rem;
+      color: var(--color-muted); margin-top: 4px;
+    }
+    .adv-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* ── Image upload section ──────────────────────────────── */
+    #advImageSection { display: none; }
+    #advImageSection.show { display: block; }
+
+    .adv-upload-zone {
+      border: 2px dashed var(--color-primary-border-soft); border-radius: 10px;
+      padding: 28px 20px; text-align: center; cursor: pointer;
+      background: var(--color-input-bg);
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .adv-upload-zone:hover, .adv-upload-zone.drag-over {
+      border-color: var(--color-primary); background: var(--color-primary-tint);
+    }
+    .adv-upload-zone.has-file { border-style: solid; border-color: var(--color-primary); }
+    .adv-upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .adv-upload-icon {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--color-primary-border-muted);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+    }
+    .adv-upload-title {
+      font-family: 'Poppins', sans-serif; font-size: .9rem; font-weight: 600;
+      color: var(--color-text-dark); margin-bottom: 4px;
+    }
+    .adv-upload-hint {
+      font-family: 'Poppins', sans-serif; font-size: .75rem; color: var(--color-muted);
+    }
+    .adv-upload-hint strong { color: var(--color-primary); }
+
+    /* ── Image preview ─────────────────────────────────────── */
+    #advImgPreviewWrap { display: none; margin-top: 14px; }
+    #advImgPreviewWrap.show { display: block; }
+    .adv-preview-inner {
+      position: relative; border-radius: 8px; overflow: hidden;
+      border: 1.5px solid var(--color-primary-border-soft); background: var(--color-text-dark);
+      aspect-ratio: 16/6;
+    }
+    #advImgPreview {
+      width: 100%; height: 100%; object-fit: contain; display: block;
+    }
+    .adv-preview-remove {
+      position: absolute; top: 8px; right: 8px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(0,0,0,.55); border: none; cursor: pointer;
+      color: var(--color-on-primary); display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .adv-preview-remove:hover { background: rgba(229,62,62,.85); }
+    .adv-preview-name {
+      font-family: 'Poppins', sans-serif; font-size: .75rem; color: var(--color-muted);
+      margin-top: 6px; text-align: center; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+    .adv-upload-zone.error { border-color: var(--color-error); background: #fff8f8; }
+
+    /* ── Upload progress bar ───────────────────────────────── */
+    #advProgressWrap { display: none; margin-top: 12px; }
+    #advProgressWrap.show { display: block; }
+    .adv-progress-track {
+      height: 6px; background: var(--color-primary-border-muted); border-radius: 50px; overflow: hidden;
+    }
+    .adv-progress-bar {
+      height: 100%; background: var(--color-primary); border-radius: 50px;
+      width: 0%; transition: width .3s ease;
+    }
+    .adv-progress-label {
+      font-family: 'Poppins', sans-serif; font-size: .75rem; color: var(--color-muted);
+      margin-top: 5px; text-align: right;
+    }
+
+    /* ── Submit button ─────────────────────────────────────── */
+    .adv-submit {
+      width: 100%; padding: 13px; margin-top: 28px; border: none;
+      border-radius: 8px; background: var(--color-primary); color: var(--color-on-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      transition: background .22s, transform .22s, box-shadow .22s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 3px 12px var(--color-primary-shadow);
+    }
+    .adv-submit:hover:not(:disabled) {
+      background: var(--color-primary-dark); transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--color-primary-shadow-strong);
+    }
+    .adv-submit:disabled { opacity: .65; cursor: not-allowed; transform: none; }
+
+    /* ── Spinner ───────────────────────────────────────────── */
+    .adv-spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.35); border-top-color: var(--color-on-primary);
+      border-radius: 50%; animation: adv-spin .7s linear infinite; display: none;
+    }
+    .adv-spinner.show { display: block; }
+    @keyframes adv-spin { to { transform: rotate(360deg); } }
+
+    /* ── Success state ─────────────────────────────────────── */
+    .adv-success { display: none; text-align: center; padding: 20px 0 10px; }
+    .adv-success.show { display: block; }
+    .adv-success-icon {
+      width: 64px; height: 64px; border-radius: 50%; background: var(--color-primary-border-muted);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px;
+    }
+    .adv-success h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif; font-size: 1.3rem; font-weight: 800;
+      color: var(--color-hero-dark); margin: 0 0 10px;
+    }
+    .adv-success p {
+      font-family: 'Poppins', sans-serif; font-size: .9rem; color: var(--color-muted);
+      line-height: 1.6; margin: 0 0 24px;
+    }
+    .adv-back-btn {
+      display: inline-flex; align-items: center; gap: 6px; color: var(--color-primary);
+      font-family: 'Poppins', sans-serif; font-size: .88rem; font-weight: 600;
+      text-decoration: none; transition: gap .2s;
+    }
+    .adv-back-btn:hover { gap: 10px; }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 560px) {
+      .adv-hero   { padding: 56px 20px 48px; }
+      .adv-card   { padding: 28px 20px 24px; }
+      .adv-wrap   { margin: 32px auto 56px; padding: 0 16px; }
+      .adv-row    { grid-template-columns: 1fr; gap: 0; }
+      .adv-type-toggle { gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top bar ───────────────────────────────────────────── -->
+<div class="top-bar">
+  <span class="top-bar-dot"></span>
+  Welcome to Vishvamitra
+  <span class="top-bar-dot"></span>
+</div>
+
+<!-- ── Navbar ────────────────────────────────────────────── -->
+<header><div id="navbar-root"></div></header>
+
+<!-- ── Hero ─────────────────────────────────────────────── -->
+<section class="adv-hero" aria-labelledby="adv-hero-title">
+  <div class="adv-hero-inner">
+    <div class="adv-hero-pill">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+      Advertise with us
+    </div>
+    <h1 id="adv-hero-title">Grow Your Business with<br/><span>Vishvamitra Ads</span></h1>
+    <p>Reach thousands of local customers across your area.<br/>Submit your ad and it goes live immediately.</p>
+  </div>
+</section>
+
+<!-- ── Form ──────────────────────────────────────────────── -->
+<main class="adv-wrap" id="main-content" aria-labelledby="adv-form-title">
+  <div class="adv-card">
+
+    <!-- ── Success state ── -->
+    <div class="adv-success" id="advSuccess">
+      <div class="adv-success-icon">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Ad Submitted Successfully!</h3>
+      <p>Your advertisement has been received and is now<br/>live on the Vishvamitra homepage carousel.</p>
+      <a href="index.html" class="adv-back-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to homepage
+      </a>
+    </div>
+
+    <!-- ── Form body ── -->
+    <div id="advFormWrap">
+      <h2 class="adv-card-title" id="adv-form-title">Submit Your Ad</h2>
+      <p class="adv-card-sub">All marked fields are required. Your ad goes live on the homepage carousel instantly.</p>
+
+      <!-- ── Ad type selector ── -->
+      <div class="adv-type-toggle" role="group" aria-label="Ad type">
+        <button class="adv-type-btn active" id="btnTypeText" type="button" aria-pressed="true">
+          <div class="adv-type-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          </div>
+          <span class="adv-type-name">Text Ad</span>
+          <span class="adv-type-desc">Headline &amp; description displayed on a branded card</span>
+        </button>
+        <button class="adv-type-btn" id="btnTypeImage" type="button" aria-pressed="false">
+          <div class="adv-type-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+          <span class="adv-type-name">Image Ad</span>
+          <span class="adv-type-desc">Upload your own banner image (JPG, PNG, WebP — max 5 MB)</span>
+        </button>
+      </div>
+
+      <!-- ── Contact details ── -->
+      <div class="adv-section-label">Contact Details</div>
+
+      <div class="adv-row">
+        <div class="adv-field">
+          <label class="adv-label" for="advFullName">Full Name<span class="req">*</span></label>
+          <input class="adv-input" id="advFullName" type="text" placeholder="e.g. Ravi Kumar" autocomplete="name" />
+        </div>
+        <div class="adv-field">
+          <label class="adv-label" for="advPhone">Contact Number<span class="req">*</span></label>
+          <input class="adv-input" id="advPhone" type="tel" placeholder="e.g. 9876543210" autocomplete="tel" />
+        </div>
+      </div>
+
+      <div class="adv-row">
+        <div class="adv-field">
+          <label class="adv-label" for="advEmail">Email Address<span class="req">*</span></label>
+          <input class="adv-input" id="advEmail" type="email" placeholder="you@example.com" autocomplete="email" />
+        </div>
+        <div class="adv-field">
+          <label class="adv-label" for="advBusiness">Business Name<span class="req">*</span></label>
+          <input class="adv-input" id="advBusiness" type="text" placeholder="e.g. Sri Ganesh Traders" />
+        </div>
+      </div>
+
+      <!-- ── Ad content ── -->
+      <div class="adv-section-label">Advertisement Content</div>
+
+      <div class="adv-field">
+        <label class="adv-label" for="advTitle">Advertisement Title<span class="req">*</span></label>
+        <input class="adv-input" id="advTitle" type="text" placeholder="e.g. 50% off on all electronics this summer" maxlength="100" />
+        <p class="adv-field-hint">Shown as the main headline on your ad slide.</p>
+      </div>
+
+      <div class="adv-field">
+        <label class="adv-label" for="advDesc">Advertisement Description<span class="req">*</span></label>
+        <textarea class="adv-textarea" id="advDesc" placeholder="Describe your offer, product, or service in a few sentences…" maxlength="400"></textarea>
+        <p class="adv-field-hint">Displayed below your headline (text ads) or alongside your image.</p>
+      </div>
+
+      <!-- ── Image upload (shown only for Image Ad type) ── -->
+      <div id="advImageSection">
+        <div class="adv-section-label">Banner Image</div>
+        <div class="adv-upload-zone" id="advDropZone">
+          <input type="file" id="advImageInput" accept="image/jpeg,image/png,image/webp,image/gif" aria-label="Upload banner image" />
+          <div class="adv-upload-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          </div>
+          <p class="adv-upload-title">Click to upload or drag &amp; drop</p>
+          <p class="adv-upload-hint">JPG, PNG, WebP, GIF &nbsp;•&nbsp; <strong>Max 5 MB</strong> &nbsp;•&nbsp; Recommended: 1200 × 450 px</p>
+        </div>
+
+        <!-- Preview -->
+        <div id="advImgPreviewWrap">
+          <div class="adv-preview-inner">
+            <img id="advImgPreview" src="" alt="Ad preview" />
+            <button class="adv-preview-remove" id="advRemoveImg" type="button" aria-label="Remove image">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <p class="adv-preview-name" id="advImgName"></p>
+        </div>
+
+        <!-- Upload progress -->
+        <div id="advProgressWrap">
+          <div class="adv-progress-track"><div class="adv-progress-bar" id="advProgressBar"></div></div>
+          <p class="adv-progress-label" id="advProgressLabel">0%</p>
+        </div>
+      </div>
+
+      <button class="adv-submit" id="advSubmitBtn" type="button">
+        <span id="advBtnText">Submit Advertisement</span>
+        <span class="adv-spinner" id="advSpinner" aria-hidden="true"></span>
+      </button>
+    </div><!-- /advFormWrap -->
+
+  </div>
+</main>
+
+<!-- ── Footer ────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">vishvamitra</div>
+      <p class="footer-tagline">Connecting local communities<br/>with trusted services</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/profile.php?id=61585787019425" target="_blank" rel="noopener noreferrer" title="Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/vishvamitra_services/" target="_blank" rel="noopener noreferrer" title="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="services.html">All Services</a>
+        <a href="paid-services.html">Paid Listings</a>
+        <a href="free-services.html">Free Listings</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="contact.html">Contact Us</a>
+        <a href="contact.html">List a Business</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Vishvamitra. All rights reserved.</p>
+  </div>
+</footer>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { submitAdRequest } from "../scripts/ads.js";
+  import { showToast }       from "../scripts/core/ui.js";
+
+  // ── State ─────────────────────────────────────────────────
+  let adType    = "text";   // "text" | "image"
+  let imageFile = null;
+
+  // ── DOM refs ──────────────────────────────────────────────
+  const btn         = document.getElementById("advSubmitBtn");
+  const spinner     = document.getElementById("advSpinner");
+  const btnText     = document.getElementById("advBtnText");
+  const imageSection = document.getElementById("advImageSection");
+  const dropZone    = document.getElementById("advDropZone");
+  const fileInput   = document.getElementById("advImageInput");
+  const previewWrap = document.getElementById("advImgPreviewWrap");
+  const previewImg  = document.getElementById("advImgPreview");
+  const previewName = document.getElementById("advImgName");
+  const removeBtn   = document.getElementById("advRemoveImg");
+  const progressWrap = document.getElementById("advProgressWrap");
+  const progressBar  = document.getElementById("advProgressBar");
+  const progressLbl  = document.getElementById("advProgressLabel");
+
+  const fields = {
+    fullName:     document.getElementById("advFullName"),
+    phone:        document.getElementById("advPhone"),
+    email:        document.getElementById("advEmail"),
+    businessName: document.getElementById("advBusiness"),
+    title:        document.getElementById("advTitle"),
+    description:  document.getElementById("advDesc"),
+  };
+
+  // ── Ad type toggle ────────────────────────────────────────
+  function setAdType(type) {
+    adType = type;
+    const isImage = type === "image";
+
+    document.getElementById("btnTypeText").classList.toggle("active",  !isImage);
+    document.getElementById("btnTypeImage").classList.toggle("active",  isImage);
+    document.getElementById("btnTypeText").setAttribute("aria-pressed", String(!isImage));
+    document.getElementById("btnTypeImage").setAttribute("aria-pressed", String(isImage));
+
+    imageSection.classList.toggle("show", isImage);
+
+    // Reset image if switching away
+    if (!isImage) clearImage();
+  }
+
+  document.getElementById("btnTypeText").addEventListener("click",  () => setAdType("text"));
+  document.getElementById("btnTypeImage").addEventListener("click", () => setAdType("image"));
+
+  // ── Image file handling ───────────────────────────────────
+  const MAX_BYTES = 5 * 1024 * 1024;
+  const ALLOWED   = ["image/jpeg","image/png","image/webp","image/gif"];
+
+  function handleFile(file) {
+    if (!file) return;
+    if (!ALLOWED.includes(file.type)) {
+      showToast("Please upload a JPG, PNG, WebP, or GIF image.", { kind: "warning" });
+      dropZone.classList.add("error");
+      return;
+    }
+    if (file.size > MAX_BYTES) {
+      showToast("Image must be under 5 MB.", { kind: "warning" });
+      dropZone.classList.add("error");
+      return;
+    }
+    dropZone.classList.remove("error");
+    dropZone.classList.add("has-file");
+    imageFile = file;
+
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewName.textContent = file.name;
+    previewWrap.classList.add("show");
+  }
+
+  function clearImage() {
+    imageFile = null;
+    fileInput.value = "";
+    previewImg.src  = "";
+    previewName.textContent = "";
+    previewWrap.classList.remove("show");
+    dropZone.classList.remove("has-file", "error");
+    progressWrap.classList.remove("show");
+    progressBar.style.width = "0%";
+    progressLbl.textContent = "0%";
+  }
+
+  fileInput.addEventListener("change", () => handleFile(fileInput.files[0]));
+  removeBtn.addEventListener("click",  clearImage);
+
+  // Drag-and-drop
+  dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("drag-over"); });
+  dropZone.addEventListener("dragleave", ()  => dropZone.classList.remove("drag-over"));
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("drag-over");
+    handleFile(e.dataTransfer.files[0]);
+  });
+
+  // ── Validation ────────────────────────────────────────────
+  function markError(el, msg) {
+    el.classList.add("error");
+    showToast(msg, { kind: "warning", duration: 3500 });
+    el.focus();
+    return false;
+  }
+
+  function clearErrors() {
+    Object.values(fields).forEach(el => el.classList.remove("error"));
+    dropZone.classList.remove("error");
+  }
+
+  const isValidEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  const isValidPhone = v => /^[\d\s\-+]{7,15}$/.test(v);
+
+  function validate() {
+    clearErrors();
+    const v = {};
+    for (const [key, el] of Object.entries(fields)) v[key] = el.value.trim();
+
+    if (!v.fullName)                 return markError(fields.fullName,     "Please enter your full name.");
+    if (!v.phone)                    return markError(fields.phone,        "Please enter a contact number.");
+    if (!isValidPhone(v.phone))      return markError(fields.phone,        "Please enter a valid phone number.");
+    if (!v.email)                    return markError(fields.email,        "Please enter your email address.");
+    if (!isValidEmail(v.email))      return markError(fields.email,        "Please enter a valid email address.");
+    if (!v.businessName)             return markError(fields.businessName, "Please enter your business name.");
+    if (!v.title)                    return markError(fields.title,        "Please enter an advertisement title.");
+    if (!v.description)              return markError(fields.description,  "Please enter an advertisement description.");
+    if (adType === "image" && !imageFile) {
+      dropZone.classList.add("error");
+      showToast("Please upload a banner image for your Image Ad.", { kind: "warning", duration: 3500 });
+      dropZone.scrollIntoView({ behavior: "smooth", block: "center" });
+      return false;
+    }
+
+    return v;
+  }
+
+  // ── Loading state ─────────────────────────────────────────
+  function setLoading(on) {
+    btn.disabled        = on;
+    spinner.classList.toggle("show", on);
+    btnText.textContent = on ? "Submitting…" : "Submit Advertisement";
+  }
+
+  // ── Progress callback ─────────────────────────────────────
+  function onProgress(pct) {
+    progressWrap.classList.add("show");
+    progressBar.style.width  = pct + "%";
+    progressLbl.textContent  = pct + "%";
+  }
+
+  // ── Submit ────────────────────────────────────────────────
+  btn.addEventListener("click", async () => {
+    const data = validate();
+    if (!data) return;
+
+    setLoading(true);
+    try {
+      await submitAdRequest(data, imageFile || null, onProgress);
+      document.getElementById("advFormWrap").style.display = "none";
+      document.getElementById("advSuccess").classList.add("show");
+      showToast("Advertisement submitted successfully!", { kind: "success", duration: 5000 });
+    } catch (err) {
+      console.error("[advertise] submit error", err);
+      const msg = err?.code === "permission-denied"
+        ? "Submission blocked — please try again or contact support."
+        : err?.message?.includes("5 MB")
+          ? "Image is too large. Please upload a file under 5 MB."
+          : "Something went wrong. Please try again.";
+      showToast(msg, { kind: "error", duration: 7000 });
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  // ── Clear errors on input ─────────────────────────────────
+  Object.values(fields).forEach(el => el.addEventListener("input", () => el.classList.remove("error")));
+</script>
+
+</body>
+</html>

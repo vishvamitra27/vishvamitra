@@ -3,13 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Select Your Role | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Choose Your Role — User or Vendor | Vishvamitra</title>
+  <meta name="description" content="Select whether to browse local services as a user or register as a vendor on Vishvamitra." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/role-select.html" />
+  <meta property="og:title" content="Choose Your Role | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/role-select.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body class="role-select-page">
 
-<div class="rs-wrap">
+<main class="rs-wrap" id="main-content">
   <!-- Top bar -->
   <div class="rs-topbar">
     <a href="index.html" class="rs-logo-text">Vishvamitra</a>
@@ -64,7 +73,7 @@
 
     <p class="rs-error" id="roleError" role="alert"></p>
   </div>
-</div>
+</main>
 
 <script type="module" src="../scripts/auth.js"></script>
 <script type="module">
@@ -105,5 +114,6 @@
   });
 </script>
 
+  <script type="module" src="../scripts/performance.js"></script>
 </body>
 </html>

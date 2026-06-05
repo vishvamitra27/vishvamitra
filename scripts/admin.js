@@ -436,38 +436,100 @@ function renderAds() {
   }
 
   box.innerHTML = "";
-  allAds.forEach(ad => box.appendChild(buildAdCard(ad)));
+  const sorted = [...allAds].sort((a, b) => {
+    const aSub = a.source === "submission";
+    const bSub = b.source === "submission";
+    if (aSub !== bSub) return aSub ? 1 : -1;
+    if (aSub) {
+      return (b.createdAt?.toMillis?.() ?? 0) - (a.createdAt?.toMillis?.() ?? 0);
+    }
+    return (a.order ?? 9999) - (b.order ?? 9999);
+  });
+  sorted.forEach(ad => box.appendChild(buildAdCard(ad)));
+}
+
+/** Derive Firebase Storage path from a download URL (legacy submissions). */
+function inferStoragePath(url) {
+  if (!url) return "";
+  try {
+    const m = String(url).match(/\/o\/([^?]+)/);
+    return m ? decodeURIComponent(m[1]) : "";
+  } catch {
+    return "";
+  }
 }
 
 function buildAdCard(ad) {
   const card = document.createElement("div");
   card.className = "admin-card ad-admin-card";
 
-  const thumb = ad.type === "video"
-    ? `<video src="${ad.url}" class="ad-card-thumb" muted preload="metadata"></video>`
-    : `<img src="${ad.url}" alt="${ad.title}" class="ad-card-thumb" loading="lazy" />`;
+  const isSubmission = ad.source === "submission";
+  const isText = ad.type === "text" || !ad.url;
+
+  let thumb;
+  if (ad.type === "video" && ad.url) {
+    thumb = `<video src="${ad.url}" class="ad-card-thumb" muted preload="metadata"></video>`;
+  } else if (ad.url) {
+    thumb = `<img src="${ad.url}" alt="" class="ad-card-thumb" loading="lazy" decoding="async" />`;
+  } else {
+    thumb = `<div class="ad-card-thumb ad-card-thumb-text" aria-hidden="true">Aa</div>`;
+  }
 
   const activeBadge = ad.active
     ? `<span class="badge badge-active">Active</span>`
     : `<span class="badge badge-inactive">Inactive</span>`;
 
+  const sourceBadge = isSubmission
+    ? `<span class="badge badge-submission">Advertise Form</span>`
+    : `<span class="badge badge-admin">Admin Upload</span>`;
+
   const typeBadge = ad.type === "video"
-    ? `<span class="badge" style="background:#6366f1;color:#fff;">Video</span>`
-    : `<span class="badge" style="background:#0ea5e9;color:#fff;">Image</span>`;
+    ? `<span class="badge badge-video">Video</span>`
+    : isText
+      ? `<span class="badge badge-text-ad">Text</span>`
+      : `<span class="badge badge-image">Image</span>`;
 
   card.innerHTML = `
     <div class="ad-card-left">${thumb}</div>
     <div class="ad-card-body">
-      <div class="ad-card-meta">${activeBadge} ${typeBadge} <span class="ad-order-tag">Order: ${ad.order ?? 0}</span></div>
-      <h4 class="ad-card-title">${ad.title || "Untitled"}</h4>
-      ${ad.link ? `<p class="ad-card-link"><a href="${ad.link}" target="_blank" rel="noopener">${ad.link}</a></p>` : ""}
+      <div class="ad-card-meta">${activeBadge} ${sourceBadge} ${typeBadge} <span class="ad-order-tag">Order: ${ad.order ?? 0}</span></div>
+      <h4 class="ad-card-title"></h4>
+      <p class="ad-card-sub" hidden></p>
+      <p class="ad-card-contact" hidden></p>
+      <p class="ad-card-link-wrap" hidden><a class="ad-card-link-a" href="#" target="_blank" rel="noopener"></a></p>
     </div>
     <div class="ad-card-actions">
       <button class="ad-toggle-btn ${ad.active ? "btn-warning" : "btn-success"}" data-id="${ad.id}" data-active="${ad.active}">
         ${ad.active ? "Deactivate" : "Activate"}
       </button>
-      <button class="ad-delete-btn btn-danger-sm" data-id="${ad.id}" data-path="${ad.storagePath || ""}">Delete</button>
+      <button class="ad-delete-btn btn-danger-sm" data-id="${ad.id}" data-path="">Delete</button>
     </div>`;
+
+  card.querySelector(".ad-card-title").textContent = ad.title || ad.businessName || "Untitled";
+
+  if (isSubmission && ad.businessName) {
+    const sub = card.querySelector(".ad-card-sub");
+    sub.hidden = false;
+    sub.textContent = ad.businessName;
+  }
+
+  const contactParts = [ad.email, ad.phone].filter(Boolean);
+  if (contactParts.length) {
+    const contact = card.querySelector(".ad-card-contact");
+    contact.hidden = false;
+    contact.textContent = contactParts.join(" · ");
+  }
+
+  if (ad.link) {
+    const wrap = card.querySelector(".ad-card-link-wrap");
+    const a = card.querySelector(".ad-card-link-a");
+    wrap.hidden = false;
+    a.href = ad.link;
+    a.textContent = ad.link;
+  }
+
+  const storagePath = ad.storagePath || inferStoragePath(ad.url);
+  card.querySelector(".ad-delete-btn").dataset.path = storagePath || "";
 
   // Toggle active
   card.querySelector(".ad-toggle-btn").addEventListener("click", async (e) => {
@@ -521,9 +583,9 @@ const REASON_LABELS = {
 };
 
 const STATUS_COLORS = {
-  unread:  { bg: "#fff0f0", color: "#e53e3e", label: "Unread" },
-  read:    { bg: "#f0f9ff", color: "#2563eb", label: "Read"   },
-  replied: { bg: "#edfce8", color: "#14a800", label: "Replied"},
+  unread:  { bg: "#fff0f0", color: "var(--color-error)", label: "Unread" },
+  read:    { bg: "#f0f9ff", color: "var(--color-info)", label: "Read"   },
+  replied: { bg: "var(--color-primary-hover-bg)", color: "var(--color-primary)", label: "Replied"},
 };
 
 export function initMessagesPanel() {
@@ -613,12 +675,12 @@ function buildMsgRow(msg) {
       <!-- Content -->
       <div style="flex:1;min-width:0;">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
-          <span style="font-size:14px;font-weight:${msg.status==='unread'?'700':'600'};color:#111;">${msg.name || "Unknown"}</span>
+          <span style="font-size:14px;font-weight:${msg.status==='unread'?'700':'600'};color:var(--color-text-dark);">${msg.name || "Unknown"}</span>
           <span style="font-size:11px;font-weight:700;padding:2px 9px;border-radius:100px;background:${sc.bg};color:${sc.color};">${sc.label}</span>
-          <span style="font-size:11px;padding:2px 9px;border-radius:100px;background:#f5f5f5;color:#666;">${reason}</span>
+          <span style="font-size:11px;padding:2px 9px;border-radius:100px;background:var(--color-surface-muted);color:var(--color-muted);">${reason}</span>
         </div>
-        <div style="font-size:12px;color:#888;margin-bottom:6px;">${msg.phone || ""}${msg.email ? " · " + msg.email : ""}</div>
-        <div style="font-size:13px;color:#555;line-height:1.5;">${preview}</div>
+        <div style="font-size:12px;color:var(--color-muted);margin-bottom:6px;">${msg.phone || ""}${msg.email ? " · " + msg.email : ""}</div>
+        <div style="font-size:13px;color:var(--color-muted);line-height:1.5;">${preview}</div>
       </div>
       <!-- Time -->
       <div style="font-size:11px;color:#aaa;white-space:nowrap;flex-shrink:0;">${ts}</div>
@@ -641,52 +703,52 @@ function openMsgModal(msg) {
 
   content.innerHTML = `
     <!-- Modal header -->
-    <div style="padding:20px 24px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+    <div style="padding:20px 24px 16px;border-bottom:1px solid var(--color-navbar-border);display:flex;align-items:center;justify-content:space-between;gap:12px;">
       <div style="display:flex;align-items:center;gap:10px;">
         <div style="width:44px;height:44px;border-radius:50%;background:${sc.bg};display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:${sc.color};">
           ${(msg.name||"?")[0].toUpperCase()}
         </div>
         <div>
-          <div style="font-size:16px;font-weight:700;color:#111;">${msg.name || "Unknown"}</div>
-          <div style="font-size:12px;color:#888;">${ts}</div>
+          <div style="font-size:16px;font-weight:700;color:var(--color-text-dark);">${msg.name || "Unknown"}</div>
+          <div style="font-size:12px;color:var(--color-muted);">${ts}</div>
         </div>
       </div>
-      <button id="msgModalClose" style="width:34px;height:34px;border-radius:50%;border:1.5px solid #eee;background:#f7f7f7;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:#666;">✕</button>
+      <button id="msgModalClose" style="width:34px;height:34px;border-radius:50%;border:1.5px solid var(--color-border);background:var(--color-surface-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--color-muted);">✕</button>
     </div>
 
     <!-- Meta info -->
-    <div style="padding:16px 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border-bottom:1px solid #f0f0f0;">
+    <div style="padding:16px 24px;display:grid;grid-template-columns:1fr 1fr;gap:12px;border-bottom:1px solid var(--color-navbar-border);">
       <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Phone</div>
-        <div style="font-size:14px;font-weight:600;color:#222;">${msg.phone || "—"}</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-muted-light);margin-bottom:4px;">Phone</div>
+        <div style="font-size:14px;font-weight:600;color:var(--color-text);">${msg.phone || "—"}</div>
       </div>
       <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Email</div>
-        <div style="font-size:14px;font-weight:600;color:#222;">${msg.email || "—"}</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-muted-light);margin-bottom:4px;">Email</div>
+        <div style="font-size:14px;font-weight:600;color:var(--color-text);">${msg.email || "—"}</div>
       </div>
       <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Reason</div>
-        <div style="font-size:13px;font-weight:600;color:#222;">${reason}</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-muted-light);margin-bottom:4px;">Reason</div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text);">${reason}</div>
       </div>
       <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:4px;">Business</div>
-        <div style="font-size:13px;font-weight:600;color:#222;">${msg.business || "—"}</div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-muted-light);margin-bottom:4px;">Business</div>
+        <div style="font-size:13px;font-weight:600;color:var(--color-text);">${msg.business || "—"}</div>
       </div>
     </div>
 
     <!-- Message body -->
-    <div style="padding:20px 24px;border-bottom:1px solid #f0f0f0;">
-      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#999;margin-bottom:10px;">Message</div>
-      <div style="font-size:14px;color:#333;line-height:1.75;white-space:pre-wrap;">${msg.message || ""}</div>
+    <div style="padding:20px 24px;border-bottom:1px solid var(--color-navbar-border);">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-muted-light);margin-bottom:10px;">Message</div>
+      <div style="font-size:14px;color:var(--color-text);line-height:1.75;white-space:pre-wrap;">${msg.message || ""}</div>
     </div>
 
     <!-- Actions -->
     <div style="padding:16px 24px;display:flex;gap:10px;flex-wrap:wrap;">
-      ${msg.phone ? `<a href="tel:${msg.phone}" style="flex:1;min-width:120px;padding:10px;background:#edfce8;color:#14a800;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid #b6f0a8;">📞 Call</a>` : ""}
-      ${msg.email ? `<a href="mailto:${msg.email}" style="flex:1;min-width:120px;padding:10px;background:#e8f4ff;color:#2563eb;border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid #b8d8ff;">✉️ Email</a>` : ""}
-      ${msg.status !== "read"    ? `<button class="msg-action-btn" data-action="read"    data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#f0f9ff;color:#2563eb;border:1.5px solid #b8d8ff;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Read</button>` : ""}
-      ${msg.status !== "replied" ? `<button class="msg-action-btn" data-action="replied" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#edfce8;color:#14a800;border:1.5px solid #b6f0a8;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Replied</button>` : ""}
-      <button class="msg-action-btn" data-action="delete" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#fff0f0;color:#e53e3e;border:1.5px solid #ffc0c0;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">🗑 Delete</button>
+      ${msg.phone ? `<a href="tel:${msg.phone}" style="flex:1;min-width:120px;padding:10px;background:var(--color-primary-hover-bg);color:var(--color-primary);border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid var(--color-primary-border-soft);">📞 Call</a>` : ""}
+      ${msg.email ? `<a href="mailto:${msg.email}" style="flex:1;min-width:120px;padding:10px;background:#e8f4ff;color:var(--color-info);border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid #b8d8ff;">✉️ Email</a>` : ""}
+      ${msg.status !== "read"    ? `<button class="msg-action-btn" data-action="read"    data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#f0f9ff;color:var(--color-info);border:1.5px solid #b8d8ff;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Read</button>` : ""}
+      ${msg.status !== "replied" ? `<button class="msg-action-btn" data-action="replied" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:var(--color-primary-hover-bg);color:var(--color-primary);border:1.5px solid var(--color-primary-border-soft);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Replied</button>` : ""}
+      <button class="msg-action-btn" data-action="delete" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#fff0f0;color:var(--color-error);border:1.5px solid #ffc0c0;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">🗑 Delete</button>
     </div>`;
 
   modal.style.display = "flex";

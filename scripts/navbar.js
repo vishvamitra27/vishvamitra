@@ -2,6 +2,7 @@
 //  scripts/navbar.js  (v5 — pro mobile drawer, fixed)
 // ============================================================
 
+import "./performance.js";
 import { NAV_ITEMS } from "./core/routes.js";
 
 const HIDDEN_BY_DEFAULT = new Set(["dashboard", "admin", "logout"]);
@@ -87,7 +88,7 @@ const drawerHtml = `
 
   <div class="nav-drawer-header">
     <div>
-      <a href="index.html" class="nav-drawer-logo"><span style="color:#fff;">VISHVA</span><span style="color:#14a800;">MITRA</span></a>
+      <a href="index.html" class="nav-drawer-logo"><span style="color: var(--color-on-primary);">VISHVA</span><span style="color:var(--color-primary);">MITRA</span></a>
       <div class="nav-drawer-tagline">Hyperlocal Services Directory</div>
     </div>
     <button class="nav-drawer-close" id="drawer-close" aria-label="Close menu">

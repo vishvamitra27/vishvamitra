@@ -3,9 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Listing Details | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Business Listing Details | Vishvamitra</title>
+  <meta name="description" content="View contact details, location, category, and description for this local business listing on Vishvamitra." />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://vishvamitra.com/listing-details.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vishvamitra" />
+  <meta property="og:title" content="Business Listing Details | Vishvamitra" />
+  <meta property="og:description" content="Local business listing on Vishvamitra — phone, address, services, and more." />
+  <meta property="og:url" content="https://vishvamitra.com/listing-details.html" />
+  <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@vishvamitra_services" />
+  <meta name="twitter:title" content="Business Listing Details | Vishvamitra" />
+  <meta name="twitter:description" content="Local business listing on Vishvamitra." />
+  <meta name="twitter:image" content="https://vishvamitra.com/assets/images/banner.svg" />
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -23,7 +41,7 @@
 </div>
 
 <!-- MAIN LISTING DETAIL -->
-<div id="listingWrap" style="display:none;">
+<article id="listingWrap" style="display:none;" itemscope itemtype="https://schema.org/LocalBusiness">
 
   <!-- BANNER -->
   <div class="ld-banner">
@@ -32,7 +50,7 @@
     <div class="ld-banner-content">
       <div class="ld-banner-left">
         <span class="ld-type-badge" id="bannerType"></span>
-        <h1 class="ld-biz-name" id="bannerName"></h1>
+        <h1 class="ld-biz-name" id="bannerName" itemprop="name"></h1>
         <div class="ld-new-badge">New listing</div>
         <p class="ld-banner-sub" id="bannerLocation"></p>
         <p class="ld-banner-sub" id="bannerPhone"></p>
@@ -95,7 +113,7 @@
     </aside>
 
     <!-- MAIN PANEL -->
-    <main class="ld-main">
+    <main class="ld-main" id="main-content">
 
       <!-- Overview tab -->
       <div id="panelOverview">
@@ -134,7 +152,7 @@
 
     </main>
   </div>
-</div>
+</article>
 
 <!-- ERROR STATE -->
 <div id="errorWrap" style="display:none;" class="ld-error-wrap">
@@ -144,7 +162,7 @@
 
 <!-- Lightbox -->
 <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;display:none;align-items:center;justify-content:center;cursor:zoom-out;" role="dialog" aria-modal="true" aria-label="Image viewer">
-  <button id="lightboxClose" style="position:absolute;top:20px;right:24px;background:none;border:none;color:#fff;font-size:32px;cursor:pointer;line-height:1;" aria-label="Close">&times;</button>
+  <button id="lightboxClose" style="position:absolute;top:20px;right:24px;background:none;border:none;color: var(--color-on-primary);font-size:32px;cursor:pointer;line-height:1;" aria-label="Close">&times;</button>
   <img id="lightboxImg" src="" alt="" style="max-width:92vw;max-height:88vh;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6);object-fit:contain;" />
 </div>
 
@@ -154,6 +172,13 @@
   import { getListingById }           from "../scripts/listings.js";
   import { toUserMessage, showToast } from "../scripts/utils.js";
   import { reportError }              from "../scripts/core/errors.js";
+  import {
+    applyPageMeta,
+    buildListingJsonLd,
+    canonicalUrl,
+    absoluteAssetUrl,
+    injectJsonLd,
+  } from "../scripts/seo-config.js";
 
   const params    = new URLSearchParams(location.search);
   const listingId = params.get("id");
@@ -168,6 +193,7 @@
 
   if (!listingId) {
     hide(skeleton); show(errWrap);
+    applyPageMeta({ robots: "noindex, nofollow" });
   } else {
     let listing = null;
     try {
@@ -181,8 +207,24 @@
 
     if (!listing || listing.status !== "active") {
       show(errWrap);
+      applyPageMeta({ robots: "noindex, nofollow" });
     } else {
-      document.title = `${listing.name} | Vishvamitra`;
+      const pageTitle = `${listing.name} | Vishvamitra`;
+      const pageDesc  = (listing.description || `${listing.name} — local business on Vishvamitra.`).slice(0, 160);
+      const pageUrl   = canonicalUrl(`listing-details.html?id=${listingId}`);
+      const ogImage   = listing.image || absoluteAssetUrl("/assets/images/banner.svg");
+
+      document.title = pageTitle;
+      applyPageMeta({
+        title: pageTitle,
+        description: pageDesc,
+        url: pageUrl,
+        image: ogImage,
+        type: "website",
+        robots: "index, follow",
+      });
+      injectJsonLd(buildListingJsonLd(listing, pageUrl));
+
       const isPaid    = listing.type === "paid";
       const typeLabel = isPaid ? "Paid" : "Free";
 
@@ -212,7 +254,7 @@
       if (listing.image) {
         strip.innerHTML = `
           <div class="ld-photo-item">
-            <img src="${listing.image}" alt="${listing.name}" loading="lazy"/>
+            <img src="${listing.image}" alt="${listing.name}" loading="eager" fetchpriority="high" decoding="async"/>
           </div>
           <div class="ld-photo-placeholder" id="vendorPhotoHint">Add more photos from your dashboard</div>`;
       } else {

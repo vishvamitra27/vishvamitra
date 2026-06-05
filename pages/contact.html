@@ -3,16 +3,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Contact Us | Vishvamitra</title>
-  <meta name="description" content="Get in touch with Vishvamitra. List your business, ask questions, or connect with us on social media." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Contact Vishvamitra — List Your Business | Vishvamitra</title>
+  <meta name="description" content="Contact Vishvamitra to list your business, ask questions, or get support. Reach us by phone, email, or social media. Serving Andhra Pradesh." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://vishvamitra.com/contact.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vishvamitra" />
+  <meta property="og:title" content="Contact Vishvamitra — List Your Business" />
+  <meta property="og:description" content="Get in touch to list your business or connect with the Vishvamitra team." />
+  <meta property="og:url" content="https://vishvamitra.com/contact.html" />
+  <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@vishvamitra_services" />
+  <meta name="twitter:title" content="Contact Vishvamitra — List Your Business" />
+  <meta name="twitter:description" content="Get in touch to list your business or connect with the Vishvamitra team." />
+  <meta name="twitter:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Vishvamitra",
+    "description": "Contact page for Vishvamitra hyperlocal services directory.",
+    "url": "https://vishvamitra.com/contact.html",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Vishvamitra",
+      "url": "https://vishvamitra.com/",
+      "sameAs": [
+        "https://www.facebook.com/profile.php?id=61585787019425",
+        "https://www.instagram.com/vishvamitra_services/"
+      ]
+    },
+    "inLanguage": "en-IN"
+  }
+  </script>
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <style>
+<style>
     *, *::before, *::after { box-sizing: border-box; }
 
     /* ── Hero ── */
     .ct-hero {
-      background: linear-gradient(135deg, #0d1f0d 0%, #14a800 60%, #1eca00 100%);
+      background: var(--gradient-hero);
       padding: 80px 24px 70px;
       text-align: center;
       position: relative;
@@ -49,7 +85,7 @@
       gap: 7px;
       background: rgba(255,255,255,.12);
       border: 1px solid rgba(255,255,255,.22);
-      color: #fff;
+      color: var(--color-on-primary);
       font-size: 12px;
       font-weight: 600;
       letter-spacing: .06em;
@@ -60,7 +96,7 @@
     }
     .ct-hero-pill-dot {
       width: 6px; height: 6px;
-      background: #7fff6e;
+      background: var(--color-hero-accent-text);
       border-radius: 50%;
       animation: pulse-dot 2s ease-in-out infinite;
     }
@@ -71,12 +107,12 @@
     .ct-hero h1 {
       font-size: clamp(30px, 5vw, 52px);
       font-weight: 800;
-      color: #fff;
+      color: var(--color-on-primary);
       line-height: 1.15;
       margin-bottom: 16px;
       letter-spacing: -.02em;
     }
-    .ct-hero h1 span { color: #b8ffb0; }
+    .ct-hero h1 span { color: var(--color-hero-accent-text); }
     .ct-hero-sub {
       font-size: 16px;
       color: rgba(255,255,255,.82);
@@ -95,7 +131,7 @@
       align-items: center;
       gap: 6px;
       background: rgba(255,255,255,.13);
-      color: #fff;
+      color: var(--color-on-primary);
       font-size: 13px;
       font-weight: 500;
       padding: 7px 16px;
@@ -119,7 +155,7 @@
     @media (max-width: 780px) { .ct-info-grid { grid-template-columns: 1fr; } }
 
     .ct-info-card {
-      background: #fff;
+      background: var(--color-white);
       border-radius: 18px;
       padding: 28px 24px;
       box-shadow: 0 4px 24px rgba(0,0,0,.09), 0 1px 3px rgba(0,0,0,.05);
@@ -136,12 +172,12 @@
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .ct-info-icon.green  { background: #edfce8; color: #14a800; }
-    .ct-info-icon.blue   { background: #e8f4ff; color: #2563eb; }
+    .ct-info-icon.green  { background: var(--color-primary-hover-bg); color: var(--color-primary); }
+    .ct-info-icon.blue   { background: #e8f4ff; color: var(--color-info); }
     .ct-info-icon.purple { background: #f2e8ff; color: #7c3aed; }
-    .ct-info-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: #999; margin-bottom: 4px; }
-    .ct-info-value { font-size: 15px; font-weight: 600; color: #1a1a1a; line-height: 1.4; }
-    .ct-info-hint  { font-size: 12px; color: #888; margin-top: 3px; }
+    .ct-info-label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--color-muted-light); margin-bottom: 4px; }
+    .ct-info-value { font-size: 15px; font-weight: 600; color: var(--color-text-dark); line-height: 1.4; }
+    .ct-info-hint  { font-size: 12px; color: var(--color-muted); margin-top: 3px; }
 
     /* ── Body layout ── */
     .ct-body {
@@ -156,21 +192,21 @@
     @media (max-width: 860px) { .ct-body { grid-template-columns: 1fr; } }
 
     /* Left panel */
-    .ct-section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #14a800; margin-bottom: 10px; }
-    .ct-left-title { font-size: 28px; font-weight: 800; color: #111; line-height: 1.25; letter-spacing: -.02em; margin-bottom: 14px; }
-    .ct-left-desc { font-size: 14px; color: #666; line-height: 1.75; margin-bottom: 32px; }
+    .ct-section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 10px; }
+    .ct-left-title { font-size: 28px; font-weight: 800; color: var(--color-text-dark); line-height: 1.25; letter-spacing: -.02em; margin-bottom: 14px; }
+    .ct-left-desc { font-size: 14px; color: var(--color-muted); line-height: 1.75; margin-bottom: 32px; }
 
-    .ct-social-title { font-size: 13px; font-weight: 700; color: #333; margin-bottom: 12px; }
+    .ct-social-title { font-size: 13px; font-weight: 700; color: var(--color-text); margin-bottom: 12px; }
     .ct-socials { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
     .ct-social-link {
       display: flex; align-items: center; gap: 12px;
       padding: 13px 16px;
       border-radius: 12px;
-      border: 1.5px solid #eee;
+      border: 1.5px solid var(--color-border);
       text-decoration: none;
       transition: border-color .2s, background .2s, transform .18s;
     }
-    .ct-social-link:hover { border-color: #14a800; background: #f6fff4; transform: translateX(4px); }
+    .ct-social-link:hover { border-color: var(--color-primary); background: var(--color-primary-tint); transform: translateX(4px); }
     .ct-social-icon {
       width: 38px; height: 38px;
       border-radius: 10px;
@@ -179,42 +215,42 @@
     }
     .ct-social-icon.fb { background: #1877f2; }
     .ct-social-icon.ig { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-    .ct-social-name   { font-size: 14px; font-weight: 600; color: #222; }
-    .ct-social-handle { font-size: 12px; color: #999; }
-    .ct-social-arrow  { margin-left: auto; color: #ccc; }
+    .ct-social-name   { font-size: 14px; font-weight: 600; color: var(--color-text); }
+    .ct-social-handle { font-size: 12px; color: var(--color-muted-light); }
+    .ct-social-arrow  { margin-left: auto; color: var(--color-border); }
 
     /* Hours card */
     .ct-hours-card {
-      background: linear-gradient(135deg, #f8fff6, #edfce8);
-      border: 1.5px solid #d4f5cc;
+      background: linear-gradient(135deg, var(--color-bg), var(--color-primary-hover-bg));
+      border: 1.5px solid var(--color-primary-light);
       border-radius: 16px;
       padding: 22px 20px;
     }
     .ct-hours-title {
-      font-size: 13px; font-weight: 700; color: #14a800;
+      font-size: 13px; font-weight: 700; color: var(--color-primary);
       margin-bottom: 14px; display: flex; align-items: center; gap: 7px;
     }
     .ct-hours-row {
       display: flex; justify-content: space-between;
-      font-size: 13px; color: #555;
+      font-size: 13px; color: var(--color-muted);
       padding: 7px 0;
-      border-bottom: 1px solid rgba(20,168,0,.1);
+      border-bottom: 1px solid var(--color-primary-focus);
     }
     .ct-hours-row:last-child { border-bottom: none; }
-    .ct-hours-row span:last-child { font-weight: 600; color: #222; }
+    .ct-hours-row span:last-child { font-weight: 600; color: var(--color-text); }
 
     /* Form card */
     .ct-form-card {
-      background: #fff;
+      background: var(--color-white);
       border-radius: 24px;
       box-shadow: 0 8px 40px rgba(0,0,0,.09), 0 1px 4px rgba(0,0,0,.04);
       overflow: hidden;
     }
     .ct-form-header {
-      background: linear-gradient(135deg, #14a800, #1eca00);
+      background: var(--gradient-cta);
       padding: 28px 32px 24px;
     }
-    .ct-form-header-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .ct-form-header-title { font-size: 20px; font-weight: 700; color: var(--color-on-primary); margin-bottom: 4px; }
     .ct-form-header-sub   { font-size: 13px; color: rgba(255,255,255,.82); }
 
     /* ── Form body ── */
@@ -225,16 +261,16 @@
     .ct-field { margin-bottom: 18px; }
     .ct-field label {
       display: block; font-size: 13px; font-weight: 600;
-      color: #333; margin-bottom: 6px;
+      color: var(--color-text); margin-bottom: 6px;
     }
-    .ct-field label span { color: #e53e3e; margin-left: 2px; }
+    .ct-field label span { color: var(--color-error); margin-left: 2px; }
     .ct-field input,
     .ct-field select,
     .ct-field textarea {
       width: 100%; padding: 12px 14px;
-      border: 1.5px solid #e8e8e8;
+      border: 1.5px solid var(--color-border);
       border-radius: 10px;
-      font-size: 14px; font-family: inherit; color: #222;
+      font-size: 14px; font-family: inherit; color: var(--color-text);
       background: #fafafa;
       outline: none; box-sizing: border-box;
       transition: border-color .2s, background .2s, box-shadow .2s;
@@ -242,18 +278,18 @@
     .ct-field input:focus,
     .ct-field select:focus,
     .ct-field textarea:focus {
-      border-color: #14a800;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(20,168,0,.1);
+      border-color: var(--color-primary);
+      background: var(--color-white);
+      box-shadow: 0 0 0 3px var(--color-primary-focus);
     }
     .ct-field input.error,
     .ct-field select.error,
     .ct-field textarea.error {
-      border-color: #e53e3e;
+      border-color: var(--color-error);
       box-shadow: 0 0 0 3px rgba(229,62,62,.08);
     }
     .ct-field-err {
-      font-size: 11px; color: #e53e3e;
+      font-size: 11px; color: var(--color-error);
       margin-top: 4px; display: none;
     }
     .ct-field textarea { resize: vertical; min-height: 120px; }
@@ -261,21 +297,21 @@
     /* Submit button */
     .ct-submit-btn {
       width: 100%; padding: 14px;
-      background: #14a800; color: #fff;
+      background: var(--color-primary); color: var(--color-on-primary);
       border: none; border-radius: 12px;
       font-size: 15px; font-weight: 700; font-family: inherit;
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: background .2s, transform .15s, box-shadow .2s;
-      box-shadow: 0 4px 14px rgba(20,168,0,.3);
+      box-shadow: 0 4px 14px var(--color-primary-shadow);
       margin-top: 6px;
     }
-    .ct-submit-btn:hover:not(:disabled) { background: #0e8a00; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(20,168,0,.38); }
+    .ct-submit-btn:hover:not(:disabled) { background: var(--color-primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px var(--color-primary-shadow-strong); }
     .ct-submit-btn:disabled { opacity: .65; cursor: not-allowed; }
 
     /* Spinner */
     .ct-spinner {
       width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.4);
-      border-top-color: #fff; border-radius: 50%;
+      border-top-color: var(--color-on-primary); border-radius: 50%;
       animation: spin .7s linear infinite; display: none;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -285,24 +321,24 @@
       display: none; text-align: center; padding: 40px 24px;
     }
     .ct-success-icon {
-      width: 64px; height: 64px; background: #edfce8;
+      width: 64px; height: 64px; background: var(--color-primary-hover-bg);
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       margin: 0 auto 16px;
     }
-    .ct-success h3 { font-size: 20px; font-weight: 700; color: #111; margin-bottom: 8px; }
-    .ct-success p  { font-size: 14px; color: #666; line-height: 1.6; }
+    .ct-success h3 { font-size: 20px; font-weight: 700; color: var(--color-text-dark); margin-bottom: 8px; }
+    .ct-success p  { font-size: 14px; color: var(--color-muted); line-height: 1.6; }
     .ct-success-back {
       margin-top: 20px; display: inline-block;
-      padding: 10px 24px; background: #14a800; color: #fff;
+      padding: 10px 24px; background: var(--color-primary); color: var(--color-on-primary);
       border-radius: 100px; font-size: 14px; font-weight: 700; text-decoration: none;
       transition: background .2s;
     }
-    .ct-success-back:hover { background: #0e8a00; }
+    .ct-success-back:hover { background: var(--color-primary-dark); }
 
     /* CTA */
     .ct-cta { max-width: 1080px; margin: 0 auto 80px; padding: 0 24px; }
     .ct-cta-inner {
-      background: linear-gradient(135deg, #0d1f0d, #14a800);
+      background: var(--gradient-drawer-header);
       border-radius: 24px;
       padding: 52px 40px;
       text-align: center;
@@ -317,13 +353,13 @@
       top: -100px; right: -100px;
       pointer-events: none;
     }
-    .ct-cta-inner h2 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 10px; letter-spacing: -.02em; }
+    .ct-cta-inner h2 { font-size: 28px; font-weight: 800; color: var(--color-on-primary); margin-bottom: 10px; letter-spacing: -.02em; }
     .ct-cta-inner p  { font-size: 15px; color: rgba(255,255,255,.78); margin-bottom: 28px; }
     .ct-cta-btn {
       display: inline-block;
       padding: 14px 36px;
-      background: #fff;
-      color: #14a800;
+      background: var(--color-white);
+      color: var(--color-primary);
       font-size: 15px;
       font-weight: 700;
       border-radius: 100px;
@@ -347,7 +383,7 @@
 <header><div id="navbar-root"></div></header>
 
 <!-- ── Hero ────────────────────────────────────────────────── -->
-<section class="ct-hero">
+<section class="ct-hero" aria-labelledby="ct-hero-title">
   <div class="ct-hero-deco ct-hero-deco-1"></div>
   <div class="ct-hero-deco ct-hero-deco-2"></div>
   <div class="ct-hero-inner">
@@ -355,7 +391,7 @@
       <span class="ct-hero-pill-dot"></span>
       We're here to help
     </div>
-    <h1>Get in <span>Touch</span><br/>with Vishvamitra</h1>
+    <h1 id="ct-hero-title">Get in <span>Touch</span><br/>with Vishvamitra</h1>
     <p class="ct-hero-sub">
       Whether you want to list your business, ask a question, or just say hello —
       we'd love to hear from you.
@@ -414,7 +450,7 @@
 </div>
 
 <!-- ── Two-col body ──────────────────────────────────────────── -->
-<div class="ct-body">
+<main class="ct-body" id="main-content">
 
   <!-- Left -->
   <div class="ct-left ct-fade-up" style="transition-delay:.1s;">
@@ -466,7 +502,7 @@
   <div class="ct-fade-up" style="transition-delay:.2s;">
     <div class="ct-form-card">
       <div class="ct-form-header">
-        <div class="ct-form-header-title">Send us a message</div>
+        <h2 class="ct-form-header-title">Send us a message</h2>
         <div class="ct-form-header-sub">Fill in the form below — we'll get back to you promptly.</div>
       </div>
       <!-- ── Custom Form ── -->
@@ -475,7 +511,7 @@
         <!-- Success screen (hidden initially) -->
         <div class="ct-success" id="ctSuccess">
           <div class="ct-success-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#14a800" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h3>Message Sent!</h3>
           <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
@@ -519,7 +555,7 @@
           </div>
 
           <div class="ct-field">
-            <label>Business Name <span style="color:#999;font-weight:400;">(if applicable)</span></label>
+            <label>Business Name <span style="color:var(--color-muted-light);font-weight:400;">(if applicable)</span></label>
             <input type="text" id="cf-business" placeholder="Your business or shop name"/>
           </div>
 
@@ -540,16 +576,16 @@
     </div>
   </div>
 
-</div>
+</main>
 
 <!-- ── CTA ──────────────────────────────────────────────────── -->
-<div class="ct-cta ct-fade-up" style="transition-delay:.15s;">
+<section class="ct-cta ct-fade-up" style="transition-delay:.15s;" aria-labelledby="ct-cta-title">
   <div class="ct-cta-inner">
-    <h2>Ready to list your business?</h2>
+    <h2 id="ct-cta-title">Ready to list your business?</h2>
     <p>Join local vendors already on Vishvamitra — basic listing is completely free.</p>
     <a href="services.html" class="ct-cta-btn">Browse All Services</a>
   </div>
-</div>
+</section>
 
 <!-- ── Footer ───────────────────────────────────────────────── -->
 <footer class="footer">

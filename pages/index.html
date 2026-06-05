@@ -3,12 +3,65 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Vishvamitra connects you with trusted local businesses, vendors, and services in your area." />
-  <meta name="theme-color" content="#14a800" />
-  <title>Vishvamitra – Local Services Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossorigin />
+
+  <title>Discover Local Services in Andhra Pradesh | Vishvamitra</title>
+  <meta name="description" content="Vishvamitra is a hyperlocal directory to find trusted restaurants, electricians, tutors, salons, and businesses across Andhra Pradesh. Browse free and paid listings." />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#0f766e" />
+  <link rel="canonical" href="https://vishvamitra.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vishvamitra" />
+  <meta property="og:title" content="Discover Local Services in Andhra Pradesh | Vishvamitra" />
+  <meta property="og:description" content="Find trusted local businesses, vendors, and services near you. Free and premium listings across Andhra Pradesh." />
+  <meta property="og:url" content="https://vishvamitra.com/" />
+  <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@vishvamitra_services" />
+  <meta name="twitter:title" content="Discover Local Services in Andhra Pradesh | Vishvamitra" />
+  <meta name="twitter:description" content="Find trusted local businesses, vendors, and services near you on Vishvamitra." />
+  <meta name="twitter:image" content="https://vishvamitra.com/assets/images/banner.svg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://vishvamitra.com/#organization",
+        "name": "Vishvamitra",
+        "url": "https://vishvamitra.com/",
+        "logo": "https://vishvamitra.com/assets/images/banner.svg",
+        "sameAs": [
+          "https://www.facebook.com/profile.php?id=61585787019425",
+          "https://www.instagram.com/vishvamitra_services/"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://vishvamitra.com/#website",
+        "name": "Vishvamitra",
+        "url": "https://vishvamitra.com/",
+        "publisher": { "@id": "https://vishvamitra.com/#organization" },
+        "inLanguage": "en-IN",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://vishvamitra.com/services.html?search={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    ]
+  }
+  </script>
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" /></noscript>
 </head>
 <body>
 
@@ -23,7 +76,7 @@
 <header><div id="navbar-root"></div></header>
 
 <!-- ── Hero ─────────────────────────────────────────────── -->
-<section class="home-hero">
+<section class="home-hero" id="main-content" tabindex="-1">
   <div class="hero-bg-pattern"></div>
   <div class="hero-inner" data-aos="fade-up">
     <div class="hero-eyebrow">
@@ -83,8 +136,8 @@
 <div class="home-promo" data-aos="fade-up">
   <div class="promo-inner" id="adCarouselWrap">
     <!-- Fallback shown while ads load or if none exist -->
-    <img id="adFallbackImg" src="../assets/images/banner.svg"
-         alt="Vishvamitra" width="1100" height="420" loading="lazy" class="promo-img" />
+    <img id="adFallbackImg" fetchpriority="high" decoding="async" src="../assets/images/banner.svg"
+         alt="Vishvamitra" width="1100" height="420" loading="eager" class="promo-img" />
     <!-- Dynamic carousel injected by JS -->
     <div id="adCarousel" class="ad-carousel" style="display:none;" aria-label="Advertisement banner" role="region">
       <div id="adCarouselTrack" class="ad-carousel-track"></div>
@@ -93,6 +146,14 @@
       <button class="ad-carousel-arrow ad-next" id="adNext" aria-label="Next ad">&#8250;</button>
     </div>
   </div>
+</div>
+
+<!-- ── Advertise button ───────────────────────────────────── -->
+<div class="home-promo" style="padding-top:0; text-align:center;">
+  <a href="advertise.html" class="adv-btn" aria-label="Advertise your business on Vishvamitra">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+    Advertise
+  </a>
 </div>
 
 <!-- ── Featured listings ─────────────────────────────────── -->
@@ -253,7 +314,7 @@
 <script type="module">
   import { subscribeToFeaturedListings } from "../scripts/listings.js";
   import { initUgadiPopup, closePopup, initPrefetch, toUserMessage, showToast } from "../scripts/utils.js";
-  import { subscribeToActiveAds } from "../scripts/ads.js";
+  import { createAdCarousel } from "../scripts/ad-carousel.js";
   import { navigate } from "../scripts/core/router.js";
   import { P }        from "../scripts/core/routes.js";
   import { reportError } from "../scripts/core/errors.js";
@@ -264,7 +325,7 @@
     (listings) => {
       box.innerHTML = "";
       if (!listings.length) {
-        box.innerHTML = "<p style='text-align:center;color:#888;grid-column:1/-1;'>No listings yet.</p>";
+        box.innerHTML = "<div class='empty-state'><h3>No listings yet</h3><p>Check back soon for local services near you.</p></div>";
         return;
       }
       listings.forEach(l => {
@@ -272,7 +333,7 @@
         card.className = "listing-card";
         card.innerHTML = `
           ${l.image
-            ? `<div class="c-img-wrap"><img class="c-img" src="${l.image}" alt="${l.name||''}" loading="lazy"/></div>`
+            ? `<div class="c-img-wrap"><img class="c-img" src="${l.image}" alt="${l.name||''}" loading="lazy" decoding="async"/></div>`
             : `<div class="c-img-wrap c-img-placeholder"></div>`}
           <div class="c-card-body">
             <span class="c-type-pill ${l.type === 'paid' ? 'paid' : 'free'}">${l.type === 'paid' ? 'Paid' : 'Free'}</span>
@@ -291,7 +352,7 @@
     (err) => {
       reportError("home.featured", err);
       showToast(toUserMessage(err), { kind: "error", duration: 8000 });
-      box.innerHTML = "<p style='text-align:center;color:#888;grid-column:1/-1;'>Could not load listings.</p>";
+      box.innerHTML = "<div class='empty-state vm-inline-error'><h3>Could not load listings</h3><p>Please refresh the page or try again later.</p></div>";
     }
   );
 
@@ -313,169 +374,12 @@
   // ── Prefetch ───────────────────────────────────────────
   initPrefetch();
 
-  // ── Ad Carousel ────────────────────────────────────────
-  let _adUnsub  = null;
-  let _adTimer  = null;
-  let _adIndex  = 0;
-  let _ads      = [];
-  let _paused   = false;      // pause on hover
-
-  const SLIDE_INTERVAL = 5000;
-
-  function initAdCarousel() {
-    _adUnsub = subscribeToActiveAds(
-      (ads) => {
-        _ads = ads;
-        const fallback  = document.getElementById("adFallbackImg");
-        const carousel  = document.getElementById("adCarousel");
-        if (!ads.length) {
-          fallback.style.display = "";
-          carousel.style.display = "none";
-          return;
-        }
-        fallback.style.display = "none";
-        carousel.style.display = "";
-        buildCarousel(ads);
-      },
-      (err) => console.warn("[ads carousel]", err)
-    );
-
-    // Pause auto-advance on hover to stop any perceived jitter
-    const carousel = document.getElementById("adCarousel");
-    carousel?.addEventListener("mouseenter", () => { _paused = true;  stopTimer(); });
-    carousel?.addEventListener("mouseleave", () => { _paused = false; startTimer(); });
-
-    window.addEventListener("pagehide", () => {
-      if (_adUnsub) _adUnsub();
-      stopTimer();
-    });
-  }
-
-  function startTimer() {
-    if (_paused || _ads.length <= 1) return;
-    stopTimer();
-    _adTimer = setInterval(() => {
-      goToSlide((_adIndex + 1) % _ads.length);
-    }, SLIDE_INTERVAL);
-  }
-
-  function stopTimer() {
-    if (_adTimer) { clearInterval(_adTimer); _adTimer = null; }
-  }
-
-  function buildCarousel(ads) {
-    stopTimer();
-    _adIndex = 0;
-
-    const track = document.getElementById("adCarouselTrack");
-    const dots  = document.getElementById("adCarouselDots");
-    const prev  = document.getElementById("adPrev");
-    const next  = document.getElementById("adNext");
-    track.innerHTML = "";
-    dots.innerHTML  = "";
-
-    ads.forEach((ad, i) => {
-      // ── Slide (position:absolute, opacity transition) ──
-      const slide = document.createElement("div");
-      slide.className = "ad-slide" + (i === 0 ? " active" : "");
-
-      let media;
-      // Blurred backdrop (fills letterbox gaps, never crops the ad)
-      const bg = document.createElement("div");
-      bg.className = "ad-slide-bg";
-
-      if (ad.type === "video") {
-        media = document.createElement("video");
-        media.src         = ad.url;
-        media.loop        = true;
-        media.muted       = true;
-        media.playsInline = true;
-        media.className   = "ad-media";
-        if (i === 0) media.autoplay = true;
-        // Video backdrop: use a duplicate blurred video
-        const bgVid = document.createElement("video");
-        bgVid.src         = ad.url;
-        bgVid.loop        = true;
-        bgVid.muted       = true;
-        bgVid.playsInline = true;
-        bgVid.autoplay    = true;
-        bgVid.style.cssText = "position:absolute;inset:-10px;width:calc(100%+20px);height:calc(100%+20px);object-fit:cover;filter:blur(18px) brightness(0.4);transform:scale(1.05);";
-        slide.appendChild(bgVid);
-      } else {
-        media = document.createElement("img");
-        media.src     = ad.url;
-        media.alt     = ad.title || "Advertisement";
-        media.loading = i === 0 ? "eager" : "lazy";
-        media.className = "ad-media";
-        // Image backdrop: CSS background-image blur
-        bg.style.backgroundImage = "url('" + ad.url + "')";
-        slide.appendChild(bg);
-      }
-
-      if (ad.link) {
-        const a = document.createElement("a");
-        a.href   = ad.link;
-        a.target = "_blank";
-        a.rel    = "noopener noreferrer";
-        a.style.cssText = "display:block;height:100%;position:relative;z-index:1;";
-        a.appendChild(media);
-        slide.appendChild(a);
-      } else {
-        slide.appendChild(media);
-      }
-      track.appendChild(slide);
-
-      // ── Dot ──
-      const dot = document.createElement("button");
-      dot.className = "ad-dot" + (i === 0 ? " active" : "");
-      dot.setAttribute("aria-label", "Go to ad " + (i + 1));
-      dot.addEventListener("click", () => { stopTimer(); goToSlide(i); startTimer(); });
-      dots.appendChild(dot);
-    });
-
-    // Show/hide arrows
-    const multi = ads.length > 1;
-    prev.style.display = multi ? "" : "none";
-    next.style.display = multi ? "" : "none";
-
-    startTimer();
-  }
-
-  function goToSlide(idx) {
-    const slides = document.querySelectorAll(".ad-slide");
-    const ddots  = document.querySelectorAll(".ad-dot");
-    if (!slides.length) return;
-
-    // Deactivate current, activate next — opacity CSS handles the crossfade
-    slides[_adIndex]?.classList.remove("active");
-    ddots[_adIndex]?.classList.remove("active");
-
-    _adIndex = (idx + slides.length) % slides.length;
-
-    slides[_adIndex]?.classList.add("active");
-    ddots[_adIndex]?.classList.add("active");
-
-    // Play video if it's a video slide
-    const video = slides[_adIndex]?.querySelector("video");
-    if (video) { video.currentTime = 0; video.play().catch(() => {}); }
-  }
-
-  document.getElementById("adPrev")?.addEventListener("click", () => {
-    stopTimer();
-    goToSlide(_adIndex - 1);
-    startTimer();
-  });
-  document.getElementById("adNext")?.addEventListener("click", () => {
-    stopTimer();
-    goToSlide(_adIndex + 1);
-    startTimer();
-  });
-
-  initAdCarousel();
+  // ── Ad Carousel (10s auto-advance) ─────────────────────
+  createAdCarousel({ intervalMs: 10000 });
 </script>
 
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-<script>AOS.init({ duration: 700, once: true, offset: 60 });</script>
+<script defer src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script defer src="../scripts/aos-init.js"></script>
 
 </body>
 </html>

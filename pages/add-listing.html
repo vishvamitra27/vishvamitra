@@ -3,17 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Add Listing | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Add or Edit Business Listing | Vishvamitra</title>
+  <meta name="description" content="Create or update your business listing on Vishvamitra with photos, category, contact details, and service information." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/add-listing.html" />
+  <meta property="og:title" content="Add Business Listing | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/add-listing.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
 
 <header><div id="navbar-root"></div></header>
 
-<div id="formWrap" style="visibility:hidden;">
+<main id="formWrap" style="visibility:hidden;">
   <div class="form-container">
-    <h2 id="form-title">Add New Listing</h2>
+    <h1 id="form-title">Add New Listing</h1>
 
     <form id="listingForm" novalidate>
       <label for="businessName">Business Name</label>
@@ -55,7 +64,7 @@
 
       <label for="imageInput">
         Business Image
-        <span style="font-weight:400;color:#888;">(optional, max 2 MB)</span>
+        <span style="font-weight:400;color:var(--color-muted);">(optional, max 2 MB)</span>
       </label>
       <input type="file" id="imageInput" accept="image/*" />
       <p id="uploadProgress" style="display:none;margin:8px 0 0;color:#4b7bd8;font-size:0.95rem;"></p>
@@ -66,7 +75,7 @@
   </div>
 
   <footer class="footer">© 2025 Vishvamitra. All rights reserved.</footer>
-</div>
+</main>
 
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>

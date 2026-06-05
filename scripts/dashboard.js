@@ -70,9 +70,9 @@ function renderEmpty(container) {
   // ✅ No onclick= — button is wired via bindCardActions delegation
   container.innerHTML = `
     <div class="empty-state">
-      <h3>📭 No Listings Yet</h3>
+      <h3>No listings yet</h3>
       <p>Create your first listing to appear here.</p>
-      <button class="btn-primary" id="emptyAddBtn">➕ Add Listing</button>
+      <button class="btn-primary" id="emptyAddBtn">Add listing</button>
     </div>`;
 
   // Wire the empty-state button without inline onclick

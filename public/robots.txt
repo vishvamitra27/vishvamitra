@@ -1,0 +1,18 @@
+# Vishvamitra — https://vishvamitra.com
+User-agent: *
+Allow: /
+
+# Private / auth / vendor flows (also set noindex in HTML)
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /dashboard.html
+Disallow: /user-dashboard.html
+Disallow: /admin.html
+Disallow: /add-listing.html
+Disallow: /role-select.html
+Disallow: /vendor-setup.html
+
+# Listing template without ID is not a real page
+Disallow: /listing-details.html$
+
+Sitemap: https://vishvamitra.com/sitemap.xml

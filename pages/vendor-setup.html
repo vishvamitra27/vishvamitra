@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vendor Setup | Vishvamitra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Complete Vendor Profile Setup | Vishvamitra</title>
+  <meta name="description" content="Finish setting up your Vishvamitra vendor profile to start listing your business and reaching local customers." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/vendor-setup.html" />
+  <meta property="og:title" content="Vendor Setup | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/vendor-setup.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../styles/main.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
+<style>
     .vendor-setup-page {
       min-height: calc(100vh - 64px);
       background: linear-gradient(145deg, #f0fdf4 0%, #f5f7fb 60%, #fff 100%);
@@ -18,7 +27,7 @@
     .vendor-setup-card {
       width: 100%;
       max-width: 460px;
-      background: #fff;
+      background: var(--color-white);
       border-radius: 16px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.09);
       padding: 2.5rem 2.2rem 2rem;
@@ -33,9 +42,10 @@
       justify-content: center;
       margin: 0 auto 1.2rem;
     }
+    .vendor-setup-card h1,
     .vendor-setup-card h2 {
       text-align: center;
-      color: #14a800;
+      color: var(--color-primary);
       font-size: 1.45rem;
       font-weight: 700;
       margin: 0 0 0.35rem;
@@ -60,7 +70,7 @@
       background: #e5e7eb;
     }
     .vs-step.active {
-      background: #14a800;
+      background: var(--color-primary);
       width: 42px;
     }
     #vendorForm label {
@@ -91,7 +101,7 @@
       border-radius: 10px;
       font-family: 'Poppins', sans-serif;
       font-size: 0.93rem;
-      color: #111;
+      color: var(--color-text-dark);
       background: #fafafa;
       box-sizing: border-box;
       transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
@@ -107,17 +117,17 @@
     }
     #vendorForm input:focus,
     #vendorForm select:focus {
-      border-color: #14a800;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(20,168,0,0.1);
+      border-color: var(--color-primary);
+      background: var(--color-white);
+      box-shadow: 0 0 0 3px var(--color-primary-focus);
     }
     #vendorForm input::placeholder { color: #b0b7c3; }
     #saveBtn {
       width: 100%;
       padding: 0.85rem;
       border: none;
-      background: #14a800;
-      color: #fff;
+      background: var(--color-primary);
+      color: var(--color-on-primary);
       font-weight: 700;
       font-size: 1rem;
       border-radius: 10px;
@@ -131,8 +141,8 @@
       gap: 8px;
     }
     #saveBtn:hover:not(:disabled) {
-      background: #0f8f00;
-      box-shadow: 0 4px 14px rgba(20,168,0,0.28);
+      background: var(--color-primary-dark);
+      box-shadow: 0 4px 14px var(--color-primary-shadow);
     }
     #saveBtn:active:not(:disabled) { transform: scale(0.98); }
     #saveBtn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -150,7 +160,7 @@
       color: #9ca3af;
       margin-top: 1.2rem;
     }
-    .vs-note a { color: #14a800; font-weight: 600; text-decoration: none; }
+    .vs-note a { color: var(--color-primary); font-weight: 600; text-decoration: none; }
     @media (max-width: 480px) {
       .vendor-setup-card { padding: 1.8rem 1.2rem 1.5rem; }
     }
@@ -160,17 +170,17 @@
 
 <header><div id="navbar-root"></div></header>
 
-<div class="vendor-setup-page">
+<main class="vendor-setup-page" id="main-content">
   <div class="vendor-setup-card">
 
     <div class="vs-icon-wrap">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#14a800" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         <polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
     </div>
 
-    <h2>Complete Your Vendor Profile</h2>
+    <h1>Complete Your Vendor Profile</h1>
     <p class="vs-subtitle">Set up your business details to start listing your services</p>
 
     <div class="vs-steps">
@@ -228,7 +238,7 @@
     </p>
 
   </div>
-</div>
+</main>
 
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
