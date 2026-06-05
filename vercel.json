@@ -1,0 +1,82 @@
+{
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/signup",
+      "destination": "/pages/signup.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/pages/dashboard.html"
+    },
+    {
+      "source": "/user-dashboard",
+      "destination": "/pages/user-dashboard.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/pages/admin.html"
+    },
+    {
+      "source": "/advertise",
+      "destination": "/pages/advertise.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/pages/services.html"
+    },
+    {
+      "source": "/free-services",
+      "destination": "/pages/free-services.html"
+    },
+    {
+      "source": "/paid-services",
+      "destination": "/pages/paid-services.html"
+    },
+    {
+      "source": "/add-listing",
+      "destination": "/pages/add-listing.html"
+    },
+    {
+      "source": "/listing-details",
+      "destination": "/pages/listing-details.html"
+    },
+    {
+      "source": "/vendor-setup",
+      "destination": "/pages/vendor-setup.html"
+    },
+    {
+      "source": "/role-select",
+      "destination": "/pages/role-select.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/pages/contact.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+      ]
+    }
+  ]
+}
