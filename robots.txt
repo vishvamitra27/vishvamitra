@@ -1,4 +1,4 @@
-# Vishvamitra — https://vishvamitra.com
+# Vishvamitra - https://vishvamitra.com
 User-agent: *
 Allow: /
 
