@@ -181,14 +181,14 @@ textarea.error,
 .ct-submit-btn,
 .hero-btn-primary,
 .hero-btn-ghost,
-.adv-btn,
+.promote-btn,
 .rs-card-cta,
 .btn-view,
 .dashboard-buttons button,
 .action-btn,
 .delete-btn,
-.ad-upload-btn,
-.ad-upload-btn.ad-upload-btn {
+.feat-upload-btn,
+.feat-upload-btn.feat-upload-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -229,7 +229,7 @@ textarea.error,
 .hero-btn-primary,
 .adv-submit,
 .ct-submit-btn,
-.adv-btn,
+.promote-btn,
 #addListingBtn,
 .btn-view,
 .dashboard-buttons button:not(#homeBtn) {
@@ -249,7 +249,7 @@ textarea.error,
 .hero-btn-primary:hover,
 .adv-submit:hover:not(:disabled),
 .ct-submit-btn:hover:not(:disabled),
-.adv-btn:hover,
+.promote-btn:hover,
 #addListingBtn:hover,
 .btn-view:hover,
 .dashboard-buttons button:not(#homeBtn):hover {
@@ -327,7 +327,7 @@ textarea.error,
 .sv-card-footer .btn-primary,
 .featured-grid .btn-primary,
 .nav-cta,
-.adv-btn,
+.promote-btn,
 .empty-state .btn-primary,
 .card-actions button,
 .action-btn,
@@ -541,7 +541,7 @@ p.empty-state::before,
   font-size: clamp(1.5rem, 4vw, 2rem);
 }
 
-/* ── Page-specific: advertise & contact forms ──────────────── */
+/* ── Page-specific: promote & contact forms ──────────────── */
 .adv-input,
 .adv-textarea,
 .ct-input,

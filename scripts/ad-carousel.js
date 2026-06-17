@@ -7,8 +7,8 @@ import { subscribeToActiveAds } from "./ads.js";
 
 const DEFAULT_INTERVAL_MS = 10000;
 
-const EMAIL_ICON = `<svg class="ad-text-card-chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>`;
-const PHONE_ICON = `<svg class="ad-text-card-chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+const EMAIL_ICON = `<svg class="feat-text-card-chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>`;
+const PHONE_ICON = `<svg class="feat-text-card-chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
 
 const _preloaded = new Set();
 
@@ -32,30 +32,30 @@ function preloadAround(ads, index) {
 
 function buildTextCard(ad) {
   const card = document.createElement("div");
-  card.className = "ad-text-card";
+  card.className = "feat-text-card";
   card.innerHTML = `
-    ${ad.businessName ? `<div class="ad-text-card-biz"></div>` : ""}
-    <div class="ad-text-card-title"></div>
-    ${ad.description ? `<div class="ad-text-card-desc"></div>` : ""}
-    <div class="ad-text-card-contact" hidden>
-      <div class="ad-text-card-divider" aria-hidden="true"></div>
-      <div class="ad-text-card-chips"></div>
+    ${ad.businessName ? `<div class="feat-text-card-biz"></div>` : ""}
+    <div class="feat-text-card-title"></div>
+    ${ad.description ? `<div class="feat-text-card-desc"></div>` : ""}
+    <div class="feat-text-card-contact" hidden>
+      <div class="feat-text-card-divider" aria-hidden="true"></div>
+      <div class="feat-text-card-chips"></div>
     </div>`;
 
-  if (ad.businessName) card.querySelector(".ad-text-card-biz").textContent = ad.businessName;
-  card.querySelector(".ad-text-card-title").textContent = ad.title || "Advertisement";
-  if (ad.description) card.querySelector(".ad-text-card-desc").textContent = ad.description;
+  if (ad.businessName) card.querySelector(".feat-text-card-biz").textContent = ad.businessName;
+  card.querySelector(".feat-text-card-title").textContent = ad.title || "Business Spotlight";
+  if (ad.description) card.querySelector(".feat-text-card-desc").textContent = ad.description;
 
   const email = String(ad.email || "").trim();
   const phone = String(ad.phone || "").trim();
   if (email || phone) {
-    const contactRow = card.querySelector(".ad-text-card-contact");
-    const chipsEl = card.querySelector(".ad-text-card-chips");
+    const contactRow = card.querySelector(".feat-text-card-contact");
+    const chipsEl = card.querySelector(".feat-text-card-chips");
     contactRow.hidden = false;
 
     if (email) {
       const chip = document.createElement("span");
-      chip.className = "ad-text-card-chip";
+      chip.className = "feat-text-card-chip";
       chip.insertAdjacentHTML("afterbegin", EMAIL_ICON);
       const label = document.createElement("span");
       label.textContent = email;
@@ -64,7 +64,7 @@ function buildTextCard(ad) {
     }
     if (phone) {
       const chip = document.createElement("span");
-      chip.className = "ad-text-card-chip";
+      chip.className = "feat-text-card-chip";
       chip.insertAdjacentHTML("afterbegin", PHONE_ICON);
       const label = document.createElement("span");
       label.textContent = phone;
@@ -78,11 +78,11 @@ function buildTextCard(ad) {
 
 function buildMediaSlide(ad, i) {
   const slide = document.createElement("div");
-  slide.className = "ad-slide" + (i === 0 ? " active" : "");
+  slide.className = "feat-slide" + (i === 0 ? " active" : "");
 
   let media;
   const bg = document.createElement("div");
-  bg.className = "ad-slide-bg";
+  bg.className = "feat-slide-bg";
 
   if (ad.type === "video") {
     media = document.createElement("video");
@@ -90,7 +90,7 @@ function buildMediaSlide(ad, i) {
     media.loop = true;
     media.muted = true;
     media.playsInline = true;
-    media.className = "ad-media";
+    media.className = "feat-media";
     media.preload = i === 0 ? "metadata" : "none";
     if (i === 0) media.autoplay = true;
 
@@ -107,11 +107,11 @@ function buildMediaSlide(ad, i) {
   } else {
     media = document.createElement("img");
     media.src = ad.url;
-    media.alt = ad.title || "Advertisement";
+    media.alt = ad.title || "Business Spotlight";
     media.loading = i === 0 ? "eager" : "lazy";
     media.decoding = "async";
     if (i === 0) media.fetchPriority = "high";
-    media.className = "ad-media";
+    media.className = "feat-media";
     bg.style.backgroundImage = `url('${ad.url}')`;
     slide.appendChild(bg);
     if (i <= 1) preloadImage(ad.url);
@@ -142,11 +142,11 @@ function buildMediaSlide(ad, i) {
 export function createAdCarousel(options = {}) {
   const ids = {
     fallback: "adFallbackImg",
-    carousel: "adCarousel",
-    track: "adCarouselTrack",
-    dots: "adCarouselDots",
-    prev: "adPrev",
-    next: "adNext",
+    carousel: "featCarousel",
+    track: "featCarouselTrack",
+    dots: "featCarouselDots",
+    prev: "featPrev",
+    next: "featNext",
     ...options.ids,
   };
 
@@ -181,8 +181,8 @@ export function createAdCarousel(options = {}) {
   }
 
   function goToSlide(idx) {
-    const slides = track.querySelectorAll(".ad-slide");
-    const ddots = dots?.querySelectorAll(".ad-dot") ?? [];
+    const slides = track.querySelectorAll(".feat-slide");
+    const ddots = dots?.querySelectorAll(".feat-dot") ?? [];
     if (!slides.length) return;
 
     slides[index]?.classList.remove("active");
@@ -220,7 +220,7 @@ export function createAdCarousel(options = {}) {
         ad.type === "text" || !ad.url
           ? (() => {
               const el = document.createElement("div");
-              el.className = "ad-slide" + (i === 0 ? " active" : "");
+              el.className = "feat-slide" + (i === 0 ? " active" : "");
               el.appendChild(buildTextCard(ad));
               return el;
             })()
@@ -230,7 +230,7 @@ export function createAdCarousel(options = {}) {
 
       if (dots) {
         const dot = document.createElement("button");
-        dot.className = "ad-dot" + (i === 0 ? " active" : "");
+        dot.className = "feat-dot" + (i === 0 ? " active" : "");
         dot.setAttribute("aria-label", "Go to ad " + (i + 1));
         dot.addEventListener("click", () => {
           stopTimer();
@@ -273,7 +273,7 @@ export function createAdCarousel(options = {}) {
 
   unsub = subscribeToActiveAds(
     render,
-    (err) => console.warn("[ad-carousel]", err)
+    (err) => console.warn("[feat-carousel]", err)
   );
 
   carousel.addEventListener("mouseenter", () => {

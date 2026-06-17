@@ -59,7 +59,7 @@
 .home-hero,
 .navbar,
 .sv-filter-bar,
-.ad-carousel {
+.feat-carousel {
   content-visibility: visible;
 }
 
@@ -70,7 +70,7 @@ video {
   height: auto;
 }
 
-.ad-media,
+.feat-media,
 .sv-card-img,
 .fs-card-img,
 .ps-card-img,
@@ -96,7 +96,7 @@ video {
     transition: none !important;
   }
 
-  .ad-carousel-track,
+  .feat-carousel-track,
   .ticker-inner {
     animation: none !important;
   }

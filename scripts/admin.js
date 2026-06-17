@@ -338,7 +338,7 @@ export function initAdsPanel() {
   // File picker → preview
   const fileInput = document.getElementById("adFile");
   const fileLabel = document.getElementById("adFileName");
-  const previewWrap = document.getElementById("adPreviewWrap");
+  const previewWrap = document.getElementById("featPreviewWrap");
   const uploadBtn   = document.getElementById("adUploadBtn");
 
   if (!fileInput) return;
@@ -359,9 +359,9 @@ export function initAdsPanel() {
     previewWrap.innerHTML = "";
     const url = URL.createObjectURL(selectedAdFile);
     if (selectedAdFile.type.startsWith("video/")) {
-      previewWrap.innerHTML = `<video src="${url}" controls class="ad-preview-media"></video>`;
+      previewWrap.innerHTML = `<video src="${url}" controls class="feat-preview-media"></video>`;
     } else {
-      previewWrap.innerHTML = `<img src="${url}" alt="preview" class="ad-preview-media" />`;
+      previewWrap.innerHTML = `<img src="${url}" alt="preview" class="feat-preview-media" />`;
     }
   });
 
@@ -401,7 +401,7 @@ export function initAdsPanel() {
       document.getElementById("adActive").checked = true;
       fileInput.value = "";
       document.getElementById("adFileName").textContent = "No file chosen";
-      document.getElementById("adPreviewWrap").style.display = "none";
+      document.getElementById("featPreviewWrap").style.display = "none";
       selectedAdFile = null;
       uploadBtn.disabled = true;
     } catch (err) {
@@ -461,18 +461,18 @@ function inferStoragePath(url) {
 
 function buildAdCard(ad) {
   const card = document.createElement("div");
-  card.className = "admin-card ad-admin-card";
+  card.className = "admin-card feat-admin-card";
 
   const isSubmission = ad.source === "submission";
   const isText = ad.type === "text" || !ad.url;
 
   let thumb;
   if (ad.type === "video" && ad.url) {
-    thumb = `<video src="${ad.url}" class="ad-card-thumb" muted preload="metadata"></video>`;
+    thumb = `<video src="${ad.url}" class="feat-card-thumb" muted preload="metadata"></video>`;
   } else if (ad.url) {
-    thumb = `<img src="${ad.url}" alt="" class="ad-card-thumb" loading="lazy" decoding="async" />`;
+    thumb = `<img src="${ad.url}" alt="" class="feat-card-thumb" loading="lazy" decoding="async" />`;
   } else {
-    thumb = `<div class="ad-card-thumb ad-card-thumb-text" aria-hidden="true">Aa</div>`;
+    thumb = `<div class="feat-card-thumb feat-card-thumb-text" aria-hidden="true">Aa</div>`;
   }
 
   const activeBadge = ad.active
@@ -480,7 +480,7 @@ function buildAdCard(ad) {
     : `<span class="badge badge-inactive">Inactive</span>`;
 
   const sourceBadge = isSubmission
-    ? `<span class="badge badge-submission">Advertise Form</span>`
+    ? `<span class="badge badge-submission">Promote Form</span>`
     : `<span class="badge badge-admin">Admin Upload</span>`;
 
   const typeBadge = ad.type === "video"
@@ -490,39 +490,39 @@ function buildAdCard(ad) {
       : `<span class="badge badge-image">Image</span>`;
 
   card.innerHTML = `
-    <div class="ad-card-left">${thumb}</div>
-    <div class="ad-card-body">
-      <div class="ad-card-meta">${activeBadge} ${sourceBadge} ${typeBadge} <span class="ad-order-tag">Order: ${ad.order ?? 0}</span></div>
-      <h4 class="ad-card-title"></h4>
-      <p class="ad-card-sub" hidden></p>
-      <p class="ad-card-contact" hidden></p>
-      <p class="ad-card-link-wrap" hidden><a class="ad-card-link-a" href="#" target="_blank" rel="noopener"></a></p>
+    <div class="feat-card-left">${thumb}</div>
+    <div class="feat-card-body">
+      <div class="feat-card-meta">${activeBadge} ${sourceBadge} ${typeBadge} <span class="feat-order-tag">Order: ${ad.order ?? 0}</span></div>
+      <h4 class="feat-card-title"></h4>
+      <p class="feat-card-sub" hidden></p>
+      <p class="feat-card-contact" hidden></p>
+      <p class="feat-card-link-wrap" hidden><a class="feat-card-link-a" href="#" target="_blank" rel="noopener"></a></p>
     </div>
-    <div class="ad-card-actions">
+    <div class="feat-card-actions">
       <button class="ad-toggle-btn ${ad.active ? "btn-warning" : "btn-success"}" data-id="${ad.id}" data-active="${ad.active}">
         ${ad.active ? "Deactivate" : "Activate"}
       </button>
       <button class="ad-delete-btn btn-danger-sm" data-id="${ad.id}" data-path="">Delete</button>
     </div>`;
 
-  card.querySelector(".ad-card-title").textContent = ad.title || ad.businessName || "Untitled";
+  card.querySelector(".feat-card-title").textContent = ad.title || ad.businessName || "Untitled";
 
   if (isSubmission && ad.businessName) {
-    const sub = card.querySelector(".ad-card-sub");
+    const sub = card.querySelector(".feat-card-sub");
     sub.hidden = false;
     sub.textContent = ad.businessName;
   }
 
   const contactParts = [ad.email, ad.phone].filter(Boolean);
   if (contactParts.length) {
-    const contact = card.querySelector(".ad-card-contact");
+    const contact = card.querySelector(".feat-card-contact");
     contact.hidden = false;
     contact.textContent = contactParts.join(" · ");
   }
 
   if (ad.link) {
-    const wrap = card.querySelector(".ad-card-link-wrap");
-    const a = card.querySelector(".ad-card-link-a");
+    const wrap = card.querySelector(".feat-card-link-wrap");
+    const a = card.querySelector(".feat-card-link-a");
     wrap.hidden = false;
     a.href = ad.link;
     a.textContent = ad.link;
@@ -578,7 +578,7 @@ const REASON_LABELS = {
   "upgrade-listing": "Upgrade Listing",
   "general":         "General Inquiry",
   "report-issue":    "Report Issue",
-  "advertise":       "Advertise",
+  "advertise":       "Promote Business",
   "other":           "Other",
 };
 

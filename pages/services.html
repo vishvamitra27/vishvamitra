@@ -130,7 +130,7 @@
   }
 
   function renderAdCards() {
-    grid.querySelectorAll(".sv-card-ad").forEach((el) => el.remove());
+    grid.querySelectorAll(".sv-card-feat").forEach((el) => el.remove());
     totalAds = 0;
     if (!showAdsInGrid()) return;
 
@@ -149,7 +149,7 @@
 
     const parts = [];
     if (totalAds > 0) {
-      parts.push(`<strong>${totalAds}</strong> sponsored ad${totalAds !== 1 ? "s" : ""}`);
+      parts.push(`<strong>${totalAds}</strong> featured business${totalAds !== 1 ? "es" : ""}`);
     }
     if (totalShown > 0) {
       parts.push(`<strong>${totalShown}</strong> listing${totalShown !== 1 ? "s" : ""}`);

@@ -35,11 +35,11 @@ function adMediaHtml(ad, eager) {
     if (eager) preloadImage(ad.url);
     return `<img class="sv-card-img" src="${ad.url}" alt="" loading="${load}" decoding="async"${prio}/>`;
   }
-  return `<div class="sv-card-no-img sv-card-ad-promo" aria-hidden="true">
+  return `<div class="sv-card-no-img sv-card-feat-promo" aria-hidden="true">
     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
       <path d="M3 11l19-9-9 19-2-8-8-2z"/>
     </svg>
-    <span>Advertisement</span>
+    <span>Business</span>
   </div>`;
 }
 
@@ -57,7 +57,7 @@ function appendContactChips(container, ad) {
 
   if (phone) {
     const chip = document.createElement("span");
-    chip.className = "sv-card-ad-chip";
+    chip.className = "sv-card-feat-chip";
     chip.insertAdjacentHTML("afterbegin", phoneIcon);
     const label = document.createElement("span");
     label.textContent = phone;
@@ -66,7 +66,7 @@ function appendContactChips(container, ad) {
   }
   if (email) {
     const chip = document.createElement("span");
-    chip.className = "sv-card-ad-chip";
+    chip.className = "sv-card-feat-chip";
     chip.insertAdjacentHTML("afterbegin", emailIcon);
     const label = document.createElement("span");
     label.textContent = email;
@@ -79,7 +79,7 @@ function adActionLabel(ad) {
   if (ad.link) return "Visit →";
   if (ad.phone) return "Call →";
   if (ad.email) return "Email →";
-  return "Sponsored";
+  return "Featured";
 }
 
 function resolveAdHref(ad) {
@@ -100,7 +100,7 @@ function resolveAdHref(ad) {
 export function buildServiceAdCard(ad, index = 0) {
   const target = resolveAdHref(ad);
   const el = document.createElement(target ? "a" : "div");
-  el.className = "sv-card sv-card-ad";
+  el.className = "sv-card sv-card-feat";
   el.dataset.adId = ad.id || "";
 
   if (target) {
@@ -115,7 +115,7 @@ export function buildServiceAdCard(ad, index = 0) {
   const businessName = String(ad.businessName || "").trim();
   const title = String(ad.title || "").trim();
   const description = String(ad.description || "").trim();
-  const displayName = businessName || title || "Advertisement";
+  const displayName = businessName || title || "Business";
   const subtitle =
     businessName && title && businessName.toLowerCase() !== title.toLowerCase()
       ? title
@@ -124,14 +124,14 @@ export function buildServiceAdCard(ad, index = 0) {
   el.innerHTML = `
     <div class="sv-card-img-wrap">
       ${adMediaHtml(ad, eager)}
-      <span class="sv-card-badge sponsored">Sponsored</span>
+      <span class="sv-card-badge sv-feat-badge">Featured</span>
     </div>
     <div class="sv-card-body">
       <div class="sv-card-name"></div>
       <div class="sv-card-desc"></div>
-      <div class="sv-card-ad-contact"></div>
+      <div class="sv-card-feat-contact"></div>
       <div class="sv-card-footer">
-        <span class="sv-card-cat sv-card-cat-ad">advertisement</span>
+        <span class="sv-card-cat sv-card-cat-feat">featured</span>
         <span class="sv-card-arrow"></span>
       </div>
     </div>`;
@@ -145,7 +145,7 @@ export function buildServiceAdCard(ad, index = 0) {
     descEl.hidden = true;
   }
 
-  appendContactChips(el.querySelector(".sv-card-ad-contact"), ad);
+  appendContactChips(el.querySelector(".sv-card-feat-contact"), ad);
   el.querySelector(".sv-card-arrow").textContent = adActionLabel(ad);
 
   const img = el.querySelector("img.sv-card-img");

@@ -34,7 +34,7 @@ function ensureMainId(el) {
 function initLazyImages() {
   const enhance = () => {
     document.querySelectorAll("img:not([loading])").forEach((img) => {
-      if (img.closest(".home-hero, .ad-carousel .ad-slide.active, .sv-ad-section .ad-slide.active")) return;
+      if (img.closest(".home-hero, .feat-carousel .feat-slide.active, .sv-ad-section .feat-slide.active")) return;
       if (img.getAttribute("fetchpriority") === "high") return;
       img.loading = "lazy";
       if (!img.hasAttribute("decoding")) img.decoding = "async";
@@ -51,14 +51,14 @@ function initLazyImages() {
 /** Pause off-screen carousel videos (save bandwidth + main thread) */
 function initCarouselVideoObserver() {
   if (!("IntersectionObserver" in window)) return;
-  const carousel = document.getElementById("adCarousel");
+  const carousel = document.getElementById("featCarousel");
   if (!carousel) return;
 
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         carousel.querySelectorAll("video").forEach((v) => {
-          if (entry.isIntersecting && v.closest(".ad-slide.active")) {
+          if (entry.isIntersecting && v.closest(".feat-slide.active")) {
             v.play().catch(() => {});
           } else {
             v.pause();
