@@ -14,15 +14,21 @@ function preloadImage(url) {
   img.src = url;
 }
 
-/** Client-side keyword filter for ad cards */
-export function filterAds(ads, keyword) {
-  if (!keyword) return ads;
-  const kw = keyword.toLowerCase();
-  return ads.filter((ad) =>
-    `${ad.title} ${ad.businessName} ${ad.description} ${ad.email} ${ad.phone} ${ad.fullName}`
-      .toLowerCase()
-      .includes(kw)
-  );
+/** Client-side keyword + category filter for ad cards */
+export function filterAds(ads, keyword, category = "") {
+  let result = ads;
+  if (category) {
+    result = result.filter((ad) => (ad.category || "") === category);
+  }
+  if (keyword) {
+    const kw = keyword.toLowerCase();
+    result = result.filter((ad) =>
+      `${ad.title} ${ad.businessName} ${ad.description} ${ad.email} ${ad.phone} ${ad.fullName}`
+        .toLowerCase()
+        .includes(kw)
+    );
+  }
+  return result;
 }
 
 function adMediaHtml(ad, eager) {
@@ -75,41 +81,24 @@ function appendContactChips(container, ad) {
   }
 }
 
-function adActionLabel(ad) {
-  if (ad.link) return "Visit →";
-  if (ad.phone) return "Call →";
-  if (ad.email) return "Email →";
-  return "Featured";
-}
-
-function resolveAdHref(ad) {
-  const link = String(ad.link || "").trim();
-  if (link) return { href: link, external: true };
-  const phone = String(ad.phone || "").trim();
-  if (phone) return { href: `tel:${phone}` };
-  const email = String(ad.email || "").trim();
-  if (email) return { href: `mailto:${email}` };
-  return null;
+function adActionLabel() {
+  return "View →";
 }
 
 /**
  * Build one ad card matching .sv-card listing layout.
+ * Clicking the card opens the dedicated Advertisement Details page —
+ * same pattern as business listing cards opening listing-details.html.
+ * Call/Visit/Email actions live on that details page instead of firing
+ * directly from the grid, so the link/phone/email fields aren't lost.
  * @param {Object} ad
  * @param {number} index - position in grid (first images eager-loaded)
  */
 export function buildServiceAdCard(ad, index = 0) {
-  const target = resolveAdHref(ad);
-  const el = document.createElement(target ? "a" : "div");
+  const el = document.createElement("a");
   el.className = "sv-card sv-card-feat";
   el.dataset.adId = ad.id || "";
-
-  if (target) {
-    el.href = target.href;
-    if (target.external) {
-      el.target = "_blank";
-      el.rel = "noopener noreferrer";
-    }
-  }
+  el.href = `listing-details.html?id=${ad.id}`;
 
   const eager = index < 4;
   const businessName = String(ad.businessName || "").trim();
@@ -146,7 +135,7 @@ export function buildServiceAdCard(ad, index = 0) {
   }
 
   appendContactChips(el.querySelector(".sv-card-feat-contact"), ad);
-  el.querySelector(".sv-card-arrow").textContent = adActionLabel(ad);
+  el.querySelector(".sv-card-arrow").textContent = adActionLabel();
 
   const img = el.querySelector("img.sv-card-img");
   if (img && displayName) img.alt = displayName;

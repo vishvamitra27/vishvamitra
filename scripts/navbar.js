@@ -32,9 +32,9 @@ const navbarHtml = `
     <span class="logo-icon" aria-hidden="true">
       <svg width="26" height="18" viewBox="0 0 52 34" fill="none" xmlns="http://www.w3.org/2000/svg">
         <!-- V: clean chevron -->
-        <path d="M1 3 L8 3 L14 20 L20 3 L27 3 L17 31 L11 31 Z" fill="#fff"/>
+        <path d="M1 3 L8 3 L14 20 L20 3 L27 3 L17 31 L11 31 Z" fill="var(--color-white)"/>
         <!-- M: bold peaks -->
-        <path d="M28 31 L28 3 L34 3 L40 17 L46 3 L52 3 L52 31 L46 31 L46 14 L41 26 L39 26 L34 14 L34 31 Z" fill="#fff"/>
+        <path d="M28 31 L28 3 L34 3 L40 17 L46 3 L52 3 L52 31 L46 31 L46 14 L41 26 L39 26 L34 14 L34 31 Z" fill="var(--color-white)"/>
       </svg>
     </span>
     <span class="logo-word">vishvamitra</span>

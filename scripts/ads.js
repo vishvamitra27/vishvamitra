@@ -8,6 +8,7 @@
 //    type       : "image" | "video"
 //    url        : string  (Firebase Storage download URL)
 //    link       : string  (optional click-through URL)
+//    category   : string  (same category slugs as "listings" — "" = uncategorized)
 //    active     : boolean
 //    order      : number  (lower = shown first)
 //    createdAt  : Timestamp
@@ -16,7 +17,7 @@
 
 import { db, storage }      from "./firebase-core.js";
 import {
-  collection, doc,
+  collection, doc, getDoc,
   addDoc, updateDoc, deleteDoc,
   query, where, orderBy,
   onSnapshot, serverTimestamp
@@ -27,6 +28,22 @@ import {
 
 const COL = "ads";
 const MAX_SIZE_MB = 20;
+
+// ─────────────────────────────────────────────────────────────
+//  READ (single doc)
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Fetch a single ad by Firestore doc ID (for listing-details.html).
+ * Mirrors listings.js's getListingById — no caching here since
+ * ads.js doesn't use the service-layer cache elsewhere.
+ * @param {string} id
+ * @returns {Promise<Object|null>}
+ */
+export async function getAdById(id) {
+  const snap = await getDoc(doc(db, COL, id));
+  return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+}
 
 // ─────────────────────────────────────────────────────────────
 //  UPLOAD
@@ -89,6 +106,7 @@ export async function addAd(data, adminId, file, onProgress) {
   const docRef = await addDoc(collection(db, COL), {
     title:      data.title      || "",
     link:       data.link       || "",
+    category:   data.category   || "",
     active:     data.active     ?? true,
     order:      Number(data.order) || 0,
     type,
@@ -105,14 +123,15 @@ export async function addAd(data, adminId, file, onProgress) {
 /**
  * Update ad metadata (does NOT re-upload media).
  * @param {string} adId
- * @param {Object} data - { title, link, active, order }
+ * @param {Object} data - { title, link, active, order, category }
  */
 export async function updateAd(adId, data) {
   const payload = {};
-  if (data.title  !== undefined) payload.title  = data.title;
-  if (data.link   !== undefined) payload.link   = data.link;
-  if (data.active !== undefined) payload.active = data.active;
-  if (data.order  !== undefined) payload.order  = Number(data.order);
+  if (data.title    !== undefined) payload.title    = data.title;
+  if (data.link     !== undefined) payload.link     = data.link;
+  if (data.active   !== undefined) payload.active   = data.active;
+  if (data.order    !== undefined) payload.order    = Number(data.order);
+  if (data.category !== undefined) payload.category = data.category;
   await updateDoc(doc(db, COL, adId), payload);
 }
 
@@ -286,6 +305,7 @@ export async function submitAdRequest(data, imageFile = null, onProgress) {
     phone:        String(data.phone        || "").trim(),
     email:        String(data.email        || "").trim(),
     businessName: String(data.businessName || "").trim(),
+    category:     String(data.category     || "").trim(),
     title:        String(data.title        || "").trim(),
     description:  String(data.description  || "").trim(),
     type:         adType,

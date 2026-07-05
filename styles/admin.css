@@ -29,14 +29,14 @@
   border-radius: 6px;
   margin-bottom: 6px;
   text-decoration: none;
-  color: #cbd5e1;
+  color: var(--color-muted-light);
   transition: background 0.2s, color 0.2s;
   cursor: pointer;
 }
 
 .sidebar a:hover,
 .sidebar a.active {
-  background: #1e293b;
+  background: var(--color-primary-dark);
   color: white;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .kpi-card         { border-left: 5px solid var(--color-success); }
-.kpi-card.yellow  { border-left-color: var(--color-accent); }
+.kpi-card.yellow  { border-left-color: var(--color-warning); }
 .kpi-card.blue    { border-left-color: var(--color-info); }
 .kpi-card.red     { border-left-color: var(--color-danger); }
 
@@ -130,7 +130,7 @@
 
 .uid-label {
   font-size: .8rem !important;
-  color: #aaa !important;
+  color: var(--color-muted-light) !important;
 }
 
 /* ── Role badges ────────────────────────────────────────────── */
@@ -143,11 +143,11 @@
   margin-right: 4px;
 }
 
-.badge-active   { background: #d4edda; color: #155724; }
-.badge-pending  { background: #fff3cd; color: #856404; }
-.badge-inactive { background: #f8d7da; color: #721c24; }
-.badge-admin    { background: #e0e7ff; color: #3730a3; }
-.badge-vendor   { background: var(--color-primary-border-muted); color: #065f46; }
+.badge-active   { background: var(--color-success-bg); color: var(--color-success-text); }
+.badge-pending  { background: var(--color-warning-bg); color: var(--color-warning-text); }
+.badge-inactive { background: var(--color-danger-bg); color: var(--color-danger-text); }
+.badge-admin    { background: var(--color-primary-border-muted); color: var(--color-primary-dark); }
+.badge-vendor   { background: var(--color-success-bg); color: var(--color-success-text); }
 .badge-user     { background: var(--color-surface-muted); color: var(--color-muted); }
 
 /* ── Admin action buttons ───────────────────────────────────── */
@@ -172,14 +172,14 @@
 }
 
 .action-btn:hover        { background: var(--color-success); }
-.action-btn.deactivate   { background: var(--color-accent); }
-.action-btn.deactivate:hover { background: var(--color-accent-dark); }
+.action-btn.deactivate   { background: var(--color-warning); }
+.action-btn.deactivate:hover { background: var(--color-warning-dark); }
 .action-btn.blue         { background: var(--color-info); }
 .action-btn.blue:hover   { background: var(--color-info); }
 .action-btn:disabled     { opacity: .4; cursor: not-allowed; }
 
 .delete-btn {
-  background: #e53935;
+  background: var(--color-danger);
   color: white;
   border: none;
   padding: 7px 13px;
@@ -190,7 +190,7 @@
   transition: background 0.2s;
 }
 
-.delete-btn:hover { background: #c62828; }
+.delete-btn:hover { background: var(--color-danger-dark); }
 
 .role-select {
   padding: 7px 10px;

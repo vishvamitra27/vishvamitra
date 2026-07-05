@@ -367,10 +367,11 @@ export function initAdsPanel() {
 
   // Upload button
   uploadBtn.addEventListener("click", async () => {
-    const title  = document.getElementById("adTitle").value.trim();
-    const link   = document.getElementById("adLink").value.trim();
-    const order  = document.getElementById("adOrder").value;
-    const active = document.getElementById("adActive").checked;
+    const title    = document.getElementById("adTitle").value.trim();
+    const link     = document.getElementById("adLink").value.trim();
+    const category = document.getElementById("adCategory").value;
+    const order    = document.getElementById("adOrder").value;
+    const active   = document.getElementById("adActive").checked;
 
     if (!title) { showToast("Please enter an ad title.", { kind: "error" }); return; }
     if (!selectedAdFile) { showToast("Please select a file.", { kind: "error" }); return; }
@@ -387,7 +388,7 @@ export function initAdsPanel() {
       const adminId = auth.currentUser?.uid || "admin";
 
       await addAd(
-        { title, link, active, order },
+        { title, link, category, active, order },
         adminId,
         selectedAdFile,
         (pct) => { progressFill.style.width = pct + "%"; }
@@ -397,6 +398,7 @@ export function initAdsPanel() {
       // Reset form
       document.getElementById("adTitle").value = "";
       document.getElementById("adLink").value  = "";
+      document.getElementById("adCategory").value = "";
       document.getElementById("adOrder").value = "0";
       document.getElementById("adActive").checked = true;
       fileInput.value = "";
@@ -489,10 +491,14 @@ function buildAdCard(ad) {
       ? `<span class="badge badge-text-ad">Text</span>`
       : `<span class="badge badge-image">Image</span>`;
 
+  const categoryBadge = ad.category
+    ? `<span class="badge badge-category">${String(ad.category).replace(/-/g, " ")}</span>`
+    : "";
+
   card.innerHTML = `
     <div class="feat-card-left">${thumb}</div>
     <div class="feat-card-body">
-      <div class="feat-card-meta">${activeBadge} ${sourceBadge} ${typeBadge} <span class="feat-order-tag">Order: ${ad.order ?? 0}</span></div>
+      <div class="feat-card-meta">${activeBadge} ${sourceBadge} ${typeBadge} ${categoryBadge} <span class="feat-order-tag">Order: ${ad.order ?? 0}</span></div>
       <h4 class="feat-card-title"></h4>
       <p class="feat-card-sub" hidden></p>
       <p class="feat-card-contact" hidden></p>
@@ -583,8 +589,8 @@ const REASON_LABELS = {
 };
 
 const STATUS_COLORS = {
-  unread:  { bg: "#fff0f0", color: "var(--color-error)", label: "Unread" },
-  read:    { bg: "#f0f9ff", color: "var(--color-info)", label: "Read"   },
+  unread:  { bg: "var(--color-error-bg)", color: "var(--color-error)", label: "Unread" },
+  read:    { bg: "var(--color-info-bg)", color: "var(--color-info)", label: "Read"   },
   replied: { bg: "var(--color-primary-hover-bg)", color: "var(--color-primary)", label: "Replied"},
 };
 
@@ -664,7 +670,7 @@ function buildMsgRow(msg) {
       padding:16px 18px; margin-bottom:10px;
       border-left:4px solid ${sc.color};
       cursor:pointer; transition:box-shadow .2s, transform .15s;
-      ${msg.status === 'unread' ? 'background:#fffaf9;' : ''}
+      ${msg.status === 'unread' ? 'background:var(--color-error-bg);' : ''}
     " data-id="${msg.id}">
       <!-- Avatar -->
       <div style="width:42px;height:42px;border-radius:50%;background:${sc.bg};
@@ -683,7 +689,7 @@ function buildMsgRow(msg) {
         <div style="font-size:13px;color:var(--color-muted);line-height:1.5;">${preview}</div>
       </div>
       <!-- Time -->
-      <div style="font-size:11px;color:#aaa;white-space:nowrap;flex-shrink:0;">${ts}</div>
+      <div style="font-size:11px;color:var(--color-muted-light);white-space:nowrap;flex-shrink:0;">${ts}</div>
     </div>`;
 
   wrap.querySelector("[data-id]").addEventListener("click", () => openMsgModal(msg));
@@ -745,10 +751,10 @@ function openMsgModal(msg) {
     <!-- Actions -->
     <div style="padding:16px 24px;display:flex;gap:10px;flex-wrap:wrap;">
       ${msg.phone ? `<a href="tel:${msg.phone}" style="flex:1;min-width:120px;padding:10px;background:var(--color-primary-hover-bg);color:var(--color-primary);border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid var(--color-primary-border-soft);">📞 Call</a>` : ""}
-      ${msg.email ? `<a href="mailto:${msg.email}" style="flex:1;min-width:120px;padding:10px;background:#e8f4ff;color:var(--color-info);border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid #b8d8ff;">✉️ Email</a>` : ""}
-      ${msg.status !== "read"    ? `<button class="msg-action-btn" data-action="read"    data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#f0f9ff;color:var(--color-info);border:1.5px solid #b8d8ff;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Read</button>` : ""}
+      ${msg.email ? `<a href="mailto:${msg.email}" style="flex:1;min-width:120px;padding:10px;background:var(--color-info-bg);color:var(--color-info);border-radius:10px;font-size:13px;font-weight:700;text-align:center;text-decoration:none;border:1.5px solid var(--color-info-border);">✉️ Email</a>` : ""}
+      ${msg.status !== "read"    ? `<button class="msg-action-btn" data-action="read"    data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:var(--color-info-bg);color:var(--color-info);border:1.5px solid var(--color-info-border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Read</button>` : ""}
       ${msg.status !== "replied" ? `<button class="msg-action-btn" data-action="replied" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:var(--color-primary-hover-bg);color:var(--color-primary);border:1.5px solid var(--color-primary-border-soft);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">Mark Replied</button>` : ""}
-      <button class="msg-action-btn" data-action="delete" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:#fff0f0;color:var(--color-error);border:1.5px solid #ffc0c0;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">🗑 Delete</button>
+      <button class="msg-action-btn" data-action="delete" data-id="${msg.id}" style="flex:1;min-width:120px;padding:10px;background:var(--color-error-bg);color:var(--color-error);border:1.5px solid var(--color-error-border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">🗑 Delete</button>
     </div>`;
 
   modal.style.display = "flex";

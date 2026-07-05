@@ -10,7 +10,7 @@
   <title>Promote Your Business on Vishvamitra | Local Directory</title>
   <meta name="description" content="Feature your business on Vishvamitra. Reach local customers across Andhra Pradesh with our premium business spotlight service." />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#0f766e" />
+  <meta name="theme-color" content="#2D3E2C" />
   <link rel="canonical" href="https://vishvamitra.com/advertise.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Vishvamitra" />
@@ -120,7 +120,7 @@
       transition: background .2s;
     }
     .adv-type-btn.active .adv-type-icon { background: var(--color-primary); }
-    .adv-type-btn.active .adv-type-icon svg { stroke: #fff; }
+    .adv-type-btn.active .adv-type-icon svg { stroke: var(--color-white); }
     .adv-type-name {
       font-size: .88rem; font-weight: 700; color: var(--color-text-dark);
     }
@@ -146,6 +146,7 @@
       font-size: .82rem; font-weight: 600; color: var(--color-text); margin-bottom: 6px;
     }
     .adv-label .req { color: var(--color-error); margin-left: 2px; font-size: .75rem; }
+    .adv-label .adv-optional { color: var(--color-muted-light, #99A695); font-weight: 500; font-size: .75rem; margin-left: 6px; text-transform: none; letter-spacing: 0; }
     .adv-input, .adv-textarea {
       width: 100%; padding: 11px 14px;
       border: 1.5px solid var(--color-primary-border-soft); border-radius: 8px;
@@ -157,7 +158,7 @@
       border-color: var(--color-primary); box-shadow: 0 0 0 3px var(--color-primary-focus); background: var(--color-white);
     }
     .adv-input.error, .adv-textarea.error {
-      border-color: var(--color-error); box-shadow: 0 0 0 3px rgba(229,62,62,.1);
+      border-color: var(--color-error); box-shadow: 0 0 0 3px rgba(var(--color-danger-rgb),.1);
     }
     .adv-textarea { resize: vertical; min-height: 110px; }
     .adv-field-hint {
@@ -216,13 +217,13 @@
       color: var(--color-on-primary); display: flex; align-items: center; justify-content: center;
       transition: background .2s;
     }
-    .adv-preview-remove:hover { background: rgba(229,62,62,.85); }
+    .adv-preview-remove:hover { background: rgba(var(--color-danger-rgb),.85); }
     .adv-preview-name {
       font-family: 'Poppins', sans-serif; font-size: .75rem; color: var(--color-muted);
       margin-top: 6px; text-align: center; overflow: hidden;
       text-overflow: ellipsis; white-space: nowrap;
     }
-    .adv-upload-zone.error { border-color: var(--color-error); background: #fff8f8; }
+    .adv-upload-zone.error { border-color: var(--color-error); background: var(--color-error-bg); }
 
     /* ── Upload progress bar ───────────────────────────────── */
     #advProgressWrap { display: none; margin-top: 12px; }
@@ -377,7 +378,7 @@
 
       <div class="adv-row">
         <div class="adv-field">
-          <label class="adv-label" for="advEmail">Email Address<span class="req">*</span></label>
+          <label class="adv-label" for="advEmail">Email Address<span class="adv-optional">(optional)</span></label>
           <input class="adv-input" id="advEmail" type="email" placeholder="you@example.com" autocomplete="email" />
         </div>
         <div class="adv-field">
@@ -390,13 +391,34 @@
       <div class="adv-section-label">Business Promotion Details</div>
 
       <div class="adv-field">
-        <label class="adv-label" for="advTitle">Promotion Title<span class="req">*</span></label>
+        <label class="adv-label" for="advCategory">Business Category<span class="req">*</span></label>
+        <select class="adv-input" id="advCategory">
+          <option value="">Select category</option>
+          <option value="food-beverages">Food &amp; Beverages</option>
+          <option value="retail-shopping">Retail &amp; Shopping</option>
+          <option value="health-wellness">Health &amp; Wellness</option>
+          <option value="education-training">Education &amp; Training</option>
+          <option value="professional-services">Professional Services</option>
+          <option value="home-garden">Home &amp; Garden</option>
+          <option value="automotive">Automotive</option>
+          <option value="technology-it">Technology &amp; IT</option>
+          <option value="real-estate">Real Estate</option>
+          <option value="travel-tourism">Travel &amp; Tourism</option>
+          <option value="arts-entertainment">Arts &amp; Entertainment</option>
+          <option value="financial-services">Financial Services</option>
+          <option value="custom">Custom</option>
+        </select>
+        <p class="adv-field-hint">Same categories used across Vishvamitra listings — helps your spotlight show up in the right filter.</p>
+      </div>
+
+      <div class="adv-field">
+        <label class="adv-label" for="advTitle">Promotion Title<span class="adv-optional">(optional)</span></label>
         <input class="adv-input" id="advTitle" type="text" placeholder="e.g. 50% off on all electronics this summer" maxlength="100" />
         <p class="adv-field-hint">Shown as the main headline on your business spotlight.</p>
       </div>
 
       <div class="adv-field">
-        <label class="adv-label" for="advDesc">Promotion Description<span class="req">*</span></label>
+        <label class="adv-label" for="advDesc">Promotion Description<span class="adv-optional">(optional)</span></label>
         <textarea class="adv-textarea" id="advDesc" placeholder="Describe your offer, product, or service in a few sentences…" maxlength="400"></textarea>
         <p class="adv-field-hint">Displayed below your headline (text ads) or alongside your image.</p>
       </div>
@@ -504,6 +526,7 @@
     phone:        document.getElementById("advPhone"),
     email:        document.getElementById("advEmail"),
     businessName: document.getElementById("advBusiness"),
+    category:     document.getElementById("advCategory"),
     title:        document.getElementById("advTitle"),
     description:  document.getElementById("advDesc"),
   };
@@ -601,11 +624,9 @@
     if (!v.fullName)                 return markError(fields.fullName,     "Please enter your full name.");
     if (!v.phone)                    return markError(fields.phone,        "Please enter a contact number.");
     if (!isValidPhone(v.phone))      return markError(fields.phone,        "Please enter a valid phone number.");
-    if (!v.email)                    return markError(fields.email,        "Please enter your email address.");
-    if (!isValidEmail(v.email))      return markError(fields.email,        "Please enter a valid email address.");
+    if (v.email && !isValidEmail(v.email)) return markError(fields.email,  "Please enter a valid email address.");
     if (!v.businessName)             return markError(fields.businessName, "Please enter your business name.");
-    if (!v.title)                    return markError(fields.title,        "Please enter a promotion title.");
-    if (!v.description)              return markError(fields.description,  "Please enter a promotion description.");
+    if (!v.category)                 return markError(fields.category,     "Please select a business category.");
     if (adType === "image" && !imageFile) {
       dropZone.classList.add("error");
       showToast("Please upload a banner image for your Image Ad.", { kind: "warning", duration: 3500 });

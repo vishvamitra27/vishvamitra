@@ -23,7 +23,7 @@
 
 /* ── KPI override for dashboard pages ──────────────────────── */
 .kpi-card.pending-kpi {
-  border-left-color: var(--color-accent);
+  border-left-color: var(--color-warning);
 }
 
 /* ── Action buttons row ─────────────────────────────────────── */
@@ -63,9 +63,9 @@
   letter-spacing: 0.02em;
 }
 
-.status-active  { background: #d4edda; color: #155724; }
-.status-review  { background: #fff3cd; color: #856404; }
-.status-inactive { background: #f8d7da; color: #721c24; }
+.status-active  { background: var(--color-success-bg); color: var(--color-success-text); }
+.status-review  { background: var(--color-warning-bg); color: var(--color-warning-text); }
+.status-inactive { background: var(--color-danger-bg); color: var(--color-danger-text); }
 
 /* ── Card action buttons ────────────────────────────────────── */
 .card-actions {
@@ -88,7 +88,7 @@
 
 .card-actions button:hover { opacity: 0.92; transform: translateY(-1px); }
 
-.btn-edit   { background: #007bff; }
+.btn-edit   { background: var(--color-info); }
 .btn-delete { background: var(--color-danger); }
 
 /* ── Type badge ─────────────────────────────────────────────── */

@@ -11,7 +11,7 @@
   <title>Discover Local Services in Andhra Pradesh | Vishvamitra</title>
   <meta name="description" content="Vishvamitra is a hyperlocal directory to find trusted restaurants, electricians, tutors, salons, and businesses across Andhra Pradesh. Browse free and paid listings." />
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#0f766e" />
+  <meta name="theme-color" content="#2D3E2C" />
   <link rel="canonical" href="https://vishvamitra.com/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Vishvamitra" />
@@ -329,8 +329,12 @@
         return;
       }
       listings.forEach(l => {
-        const card = document.createElement("div");
+        // Whole card is a link to Listing Details (reuses existing page/pattern
+        // already used by sv-card / ps-card / fs-card). Keeps native back-button
+        // behaviour and needs no extra click handling.
+        const card = document.createElement("a");
         card.className = "listing-card";
+        card.href = `listing-details.html?id=${l.id}`;
         card.innerHTML = `
           ${l.image
             ? `<div class="c-img-wrap"><img class="c-img" src="${l.image}" alt="${l.name||''}" loading="lazy" decoding="async"/></div>`
@@ -341,7 +345,7 @@
             <p class="c-loc"></p>
           </div>
           <div class="c-card-footer">
-            <a class="c-view-btn" href="listing-details.html?id=${l.id}">View Details</a>
+            <span class="c-view-btn">View Details</span>
           </div>`;
         card.querySelector(".c-name").textContent = l.name     || "Unnamed";
         card.querySelector(".c-loc").textContent  = l.location || "";
@@ -375,7 +379,7 @@
   initPrefetch();
 
   // ── Ad Carousel (10s auto-advance) ─────────────────────
-  createAdCarousel({ intervalMs: 10000 });
+  createAdCarousel({ intervalMs: 4000 });
 </script>
 
 <script defer src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>

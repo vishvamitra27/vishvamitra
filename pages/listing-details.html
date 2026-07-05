@@ -7,21 +7,21 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
 
-  <title>Business Listing Details | Vishvamitra</title>
-  <meta name="description" content="View contact details, location, category, and description for this local business listing on Vishvamitra." />
+  <title>Advertisement Details | Vishvamitra</title>
+  <meta name="description" content="View this featured business spotlight on Vishvamitra." />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://vishvamitra.com/listing-details.html" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Vishvamitra" />
-  <meta property="og:title" content="Business Listing Details | Vishvamitra" />
-  <meta property="og:description" content="Local business listing on Vishvamitra — phone, address, services, and more." />
+  <meta property="og:title" content="Advertisement Details | Vishvamitra" />
+  <meta property="og:description" content="Featured business spotlight on Vishvamitra." />
   <meta property="og:url" content="https://vishvamitra.com/listing-details.html" />
   <meta property="og:image" content="https://vishvamitra.com/assets/images/banner.svg" />
   <meta property="og:locale" content="en_IN" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@vishvamitra_services" />
-  <meta name="twitter:title" content="Business Listing Details | Vishvamitra" />
-  <meta name="twitter:description" content="Local business listing on Vishvamitra." />
+  <meta name="twitter:title" content="Advertisement Details | Vishvamitra" />
+  <meta name="twitter:description" content="Featured business spotlight on Vishvamitra." />
   <meta name="twitter:image" content="https://vishvamitra.com/assets/images/banner.svg" />
   <link rel="stylesheet" href="../styles/main.css" />
 </head>
@@ -29,7 +29,7 @@
 
 <header><div id="navbar-root"></div></header>
 
-<!-- SKELETON -->
+<!-- SKELETON (reuses listing-details skeleton styles) -->
 <div id="skeletonWrap" class="ld-skeleton-wrap">
   <div class="ld-skeleton-banner"></div>
   <div class="ld-skeleton-body">
@@ -40,8 +40,8 @@
   </div>
 </div>
 
-<!-- MAIN LISTING DETAIL -->
-<article id="listingWrap" style="display:none;" itemscope itemtype="https://schema.org/LocalBusiness">
+<!-- MAIN AD DETAIL — reuses listing-details.html's .ld-* layout -->
+<article id="adWrap" style="display:none;">
 
   <!-- BANNER -->
   <div class="ld-banner">
@@ -49,16 +49,19 @@
     <div class="ld-banner-overlay"></div>
     <div class="ld-banner-content">
       <div class="ld-banner-left">
-        <span class="ld-type-badge" id="bannerType"></span>
-        <h1 class="ld-biz-name" id="bannerName" itemprop="name"></h1>
-        <div class="ld-new-badge">New listing</div>
-        <p class="ld-banner-sub" id="bannerLocation"></p>
+        <span class="ld-type-badge paid" id="bannerType">Featured Business</span>
+        <h1 class="ld-biz-name" id="bannerName"></h1>
+        <p class="ld-banner-sub" id="bannerTagline"></p>
         <p class="ld-banner-sub" id="bannerPhone"></p>
       </div>
       <div class="ld-banner-actions">
         <a id="callBtnBanner" class="ld-btn-call" href="#">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           Call Now
+        </a>
+        <a id="visitBtnBanner" class="ld-btn-back" href="#" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Visit Website
         </a>
         <a href="services.html" class="ld-btn-back">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -84,10 +87,6 @@
 
     <!-- SIDEBAR -->
     <aside class="ld-sidebar">
-      <div class="ld-sidebar-section" id="sideAddrSection">
-        <div class="ld-sidebar-label">Address</div>
-        <div class="ld-sidebar-value" id="sideAddress"></div>
-      </div>
       <div class="ld-sidebar-section" id="sidePhoneSection">
         <div class="ld-sidebar-label">Phone</div>
         <div class="ld-sidebar-value">
@@ -99,12 +98,8 @@
         <div class="ld-sidebar-value" id="sideCategory"></div>
       </div>
       <div class="ld-sidebar-section">
-        <div class="ld-sidebar-label">Listing Type</div>
-        <div class="ld-sidebar-value"><span class="ld-type-pill" id="sideTypePill"></span></div>
-      </div>
-      <div class="ld-sidebar-section" id="sidePriceSection">
-        <div class="ld-sidebar-label">Price / Fee</div>
-        <div class="ld-sidebar-value" id="sidePrice"></div>
+        <div class="ld-sidebar-label">Ad Type</div>
+        <div class="ld-sidebar-value"><span class="ld-type-pill paid" id="sideTypePill"></span></div>
       </div>
       <div class="ld-sidebar-section">
         <div class="ld-sidebar-label">Status</div>
@@ -134,11 +129,17 @@
               </span>
               <a class="ld-contact-link" id="cPhone" href="#"></a>
             </div>
-            <div class="ld-contact-row">
+            <div class="ld-contact-row" id="cRowEmail">
               <span class="ld-contact-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
               </span>
-              <span id="cAddr"></span>
+              <a class="ld-contact-link" id="cEmail" href="#"></a>
+            </div>
+            <div class="ld-contact-row" id="cRowLink">
+              <span class="ld-contact-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </span>
+              <a class="ld-contact-link" id="cLink" href="#" target="_blank" rel="noopener noreferrer">Visit website</a>
             </div>
             <div class="ld-contact-row">
               <span class="ld-contact-icon">
@@ -156,7 +157,7 @@
 
 <!-- ERROR STATE -->
 <div id="errorWrap" style="display:none;" class="ld-error-wrap">
-  <p class="ld-error-msg">Listing not found or no longer active.</p>
+  <p class="ld-error-msg">Advertisement not found or no longer active.</p>
   <a href="services.html" class="btn-primary">Browse Services</a>
 </div>
 
@@ -169,50 +170,62 @@
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
 <script type="module">
-  import { getListingById }           from "../scripts/listings.js";
+  import { getAdById }                from "../scripts/ads.js";
   import { toUserMessage, showToast } from "../scripts/utils.js";
   import { reportError }              from "../scripts/core/errors.js";
   import {
     applyPageMeta,
-    buildListingJsonLd,
     canonicalUrl,
     absoluteAssetUrl,
-    injectJsonLd,
   } from "../scripts/seo-config.js";
 
-  const params    = new URLSearchParams(location.search);
-  const listingId = params.get("id");
-  const skeleton  = document.getElementById("skeletonWrap");
-  const wrap      = document.getElementById("listingWrap");
-  const errWrap   = document.getElementById("errorWrap");
+  const params   = new URLSearchParams(location.search);
+  const adId     = params.get("id");
+  const skeleton = document.getElementById("skeletonWrap");
+  const wrap     = document.getElementById("adWrap");
+  const errWrap  = document.getElementById("errorWrap");
 
   const $ = id => document.getElementById(id);
   function txt(id, v) { const el = $(id); if (el) el.textContent = v; }
   function show(el)   { el.style.display = ""; }
   function hide(el)   { el.style.display = "none"; }
 
-  if (!listingId) {
+  function formatCategory(cat) {
+    if (!cat) return "General";
+    return String(cat).replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  if (!adId) {
     hide(skeleton); show(errWrap);
     applyPageMeta({ robots: "noindex, nofollow" });
   } else {
-    let listing = null;
+    let ad = null;
     try {
-      listing = await getListingById(listingId);
+      ad = await getAdById(adId);
     } catch (err) {
-      reportError("listingDetails.fetch", err);
+      reportError("adDetails.fetch", err);
       showToast(toUserMessage(err), { kind: "error" });
     }
 
     hide(skeleton);
 
-    if (!listing || listing.status !== "active") {
+    // Only reachable ads are ones that are currently active — matches
+    // listing-details.html's `status !== "active"` gate.
+    if (!ad || ad.active !== true) {
       show(errWrap);
       applyPageMeta({ robots: "noindex, nofollow" });
     } else {
-      const pageTitle = `${listing.name} | Vishvamitra`;
-      const pageDesc  = (listing.description || `${listing.name} — local business on Vishvamitra.`).slice(0, 160);
-      const pageUrl   = canonicalUrl(`listing-details.html?id=${listingId}`);
-      const ogImage   = listing.image || absoluteAssetUrl("/assets/images/banner.svg");
+      const businessName = String(ad.businessName || "").trim();
+      const title         = String(ad.title || "").trim();
+      const displayName   = businessName || title || "Featured Business";
+      const tagline       = businessName && title && businessName.toLowerCase() !== title.toLowerCase()
+        ? title
+        : "";
+
+      const pageTitle = `${displayName} | Vishvamitra`;
+      const pageDesc  = (ad.description || `${displayName} — featured business spotlight on Vishvamitra.`).slice(0, 160);
+      const pageUrl   = canonicalUrl(`listing-details.html?id=${adId}`);
+      const ogImage   = ad.url || absoluteAssetUrl("/assets/images/banner.svg");
 
       document.title = pageTitle;
       applyPageMeta({
@@ -221,80 +234,80 @@
         url: pageUrl,
         image: ogImage,
         type: "website",
-        robots: "index, follow",
+        robots: "noindex, follow",
       });
-      injectJsonLd(buildListingJsonLd(listing, pageUrl));
 
-      const isPaid    = listing.type === "paid";
-      const typeLabel = isPaid ? "Paid" : "Free";
+      txt("bannerName", displayName);
 
-      txt("bannerName", listing.name || "Unnamed Business");
+      const taglineEl = $("bannerTagline");
+      if (tagline) taglineEl.textContent = tagline; else hide(taglineEl);
 
-      // Location with SVG pin inline
-      const locEl = $("bannerLocation");
-      if (listing.location) locEl.textContent = listing.location;
-      else hide(locEl);
-
-      // Phone
-      if (listing.phone) txt("bannerPhone", listing.phone);
+      if (ad.phone) txt("bannerPhone", ad.phone);
       else hide($("bannerPhone"));
 
-      const bannerType = $("bannerType");
-      bannerType.textContent = typeLabel + " Listing";
-      bannerType.classList.add(isPaid ? "paid" : "free");
-
       const callBtn = $("callBtnBanner");
-      if (listing.phone) callBtn.href = `tel:${listing.phone}`;
+      if (ad.phone) callBtn.href = `tel:${ad.phone}`;
       else hide(callBtn);
 
-      if (listing.image) $("bannerBg").style.backgroundImage = `url('${listing.image}')`;
+      const visitBtn = $("visitBtnBanner");
+      if (ad.link) visitBtn.href = ad.link;
+      else hide(visitBtn);
+
+      // Banner background: image/video ads show their media;
+      // text ads fall back to the branded gradient (same fallback
+      // rule listing-details.html already uses for listings with no photo).
+      if (ad.url && ad.type !== "video") $("bannerBg").style.backgroundImage = `url('${ad.url}')`;
 
       // Photo strip
       const strip = $("photoStrip");
-      if (listing.image) {
+      if (ad.url && ad.type === "video") {
         strip.innerHTML = `
           <div class="ld-photo-item">
-            <img src="${listing.image}" alt="${listing.name}" loading="eager" fetchpriority="high" decoding="async"/>
-          </div>
-          <div class="ld-photo-placeholder" id="vendorPhotoHint">Add more photos from your dashboard</div>`;
+            <video src="${ad.url}" style="height:120px;width:auto;max-width:220px;object-fit:cover;display:block;" muted playsinline controls></video>
+          </div>`;
+      } else if (ad.url) {
+        strip.innerHTML = `
+          <div class="ld-photo-item">
+            <img src="${ad.url}" alt="${displayName}" loading="eager" fetchpriority="high" decoding="async"/>
+          </div>`;
       } else {
         strip.classList.add("empty");
       }
 
-      // Show "add more photos" hint only to the vendor who owns this listing
-      import("../scripts/auth-service.js").then(({ onAuthReady }) => {
-        onAuthReady((user) => {
-          if (user && listing.vendorId && user.uid === listing.vendorId) {
-            const hint = $("vendorPhotoHint");
-            if (hint) hint.classList.add("visible");
-          }
-        });
-      });
-
-      txt("sideAddress",  listing.location || "Not specified");
-      txt("sideCategory", listing.category || "General");
+      txt("sideCategory", formatCategory(ad.category));
       const pill = $("sideTypePill");
-      pill.textContent = typeLabel;
-      pill.classList.add(isPaid ? "paid" : "free");
+      pill.textContent = ad.type === "video" ? "Video Ad" : ad.type === "text" ? "Text Ad" : "Image Ad";
 
-      if (listing.phone) {
-        $("sidePhone").textContent = listing.phone;
-        $("sidePhone").href        = `tel:${listing.phone}`;
+      if (ad.phone) {
+        $("sidePhone").textContent = ad.phone;
+        $("sidePhone").href        = `tel:${ad.phone}`;
       } else {
         hide($("sidePhoneSection"));
       }
 
-      txt("sidePrice", isPaid && listing.price ? "₹" + listing.price : "Free");
-      txt("mainDesc", listing.description || "No description provided for this listing.");
+      txt("mainDesc", ad.description || "No description provided for this advertisement.");
 
-      if (listing.phone) {
-        $("cPhone").textContent = listing.phone;
-        $("cPhone").href        = `tel:${listing.phone}`;
+      if (ad.phone) {
+        $("cPhone").textContent = ad.phone;
+        $("cPhone").href        = `tel:${ad.phone}`;
       } else {
         hide($("cRowPhone"));
       }
-      txt("cAddr",     listing.location || "—");
-      txt("cCategory", listing.category || "—");
+
+      if (ad.email) {
+        $("cEmail").textContent = ad.email;
+        $("cEmail").href        = `mailto:${ad.email}`;
+      } else {
+        hide($("cRowEmail"));
+      }
+
+      if (ad.link) {
+        $("cLink").href = ad.link;
+      } else {
+        hide($("cRowLink"));
+      }
+
+      txt("cCategory", formatCategory(ad.category));
 
       show(wrap);
     }

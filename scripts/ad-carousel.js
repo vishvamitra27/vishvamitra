@@ -5,10 +5,14 @@
 
 import { subscribeToActiveAds } from "./ads.js";
 
-const DEFAULT_INTERVAL_MS = 10000;
+const DEFAULT_INTERVAL_MS = 4000;
 
-const EMAIL_ICON = `<svg class="feat-text-card-chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>`;
 const PHONE_ICON = `<svg class="feat-text-card-chip-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`;
+
+// Max service chips shown per card — keeps very long comma lists from
+// overflowing the fixed-height carousel box. Not text truncation of any
+// single service name, just a cap on how many chips are listed.
+const MAX_SERVICE_CHIPS = 8;
 
 const _preloaded = new Set();
 
@@ -30,47 +34,63 @@ function preloadAround(ads, index) {
   });
 }
 
+/**
+ * Business-spotlight text card: business name is the single dominant
+ * element at every breakpoint (desktop + mobile), with services and
+ * phone underneath. Long names/service lists get a smaller type-scale
+ * (via .is-* modifier classes below) instead of being clipped.
+ */
 function buildTextCard(ad) {
   const card = document.createElement("div");
   card.className = "feat-text-card";
   card.innerHTML = `
-    ${ad.businessName ? `<div class="feat-text-card-biz"></div>` : ""}
-    <div class="feat-text-card-title"></div>
-    ${ad.description ? `<div class="feat-text-card-desc"></div>` : ""}
-    <div class="feat-text-card-contact" hidden>
-      <div class="feat-text-card-divider" aria-hidden="true"></div>
-      <div class="feat-text-card-chips"></div>
+    <div class="feat-text-card-mobile">
+      <div class="feat-text-card-mobile-biz"></div>
+      <div class="feat-text-card-mobile-services" hidden></div>
+      <div class="feat-text-card-mobile-phone" hidden></div>
     </div>`;
 
-  if (ad.businessName) card.querySelector(".feat-text-card-biz").textContent = ad.businessName;
-  card.querySelector(".feat-text-card-title").textContent = ad.title || "Business Spotlight";
-  if (ad.description) card.querySelector(".feat-text-card-desc").textContent = ad.description;
+  const businessName = String(ad.businessName || ad.title || "Business Spotlight").trim();
+  const bizEl = card.querySelector(".feat-text-card-mobile-biz");
+  bizEl.textContent = businessName;
+  // Dynamic type-scale for long names — wraps gracefully instead of clipping.
+  if (businessName.length > 42) bizEl.classList.add("is-name-lg-overflow");
+  else if (businessName.length > 26) bizEl.classList.add("is-name-long");
 
-  const email = String(ad.email || "").trim();
+  const servicesEl = card.querySelector(".feat-text-card-mobile-services");
+  if (ad.description) {
+    const lines = String(ad.description)
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (lines.length) {
+      servicesEl.hidden = false;
+      const shown = lines.slice(0, MAX_SERVICE_CHIPS);
+      const extra = lines.length - shown.length;
+      shown.forEach((service) => {
+        const line = document.createElement("div");
+        line.className = "feat-text-card-mobile-service-line";
+        line.textContent = service;
+        servicesEl.appendChild(line);
+      });
+      if (extra > 0) {
+        const more = document.createElement("div");
+        more.className = "feat-text-card-mobile-service-line feat-text-card-mobile-service-more";
+        more.textContent = `+${extra} more`;
+        servicesEl.appendChild(more);
+      }
+      if (shown.some((s) => s.length > 24)) servicesEl.classList.add("is-services-long");
+    }
+  }
+
   const phone = String(ad.phone || "").trim();
-  if (email || phone) {
-    const contactRow = card.querySelector(".feat-text-card-contact");
-    const chipsEl = card.querySelector(".feat-text-card-chips");
-    contactRow.hidden = false;
-
-    if (email) {
-      const chip = document.createElement("span");
-      chip.className = "feat-text-card-chip";
-      chip.insertAdjacentHTML("afterbegin", EMAIL_ICON);
-      const label = document.createElement("span");
-      label.textContent = email;
-      chip.appendChild(label);
-      chipsEl.appendChild(chip);
-    }
-    if (phone) {
-      const chip = document.createElement("span");
-      chip.className = "feat-text-card-chip";
-      chip.insertAdjacentHTML("afterbegin", PHONE_ICON);
-      const label = document.createElement("span");
-      label.textContent = phone;
-      chip.appendChild(label);
-      chipsEl.appendChild(chip);
-    }
+  const mobilePhone = card.querySelector(".feat-text-card-mobile-phone");
+  if (phone) {
+    mobilePhone.hidden = false;
+    mobilePhone.insertAdjacentHTML("afterbegin", PHONE_ICON);
+    const label = document.createElement("span");
+    label.textContent = phone;
+    mobilePhone.appendChild(label);
   }
 
   return card;
@@ -80,9 +100,10 @@ function buildMediaSlide(ad, i) {
   const slide = document.createElement("div");
   slide.className = "feat-slide" + (i === 0 ? " active" : "");
 
+  const frame = document.createElement("div");
+  frame.className = "feat-media-frame";
+
   let media;
-  const bg = document.createElement("div");
-  bg.className = "feat-slide-bg";
 
   if (ad.type === "video") {
     media = document.createElement("video");
@@ -93,17 +114,9 @@ function buildMediaSlide(ad, i) {
     media.className = "feat-media";
     media.preload = i === 0 ? "metadata" : "none";
     if (i === 0) media.autoplay = true;
-
-    const bgVid = document.createElement("video");
-    bgVid.src = ad.url;
-    bgVid.loop = true;
-    bgVid.muted = true;
-    bgVid.playsInline = true;
-    bgVid.preload = "none";
-    bgVid.autoplay = i === 0;
-    bgVid.style.cssText =
-      "position:absolute;inset:-10px;width:calc(100%+20px);height:calc(100%+20px);object-fit:cover;filter:blur(18px) brightness(0.4);transform:scale(1.05);";
-    slide.appendChild(bgVid);
+    media.addEventListener("loadedmetadata", () => {
+      applyAspectClass(frame, media.videoWidth, media.videoHeight);
+    });
   } else {
     media = document.createElement("img");
     media.src = ad.url;
@@ -112,24 +125,46 @@ function buildMediaSlide(ad, i) {
     media.decoding = "async";
     if (i === 0) media.fetchPriority = "high";
     media.className = "feat-media";
-    bg.style.backgroundImage = `url('${ad.url}')`;
-    slide.appendChild(bg);
+    if (media.complete && media.naturalWidth) {
+      applyAspectClass(frame, media.naturalWidth, media.naturalHeight);
+    } else {
+      media.addEventListener("load", () => {
+        applyAspectClass(frame, media.naturalWidth, media.naturalHeight);
+      });
+    }
     if (i <= 1) preloadImage(ad.url);
   }
+
+  frame.appendChild(media);
 
   if (ad.link) {
     const a = document.createElement("a");
     a.href = ad.link;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
-    a.style.cssText = "display:block;height:100%;position:relative;z-index:1;";
-    a.appendChild(media);
+    a.style.cssText = "display:flex;width:100%;height:100%;align-items:center;justify-content:center;position:relative;z-index:1;";
+    a.appendChild(frame);
     slide.appendChild(a);
   } else {
-    slide.appendChild(media);
+    slide.appendChild(frame);
   }
 
   return slide;
+}
+
+/**
+ * Tags the media frame as portrait/landscape once real dimensions are
+ * known, so CSS can give tall images a premium matted-card treatment
+ * (Tasks 3 & 4) instead of leaving them stretched across the wide
+ * landscape carousel slot. Never stretches, crops, or blurs the image
+ * itself — purely a framing decision.
+ */
+function applyAspectClass(frame, w, h) {
+  if (!w || !h) return;
+  const ratio = w / h;
+  frame.style.aspectRatio = `${w} / ${h}`;
+  frame.classList.remove("is-portrait", "is-landscape");
+  frame.classList.add(ratio <= 0.92 ? "is-portrait" : "is-landscape");
 }
 
 /**
@@ -167,6 +202,8 @@ export function createAdCarousel(options = {}) {
   let timer = null;
   let index = 0;
   let ads = [];
+  let allAds = [];       // last raw snapshot, pre-category-filter
+  let category = options.category ?? "";
   let paused = false;
 
   function setSectionVisible(show) {
@@ -250,7 +287,9 @@ export function createAdCarousel(options = {}) {
   }
 
   function render(adList) {
-    ads = adList;
+    allAds = adList;
+    // "All Categories" (empty string) shows every ad — same convention as listings.
+    ads = category ? adList.filter((ad) => (ad.category || "") === category) : adList;
 
     if (!isVisible()) {
       setSectionVisible(false);
@@ -304,7 +343,12 @@ export function createAdCarousel(options = {}) {
 
   return {
     refresh() {
-      render(ads);
+      render(allAds);
+    },
+    /** Optional: filter the carousel to one category ("" = all). Re-renders instantly. */
+    setCategory(cat) {
+      category = cat || "";
+      render(allAds);
     },
     destroy() {
       if (unsub) unsub();

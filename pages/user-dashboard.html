@@ -73,12 +73,13 @@
         return;
       }
       listings.forEach(l => {
-        const card = document.createElement("div");
+        const card = document.createElement("a");
         card.className = "listing-card";
+        card.href = `listing-details.html?id=${l.id}`;
         card.innerHTML = `
           <h3 class="c-name"></h3>
           <p class="c-loc"></p>
-          <a class="btn-view" href="listing-details.html?id=${l.id}">View</a>`;
+          <span class="btn-view">View</span>`;
         card.querySelector(".c-name").textContent = l.name     || "Unnamed";
         card.querySelector(".c-loc").textContent  = l.location || "";
         box.appendChild(card);
