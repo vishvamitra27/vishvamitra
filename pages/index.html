@@ -75,6 +75,42 @@
 <!-- ── Navbar ────────────────────────────────────────────── -->
 <header><div id="navbar-root"></div></header>
 
+<!-- ── Ad / Promo banner (dynamic) ──────────────────────── -->
+<div class="home-promo" data-aos="fade-up">
+  <div class="promo-inner" id="featCarouselWrap">
+    <!-- Fallback shown while ads load or if none exist -->
+    <img id="adFallbackImg" fetchpriority="high" decoding="async" src="../assets/images/banner.svg"
+         alt="Vishvamitra" width="1100" height="420" loading="eager" class="promo-img" />
+    <!-- Dynamic carousel injected by JS -->
+    <div id="featCarousel" class="feat-carousel" style="display:none;" aria-label="Featured Business Spotlight" role="region">
+      <div id="featCarouselTrack" class="feat-carousel-track"></div>
+      <div id="featCarouselDots" class="feat-carousel-dots"></div>
+      <button class="feat-carousel-arrow feat-prev" id="featPrev" aria-label="Previous">&#8249;</button>
+      <button class="feat-carousel-arrow feat-next" id="featNext" aria-label="Next">&#8250;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Advertise button ───────────────────────────────────── -->
+<div class="home-promo" style="padding-top:0; text-align:center;">
+  <a href="advertise.html" class="promote-btn" aria-label="Promote your business on Vishvamitra">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+    Promote Your Business
+  </a>
+</div>
+
+<!-- ── Scrolling ticker ──────────────────────────────────── -->
+<div class="home-ticker">
+  <div class="ticker-label">Latest</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner">
+      విద్య &nbsp;•&nbsp; వివాహం &nbsp;•&nbsp; వైద్యం &nbsp;•&nbsp; వ్యవసాయం &nbsp;•&nbsp; పర్యాటక రంగం &nbsp;•&nbsp; సంవత్సరం పాటు ఉచిత ప్రకటనలు &nbsp;•&nbsp; సంప్రదించండి &nbsp;•&nbsp;
+      విద్య &nbsp;•&nbsp; వివాహం &nbsp;•&nbsp; వైద్యం &nbsp;•&nbsp; వ్యవసాయం &nbsp;•&nbsp; పర్యాటక రంగం &nbsp;•&nbsp; సంవత్సరం పాటు ఉచిత ప్రకటనలు &nbsp;•&nbsp; సంప్రదించండి &nbsp;•&nbsp;
+    </div>
+  </div>
+</div>
+
+
 <!-- ── Hero ─────────────────────────────────────────────── -->
 <section class="home-hero" id="main-content" tabindex="-1">
   <div class="hero-bg-pattern"></div>
@@ -83,7 +119,7 @@
       <span class="eyebrow-dot"></span>
       Trusted Local Services Platform
     </div>
-    <h1 class="hero-title">Discover Trusted<br/><span class="hero-accent">Local Services</span> Near You</h1>
+    <h1 class="hero-title">Discover Trusted<br/><span class="hero-accent">Local Services</span> Near Andhra Pradhesh & Telangana</h1>
     <p class="hero-sub">Find restaurants, electricians, tutors, salons and more — all in your area</p>
 
     <div class="home-search-bar">
@@ -120,41 +156,6 @@
     </div>
   </div>
 </section>
-
-<!-- ── Scrolling ticker ──────────────────────────────────── -->
-<div class="home-ticker">
-  <div class="ticker-label">Latest</div>
-  <div class="ticker-scroll">
-    <div class="ticker-inner">
-      విద్య &nbsp;•&nbsp; వివాహం &nbsp;•&nbsp; వైద్యం &nbsp;•&nbsp; వ్యవసాయం &nbsp;•&nbsp; పర్యాటక రంగం &nbsp;•&nbsp; సంవత్సరం పాటు ఉచిత ప్రకటనలు &nbsp;•&nbsp; సంప్రదించండి &nbsp;•&nbsp;
-      విద్య &nbsp;•&nbsp; వివాహం &nbsp;•&nbsp; వైద్యం &nbsp;•&nbsp; వ్యవసాయం &nbsp;•&nbsp; పర్యాటక రంగం &nbsp;•&nbsp; సంవత్సరం పాటు ఉచిత ప్రకటనలు &nbsp;•&nbsp; సంప్రదించండి &nbsp;•&nbsp;
-    </div>
-  </div>
-</div>
-
-<!-- ── Ad / Promo banner (dynamic) ──────────────────────── -->
-<div class="home-promo" data-aos="fade-up">
-  <div class="promo-inner" id="featCarouselWrap">
-    <!-- Fallback shown while ads load or if none exist -->
-    <img id="adFallbackImg" fetchpriority="high" decoding="async" src="../assets/images/banner.svg"
-         alt="Vishvamitra" width="1100" height="420" loading="eager" class="promo-img" />
-    <!-- Dynamic carousel injected by JS -->
-    <div id="featCarousel" class="feat-carousel" style="display:none;" aria-label="Featured Business Spotlight" role="region">
-      <div id="featCarouselTrack" class="feat-carousel-track"></div>
-      <div id="featCarouselDots" class="feat-carousel-dots"></div>
-      <button class="feat-carousel-arrow feat-prev" id="featPrev" aria-label="Previous">&#8249;</button>
-      <button class="feat-carousel-arrow feat-next" id="featNext" aria-label="Next">&#8250;</button>
-    </div>
-  </div>
-</div>
-
-<!-- ── Advertise button ───────────────────────────────────── -->
-<div class="home-promo" style="padding-top:0; text-align:center;">
-  <a href="advertise.html" class="promote-btn" aria-label="Promote your business on Vishvamitra">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
-    Promote Your Business
-  </a>
-</div>
 
 <!-- ── Featured listings ─────────────────────────────────── -->
 <section class="home-section" data-aos="fade-up">
