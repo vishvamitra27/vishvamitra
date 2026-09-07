@@ -1,14 +1,20 @@
 // ============================================================
-//  scripts/role.js  (v4 — Firestore-only role management)
+//  scripts/role.js  (v5 — dynamic admins/{uid} authorization)
 //
 //  Single source of truth for:
 //    - getUserRole(uid)      → "admin"|"vendor"|"user"|null
 //    - getUserProfile(uid)   → full Firestore user doc
-//    - isOperatorAdmin(user) → checks Firestore role field only
+//    - isOperatorAdmin(user) → checks the admins/{uid} collection
 //
-//  Admin role is stored in Firestore: users/{uid}.role = "admin"
-//  Set this in Firebase Console or via the admin panel.
+//  Real admin privileges are dynamic and live in Firestore:
+//  admins/{uid} = { email, name, role: "admin", active, createdAt }.
+//  This is also what firestore.rules → isAdmin() checks, so this
+//  client-side gate stays in sync with what the server will allow.
 //  No hardcoded email lists — Firestore is the single source of truth.
+//
+//  users/{uid}.role stays around too (kept in sync by the admin
+//  panel) purely for UI purposes — nav visibility, badges, filters.
+//  It is NOT used for authorization; see admins/{uid} for that.
 // ============================================================
 
 import { db } from "./firebase-core.js";
@@ -17,13 +23,14 @@ import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.14
 export { ROLE_DASHBOARD, DASHBOARD_BY_ROLE } from "./core/routes.js";
 
 /**
- * True if this Firebase user has role "admin" in Firestore.
+ * True if this Firebase user has an active document in the
+ * admins/{uid} collection — the same check firestore.rules enforces.
  * @param {import("firebase/auth").User|null} user
  */
 export async function isOperatorAdmin(user) {
   if (!user) return false;
-  const snap = await getDoc(doc(db, "users", user.uid));
-  return snap.exists() && snap.data().role === "admin";
+  const snap = await getDoc(doc(db, "admins", user.uid));
+  return snap.exists() && snap.data().active === true;
 }
 
 /**

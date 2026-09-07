@@ -49,6 +49,10 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Users
       </a>
+      <a data-section="admins">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16.5 3.5a4 4 0 0 1 0 7"/></svg>
+        Admins
+      </a>
       <a data-section="ads">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
         Ad Banners
@@ -116,6 +120,30 @@
           <input type="text" id="userSearch" placeholder="Search by name or email…" />
         </div>
         <div id="adminUsers"><p class="empty-state">Loading…</p></div>
+      </section>
+
+      <!-- ADMINS panel -->
+      <section class="section-panel" id="sectionAdmins">
+        <div class="admins-panel-header">
+          <h2>Admin Management</h2>
+          <button id="addAdminBtn" class="btn-primary">+ Add Admin</button>
+        </div>
+        <p class="feat-panel-note">Administrators are managed dynamically — promote any existing registered user, and disable, enable, or remove privileges at any time. You can't change your own admin access, and the last active administrator can't be removed.</p>
+        <div id="adminsList"><p class="empty-state">Loading admins…</p></div>
+
+        <!-- Add Admin modal -->
+        <div id="adminModal" class="vm-modal-backdrop" style="display:none;">
+          <div class="vm-modal">
+            <div class="vm-modal-header">
+              <h3>Add Admin</h3>
+              <button id="adminModalClose" class="vm-modal-close" aria-label="Close">✕</button>
+            </div>
+            <div class="vm-modal-body">
+              <input type="text" id="addAdminSearch" class="vm-modal-search" placeholder="Search registered users by name or email…" />
+              <div id="addAdminResults" class="add-admin-results"><p class="empty-state">Loading users…</p></div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ADS panel -->
@@ -232,11 +260,13 @@
     initAdminPanel,
     renderListings, bindListingActions,
     renderUsers,    bindUserActions,
+    initAdminsPanel,
     initAdsPanel,
     initMessagesPanel
   } from "../scripts/admin.js";
 
   initAdminPanel();
+  initAdminsPanel();
   initAdsPanel();
 
   document.getElementById("statusFilter").addEventListener("change", renderListings);

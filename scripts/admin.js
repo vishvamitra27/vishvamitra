@@ -1,8 +1,11 @@
 // ============================================================
-//  scripts/admin.js  (v3 — firebase-core + improved admin panel)
+//  scripts/admin.js  (v4 — firebase-core + dynamic admin management)
 //
-//  Admin panel: real-time listings + users management.
+//  Admin panel: real-time listings + users + admins management.
 //  All Firestore reads/writes centralized here.
+//  v4 adds the Admins panel: promote existing users to admin via
+//  the dynamic admins/{uid} collection (see scripts/role.js and
+//  firestore.rules for the matching authorization checks).
 //  Improvements in v3:
 //    - Imports from firebase-core.js
 //    - Approve button now shows pending count badge
@@ -14,7 +17,7 @@ import { db, auth }           from "./firebase-core.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-auth.js";
 import {
   collection, doc, query, orderBy,
-  onSnapshot, updateDoc, deleteDoc
+  onSnapshot, updateDoc, deleteDoc, setDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 import { isOperatorAdmin }            from "./role.js";
 import { setListingStatus, deleteListing } from "./listings.js";
@@ -262,7 +265,11 @@ export function bindUserActions() {
         cacheClearAll();
         btn.textContent = "Saved";
         setTimeout(() => { btn.textContent = "Save Role"; }, 1500);
-        showToast("Role updated.", { kind: "success" });
+        if (sel.value === "admin") {
+          showToast("Role label updated. To grant real admin access, use the Admins tab \u2192 Add Admin.", { kind: "info", duration: 7000 });
+        } else {
+          showToast("Role updated.", { kind: "success" });
+        }
       }
 
       if (action === "delete-user") {
@@ -791,4 +798,261 @@ async function updateMsgStatus(id, status) {
   } catch (err) {
     showToast(toUserMessage(err), { kind: "error" });
   }
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ADMINS PANEL
+//
+//  Dynamic admin management on top of the admins/{uid} collection
+//  (Firebase Auth UID = doc ID). See firestore.rules → isAdmin()
+//  and scripts/role.js → isOperatorAdmin() for the authorization
+//  side; this section only handles the UI + Firestore writes.
+//
+//  Add Admin: pick from EXISTING registered users (reuses the
+//  `allUsers` stream already loaded above — no duplicate listener,
+//  no client-created Auth accounts, no passwords ever touched).
+// ─────────────────────────────────────────────────────────────
+
+let unsubAdmins  = null;
+let allAdmins    = [];
+let adminsLoaded = false;
+
+export function initAdminsPanel() {
+  startAdminsStream();
+  bindAddAdminModal();
+  bindAdminsListActions();
+
+  document.getElementById("addAdminBtn")?.addEventListener("click", openAddAdminModal);
+  document.getElementById("adminModal")?.addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeAddAdminModal();
+  });
+
+  window.addEventListener("pagehide", () => { if (unsubAdmins) unsubAdmins(); });
+}
+
+// ── Stream ────────────────────────────────────────────────────
+function startAdminsStream() {
+  if (unsubAdmins) unsubAdmins();
+  const q = query(collection(db, "admins"), orderBy("createdAt", "desc"));
+  unsubAdmins = onSnapshot(q, (snap) => {
+    allAdmins   = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    adminsLoaded = true;
+    renderAdminsList();
+  }, (err) => {
+    reportError("admin.admins", err);
+    const msg = toUserMessage(err);
+    const box = document.getElementById("adminsList");
+    if (box) box.innerHTML = `<p class="empty-state vm-inline-error">${msg}</p>`;
+    showToast(msg, { kind: "error", duration: 8000 });
+  });
+}
+
+// ── List rendering ───────────────────────────────────────────
+function renderAdminsList() {
+  const box = document.getElementById("adminsList");
+  if (!box) return;
+
+  if (!adminsLoaded) { box.innerHTML = '<p class="empty-state">Loading admins…</p>'; return; }
+  if (!allAdmins.length) { box.innerHTML = '<p class="empty-state">No administrators yet.</p>'; return; }
+
+  const activeCount = allAdmins.filter(a => a.active).length;
+  const myUid = auth.currentUser?.uid || "";
+
+  box.innerHTML = "";
+  allAdmins.forEach(a => box.appendChild(buildAdminCard(a, myUid, activeCount)));
+}
+
+function buildAdminCard(a, myUid, activeCount) {
+  const isSelf     = a.id === myUid;
+  const isLastOne  = a.active && activeCount <= 1;
+  const lockAction = isSelf || isLastOne;
+  const lockReason = isSelf
+    ? "You cannot change your own admin privileges."
+    : "The last active administrator cannot be disabled or removed.";
+
+  let joinedText = "—";
+  if (a.createdAt?.toDate) {
+    joinedText = a.createdAt.toDate().toLocaleDateString("en-IN", { year: "numeric", month: "short", day: "numeric" });
+  }
+
+  const card = document.createElement("div");
+  card.className = "admin-card";
+  card.innerHTML = `
+    <h3 class="a-name"></h3>
+    <p>Email: <span class="a-email"></span></p>
+    <p>Date Added: <span class="a-joined"></span></p>
+    <p>Role: <span class="badge badge-admin">Admin</span>
+      <span class="badge ${a.active ? "badge-active" : "badge-inactive"} a-status"></span>
+      ${isSelf ? '<span class="badge badge-user">You</span>' : ""}
+    </p>
+    <p class="uid-label">UID: <span class="a-uid"></span></p>
+    <div class="card-actions">
+      ${a.active
+        ? `<button class="action-btn deactivate" data-uid="${a.id}" data-action="disable" ${lockAction ? "disabled" : ""} title="${lockAction ? lockReason : ""}">Disable</button>`
+        : `<button class="action-btn" data-uid="${a.id}" data-action="enable">Enable</button>`}
+      <button class="delete-btn" data-uid="${a.id}" data-action="remove" ${lockAction ? "disabled" : ""} title="${lockAction ? lockReason : ""}">Remove</button>
+    </div>`;
+
+  card.querySelector(".a-name").textContent   = a.name || a.email?.split("@")[0] || "Unnamed";
+  card.querySelector(".a-email").textContent  = a.email || "—";
+  card.querySelector(".a-joined").textContent = joinedText;
+  card.querySelector(".a-status").textContent = a.active ? "Active" : "Disabled";
+  card.querySelector(".a-uid").textContent    = a.id;
+
+  return card;
+}
+
+// ── Row actions: disable / enable / remove ──────────────────────
+function bindAdminsListActions() {
+  const box = document.getElementById("adminsList");
+  if (!box) return;
+
+  box.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-action]");
+    if (!btn || btn.disabled) return;
+    const { uid, action } = btn.dataset;
+
+    const target = allAdmins.find(a => a.id === uid);
+    if (!target) return;
+
+    const myUid       = auth.currentUser?.uid || "";
+    const activeCount = allAdmins.filter(a => a.active).length;
+
+    if (uid === myUid) {
+      showToast("You cannot change your own admin privileges.", { kind: "error" });
+      return;
+    }
+    if (target.active && activeCount <= 1 && (action === "disable" || action === "remove")) {
+      showToast("Cannot remove the last active administrator.", { kind: "error" });
+      return;
+    }
+
+    if (action === "remove" && !confirm("Remove this user as an administrator?")) return;
+
+    btn.disabled = true;
+    try {
+      if (action === "disable") {
+        await updateDoc(doc(db, "admins", uid), { active: false });
+        showToast("Administrator disabled.", { kind: "success" });
+      }
+      if (action === "enable") {
+        await updateDoc(doc(db, "admins", uid), { active: true });
+        await updateDoc(doc(db, "users", uid), { role: "admin" }).catch(() => {});
+        showToast("Administrator enabled.", { kind: "success" });
+      }
+      if (action === "remove") {
+        const restoredRole = target.previousRole || "user";
+        await deleteDoc(doc(db, "admins", uid));
+        await updateDoc(doc(db, "users", uid), { role: restoredRole }).catch(() => {});
+        showToast("Administrator removed.", { kind: "success" });
+      }
+      cacheClearAll();
+    } catch (err) {
+      reportError("admin.adminAction", err);
+      showToast(toUserMessage(err), { kind: "error" });
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
+// ── Add Admin modal ──────────────────────────────────────────
+function openAddAdminModal() {
+  const modal = document.getElementById("adminModal");
+  if (!modal) return;
+  modal.style.display = "flex";
+  const input = document.getElementById("addAdminSearch");
+  if (input) { input.value = ""; input.focus(); }
+  renderAddAdminResults("");
+}
+
+function closeAddAdminModal() {
+  const modal = document.getElementById("adminModal");
+  if (modal) modal.style.display = "none";
+}
+
+function bindAddAdminModal() {
+  document.getElementById("adminModalClose")?.addEventListener("click", closeAddAdminModal);
+  document.getElementById("addAdminSearch")?.addEventListener("input", (e) => {
+    renderAddAdminResults(e.target.value.trim().toLowerCase());
+  });
+  document.getElementById("addAdminResults")?.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-uid]");
+    if (!btn || btn.disabled) return;
+    const user = allUsers.find(u => u.id === btn.dataset.uid);
+    if (!user) return;
+
+    btn.disabled = true;
+    btn.textContent = "Adding…";
+    try {
+      await promoteUserToAdmin(user);
+      showToast(`${user.email || "User"} is now an administrator.`, { kind: "success" });
+      closeAddAdminModal();
+    } catch (err) {
+      reportError("admin.addAdmin", err);
+      showToast(toUserMessage(err), { kind: "error" });
+      btn.disabled = false;
+      btn.textContent = "Make Admin";
+    }
+  });
+}
+
+function renderAddAdminResults(keyword) {
+  const box = document.getElementById("addAdminResults");
+  if (!box) return;
+
+  const adminIds = new Set(allAdmins.map(a => a.id));
+  let list = allUsers.filter(u => !adminIds.has(u.id));
+
+  if (keyword) {
+    list = list.filter(u =>
+      (u.displayName || "").toLowerCase().includes(keyword) ||
+      (u.email       || "").toLowerCase().includes(keyword)
+    );
+  }
+  list = list.slice(0, 25);
+
+  if (!list.length) {
+    box.innerHTML = `<p class="empty-state">${keyword ? "No matching users." : "No eligible users to promote."}</p>`;
+    return;
+  }
+
+  box.innerHTML = "";
+  list.forEach(u => {
+    const row = document.createElement("div");
+    row.className = "add-admin-row";
+    row.innerHTML = `
+      <div class="add-admin-row-info">
+        <span class="add-admin-row-name"></span>
+        <span class="add-admin-row-email"></span>
+      </div>
+      <button class="action-btn blue" data-uid="${u.id}">Make Admin</button>`;
+    row.querySelector(".add-admin-row-name").textContent  = u.displayName || u.email?.split("@")[0] || "Unnamed";
+    row.querySelector(".add-admin-row-email").textContent = u.email || u.id;
+    box.appendChild(row);
+  });
+}
+
+/**
+ * Promote an existing registered user to administrator.
+ * Creates admins/{uid} and mirrors role:"admin" onto users/{uid}
+ * for UI purposes (nav, badges). Prevents duplicate admin records.
+ * @param {{id:string, email?:string, displayName?:string, role?:string}} user
+ */
+async function promoteUserToAdmin(user) {
+  if (allAdmins.some(a => a.id === user.id)) {
+    throw new Error("This user is already an administrator.");
+  }
+
+  await setDoc(doc(db, "admins", user.id), {
+    email:       user.email || "",
+    name:        user.displayName || "",
+    role:        "admin",
+    active:      true,
+    createdAt:   serverTimestamp(),
+    previousRole: user.role || "user",
+  });
+
+  await updateDoc(doc(db, "users", user.id), { role: "admin" });
+  cacheClearAll();
 }
