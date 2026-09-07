@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Your Dashboard — Saved Listings | Vishvamitra</title>
+  <meta name="description" content="Your Vishvamitra user dashboard with recommended local services and listings near you." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/user-dashboard.html" />
+  <meta property="og:title" content="Your Dashboard | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/user-dashboard.html" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link rel="stylesheet" href="../styles/dashboard.css" />
+</head>
+<body>
+
+<header><div id="navbar-root"></div></header>
+
+<main id="dashMain" style="visibility:hidden;">
+  <div class="dashboard">
+    <h1 class="welcome">Welcome, <span id="userName">…</span></h1>
+
+    <div class="kpi-overview">
+      <div class="kpi-card">
+        <h4>Saved Listings</h4>
+        <div class="kpi-value" id="savedCount">0</div>
+      </div>
+      <div class="kpi-card">
+        <h4>Recent Views</h4>
+        <div class="kpi-value" id="viewsCount">0</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Recommended for You</h2>
+    <div class="recommendation-grid" id="recommendations">
+      <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+      <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+      <div class="skeleton-card"><div class="skeleton-line skeleton-title"></div><div class="skeleton-line"></div></div>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import { onAuthReady }                 from "../scripts/auth-service.js";
+  import { subscribeToFeaturedListings } from "../scripts/listings.js";
+  import { toUserMessage, showToast }    from "../scripts/utils.js";
+  import { reportError }                 from "../scripts/core/errors.js";
+
+  let unsub = null;
+
+  onAuthReady((user) => {
+    if (!user) return;
+
+    document.getElementById("dashMain").style.visibility = "visible";
+    document.getElementById("userName").textContent =
+      user.displayName || user.email?.split("@")[0] || "there";
+
+    if (unsub) unsub();
+    const box = document.getElementById("recommendations");
+
+    unsub = subscribeToFeaturedListings(
+      (listings) => {
+      box.innerHTML = "";
+      if (!listings.length) {
+        box.innerHTML = "<div class='empty-state'><h3>No listings yet</h3><p>New services will appear here as vendors join.</p></div>";
+        return;
+      }
+      listings.forEach(l => {
+        const card = document.createElement("a");
+        card.className = "listing-card";
+        card.href = `listing-details.html?id=${l.id}`;
+        card.innerHTML = `
+          <h3 class="c-name"></h3>
+          <p class="c-loc"></p>
+          <span class="btn-view">View</span>`;
+        card.querySelector(".c-name").textContent = l.name     || "Unnamed";
+        card.querySelector(".c-loc").textContent  = l.location || "";
+        box.appendChild(card);
+      });
+      },
+      6,
+      (err) => {
+        reportError("userDash.featured", err);
+        showToast(toUserMessage(err), { kind: "error", duration: 8000 });
+      }
+    );
+  });
+
+  window.addEventListener("pagehide", () => { if (unsub) unsub(); });
+</script>
+
+</body>
+</html>

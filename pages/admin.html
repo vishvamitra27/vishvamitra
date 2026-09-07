@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+
+  <title>Admin Dashboard | Vishvamitra</title>
+  <meta name="description" content="Vishvamitra administration panel for managing listings, users, business promotions, and contact messages." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://vishvamitra.com/admin.html" />
+  <meta property="og:title" content="Admin Dashboard | Vishvamitra" />
+  <meta property="og:url" content="https://vishvamitra.com/admin.html" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="../styles/main.css" />
+  <link rel="stylesheet" href="../styles/admin.css" />
+</head>
+<body>
+<!-- Auth Guard: must be admin -->
+<script type="module">
+  import { protectAdminPage } from "../scripts/authGuard.js";
+  protectAdminPage();
+</script>
+
+<!-- Mobile top bar -->
+<div class="mobile-header" id="mobileHeader">
+  <button id="menuBtn" aria-label="Open sidebar">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <span>Admin Panel</span>
+</div>
+
+<div id="adminWrap" style="visibility:hidden;">
+  <div class="admin-container">
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar" aria-label="Admin navigation">
+      <button class="close-sidebar" id="closeSidebar" aria-label="Close sidebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2>Admin</h2>
+      <a data-section="listings" class="active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
+        Listings
+      </a>
+      <a data-section="users">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Users
+      </a>
+      <a data-section="admins">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16.5 3.5a4 4 0 0 1 0 7"/></svg>
+        Admins
+      </a>
+      <a data-section="ads">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        Ad Banners
+      </a>
+      <a data-section="messages">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span id="msgBadge" style="display:none;margin-left:auto;background:var(--color-error);color: var(--color-on-primary);font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;">0</span>
+      </a>
+      <a href="index.html">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Back to Site
+      </a>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content" id="main-content">
+      <h1>Admin Dashboard</h1>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <h4>Total Listings</h4>
+          <div class="kpi-value" id="kpiTotal">—</div>
+        </div>
+        <div class="kpi-card yellow">
+          <h4>Pending Review</h4>
+          <div class="kpi-value" id="kpiPending">—</div>
+        </div>
+        <div class="kpi-card blue">
+          <h4>Total Users</h4>
+          <div class="kpi-value" id="kpiUsers">—</div>
+        </div>
+        <div class="kpi-card red">
+          <h4>Vendors</h4>
+          <div class="kpi-value" id="kpiVendors">—</div>
+        </div>
+      </div>
+
+      <!-- LISTINGS panel -->
+      <section class="section-panel active" id="sectionListings">
+        <h2>All Listings</h2>
+        <div class="filter-bar">
+          <select id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="pending">Pending Review</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <input type="text" id="listingSearch" placeholder="Search by name or location…" />
+        </div>
+        <div id="adminListings"><p class="empty-state">Loading…</p></div>
+      </section>
+
+      <!-- USERS panel -->
+      <section class="section-panel" id="sectionUsers">
+        <h2>All Users</h2>
+        <div class="filter-bar">
+          <select id="roleFilter">
+            <option value="">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="vendor">Vendor</option>
+            <option value="user">User</option>
+          </select>
+          <input type="text" id="userSearch" placeholder="Search by name or email…" />
+        </div>
+        <div id="adminUsers"><p class="empty-state">Loading…</p></div>
+      </section>
+
+      <!-- ADMINS panel -->
+      <section class="section-panel" id="sectionAdmins">
+        <div class="admins-panel-header">
+          <h2>Admin Management</h2>
+          <button id="addAdminBtn" class="btn-primary">+ Add Admin</button>
+        </div>
+        <p class="feat-panel-note">Administrators are managed dynamically — promote any existing registered user, and disable, enable, or remove privileges at any time. You can't change your own admin access, and the last active administrator can't be removed.</p>
+        <div id="adminsList"><p class="empty-state">Loading admins…</p></div>
+
+        <!-- Add Admin modal -->
+        <div id="adminModal" class="vm-modal-backdrop" style="display:none;">
+          <div class="vm-modal">
+            <div class="vm-modal-header">
+              <h3>Add Admin</h3>
+              <button id="adminModalClose" class="vm-modal-close" aria-label="Close">✕</button>
+            </div>
+            <div class="vm-modal-body">
+              <input type="text" id="addAdminSearch" class="vm-modal-search" placeholder="Search registered users by name or email…" />
+              <div id="addAdminResults" class="add-admin-results"><p class="empty-state">Loading users…</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADS panel -->
+      <section class="section-panel" id="sectionAds">
+        <h2>Ad Banners</h2>
+
+        <!-- Upload form -->
+        <div class="admin-card feat-upload-card">
+          <h3 class="feat-upload-title">Upload New Business Feature</h3>
+          <div class="feat-form-grid">
+            <div class="feat-form-group">
+              <label for="adTitle">Title <span class="feat-required">*</span></label>
+              <input type="text" id="adTitle" placeholder="e.g. May Day Banner" maxlength="80" />
+            </div>
+            <div class="feat-form-group">
+              <label for="adLink">Click-through URL <span class="feat-optional">(optional)</span></label>
+              <input type="url" id="adLink" placeholder="https://…" />
+            </div>
+            <div class="feat-form-group">
+              <label for="adCategory">Category <span class="feat-optional">(optional)</span></label>
+              <select id="adCategory">
+                <option value="">Uncategorized</option>
+                <option value="food-beverages">Food &amp; Beverages</option>
+                <option value="retail-shopping">Retail &amp; Shopping</option>
+                <option value="health-wellness">Health &amp; Wellness</option>
+                <option value="education-training">Education &amp; Training</option>
+                <option value="professional-services">Professional Services</option>
+                <option value="home-garden">Home &amp; Garden</option>
+                <option value="automotive">Automotive</option>
+                <option value="technology-it">Technology &amp; IT</option>
+                <option value="real-estate">Real Estate</option>
+                <option value="travel-tourism">Travel &amp; Tourism</option>
+                <option value="arts-entertainment">Arts &amp; Entertainment</option>
+                <option value="financial-services">Financial Services</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div class="feat-form-group">
+              <label for="adOrder">Display Order</label>
+              <input type="number" id="adOrder" value="0" min="0" max="99" style="width:90px;" />
+            </div>
+            <div class="feat-form-group feat-form-check">
+              <label class="feat-toggle-label">
+                <input type="checkbox" id="adActive" checked />
+                <span>Active (show on homepage)</span>
+              </label>
+            </div>
+          </div>
+          <div class="feat-file-row">
+            <label class="feat-file-label" for="adFile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              Choose Image / Video
+            </label>
+            <input type="file" id="adFile" accept="image/*,video/*" style="display:none;" />
+            <span id="adFileName" class="feat-file-name">No file chosen</span>
+          </div>
+          <div id="featPreviewWrap" class="feat-preview-wrap" style="display:none;"></div>
+          <div id="adUploadProgress" class="feat-progress-bar" style="display:none;">
+            <div id="adProgressFill" class="feat-progress-fill"></div>
+          </div>
+          <button id="adUploadBtn" class="btn-primary feat-upload-btn" disabled>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Feature
+          </button>
+        </div>
+
+        <!-- Ad list -->
+        <p class="feat-panel-note">Manage homepage carousel and services-page featured cards. Deactivate or delete submissions from the promote form; upload your own media above.</p>
+        <div id="adminAdsList"><p class="empty-state">Loading ads…</p></div>
+      </section>
+
+      <!-- ── Messages panel ── -->
+      <section class="section-panel" id="sectionMessages">
+        <h2>Contact Messages</h2>
+
+        <!-- Filters -->
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:20px;">
+          <select id="msgStatusFilter" style="padding:9px 14px;border:1.5px solid var(--color-border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--color-surface-muted);outline:none;cursor:pointer;">
+            <option value="">All Messages</option>
+            <option value="unread">Unread</option>
+            <option value="read">Read</option>
+            <option value="replied">Replied</option>
+          </select>
+          <select id="msgReasonFilter" style="padding:9px 14px;border:1.5px solid var(--color-border);border-radius:10px;font-size:13px;font-family:inherit;background:var(--color-surface-muted);outline:none;cursor:pointer;">
+            <option value="">All Reasons</option>
+            <option value="list-business">List My Business</option>
+            <option value="upgrade-listing">Upgrade Listing</option>
+            <option value="general">General Inquiry</option>
+            <option value="report-issue">Report Issue</option>
+            <option value="advertise">Promote Business</option>
+            <option value="other">Other</option>
+          </select>
+          <span id="msgCount" style="font-size:13px;color:var(--color-muted);margin-left:auto;"></span>
+        </div>
+
+        <!-- Messages list -->
+        <div id="msgList"><p class="empty-state">Loading messages…</p></div>
+
+        <!-- Message detail modal -->
+        <div id="msgModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+          <div style="background: var(--color-white);border-radius:20px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.2);">
+            <div id="msgModalContent"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script type="module" src="../scripts/navbar.js"></script>
+<script type="module" src="../scripts/auth.js"></script>
+<script type="module">
+  import {
+    initAdminPanel,
+    renderListings, bindListingActions,
+    renderUsers,    bindUserActions,
+    initAdminsPanel,
+    initAdsPanel,
+    initMessagesPanel
+  } from "../scripts/admin.js";
+
+  initAdminPanel();
+  initAdminsPanel();
+  initAdsPanel();
+
+  document.getElementById("statusFilter").addEventListener("change", renderListings);
+  document.getElementById("listingSearch").addEventListener("input",  renderListings);
+  document.getElementById("roleFilter").addEventListener("change",    renderUsers);
+  document.getElementById("userSearch").addEventListener("input",     renderUsers);
+
+  bindListingActions();
+  bindUserActions();
+  initMessagesPanel();
+</script>
+
+  <script type="module" src="../scripts/performance.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1100 420" width="1100" height="420">
+  <defs>
+    <!-- Background -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fffde7"/>
+      <stop offset="100%" style="stop-color:#fff9c4"/>
+    </linearGradient>
+
+    <!-- Blob gradient -->
+    <radialGradient id="blobGrad" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" style="stop-color:#ffe033"/>
+      <stop offset="100%" style="stop-color:#ffc800"/>
+    </radialGradient>
+
+    <!-- Shadow filter -->
+    <filter id="blobShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="18" flood-color="#f0a500" flood-opacity="0.25"/>
+    </filter>
+    <filter id="megaphoneShadow">
+      <feDropShadow dx="4" dy="8" stdDeviation="12" flood-color="#00000033"/>
+    </filter>
+    <filter id="textShadow">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-color="#00000015"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="420" fill="url(#bgGrad)" rx="18"/>
+
+  <!-- Decorative quote marks (background) -->
+  <text x="18" y="120" font-size="130" fill="#d4c87a" opacity="0.35" font-family="Georgia,serif" font-weight="900">"</text>
+  <text x="970" y="390" font-size="130" fill="#c8b84a" opacity="0.3" font-family="Georgia,serif" font-weight="900">"</text>
+
+  <!-- Main blob shape -->
+  <path d="M 160,30
+    C 260,10 460,0 600,20
+    C 750,40 920,20 1020,60
+    C 1080,82 1090,130 1070,180
+    C 1050,240 1020,290 980,330
+    C 940,370 880,395 800,400
+    C 700,408 580,400 460,390
+    C 340,380 200,375 130,340
+    C 60,305 30,250 40,190
+    C 52,120 80,52 160,30 Z"
+    fill="url(#blobGrad)" filter="url(#blobShadow)" opacity="0.92"/>
+
+  <!-- IMPORTANT tag pill (yellow darker) -->
+  <rect x="200" y="48" width="280" height="52" rx="26" fill="#ffc107"/>
+  <text x="340" y="82" text-anchor="middle" font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="22" font-weight="900" fill="#1a1a1a" letter-spacing="4">IMPORTANT</text>
+
+  <!-- ANNOUNCEMENT tag pill (grey) -->
+  <rect x="320" y="110" width="400" height="56" rx="28" fill="#e0e0e0"/>
+  <text x="520" y="148" text-anchor="middle" font-family="'Arial Black', 'Impact', sans-serif"
+        font-size="22" font-weight="900" fill="#1a1a1a" letter-spacing="3">ANNOUNCEMENT</text>
+
+  <!-- Body text -->
+  <text text-anchor="middle" font-family="'Trebuchet MS', 'Segoe UI', sans-serif" font-size="19" fill="#1a1a1a" font-weight="500">
+    <tspan x="530" dy="195">We would like to share an important announcement</tspan>
+    <tspan x="530" dy="30">with all of you. Please stay tuned for upcoming</tspan>
+    <tspan x="530" dy="30">updates — we are preparing something special that</tspan>
+    <tspan x="530" dy="30">will bring positive changes. Your support means</tspan>
+    <tspan x="530" dy="30">everything to us as we move forward.</tspan>
+  </text>
+
+  <!-- Megaphone body -->
+  <g transform="translate(820, 195) rotate(-20)" filter="url(#megaphoneShadow)">
+    <!-- Horn wide end -->
+    <ellipse cx="30" cy="20" rx="16" ry="28" fill="#b0bec5"/>
+    <ellipse cx="30" cy="20" rx="13" ry="24" fill="#cfd8dc"/>
+    <!-- Main cone -->
+    <polygon points="30,-8 30,48 110,70 110,-30" fill="#cfd8dc"/>
+    <polygon points="30,-8 30,48 110,70 110,-30" fill="url(#coneGrad)"/>
+    <!-- Cone outline highlight -->
+    <polygon points="30,-8 30,48 110,70 110,-30" fill="none" stroke="#b0bec5" stroke-width="2"/>
+    <!-- Yellow ring at wide end -->
+    <ellipse cx="110" cy="20" rx="14" ry="50" fill="#ffd600"/>
+    <ellipse cx="110" cy="20" rx="10" ry="44" fill="#ffe033"/>
+    <!-- Handle -->
+    <rect x="38" y="44" width="36" height="18" rx="9" fill="#90a4ae"/>
+    <!-- Sound waves -->
+    <path d="M 125,0 Q 145,-10 145,20 Q 145,50 125,40" fill="none" stroke="#ffc107" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 135,-10 Q 165,-24 165,20 Q 165,64 135,50" fill="none" stroke="#ffc107" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
+    <!-- Cord -->
+    <path d="M 44,62 Q 50,90 42,110 Q 38,125 46,135" fill="none" stroke="#546e7a" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bottom tagline -->
+  <text x="550" y="400" text-anchor="middle"
+        font-family="'Trebuchet MS', sans-serif" font-size="13"
+        fill="#888" letter-spacing="1">vishvamitra.web.app — Discover Trusted Local Services</text>
+</svg>

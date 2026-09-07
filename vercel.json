@@ -1,0 +1,144 @@
+{
+  "framework": null,
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/pages/index.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/login.html",
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/signup",
+      "destination": "/pages/signup.html"
+    },
+    {
+      "source": "/signup.html",
+      "destination": "/pages/signup.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/pages/dashboard.html"
+    },
+    {
+      "source": "/dashboard.html",
+      "destination": "/pages/dashboard.html"
+    },
+    {
+      "source": "/user-dashboard",
+      "destination": "/pages/user-dashboard.html"
+    },
+    {
+      "source": "/user-dashboard.html",
+      "destination": "/pages/user-dashboard.html"
+    },
+    {
+      "source": "/admin",
+      "destination": "/pages/admin.html"
+    },
+    {
+      "source": "/admin.html",
+      "destination": "/pages/admin.html"
+    },
+    {
+      "source": "/advertise",
+      "destination": "/pages/advertise.html"
+    },
+    {
+      "source": "/advertise.html",
+      "destination": "/pages/advertise.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/pages/services.html"
+    },
+    {
+      "source": "/services.html",
+      "destination": "/pages/services.html"
+    },
+    {
+      "source": "/free-services",
+      "destination": "/pages/free-services.html"
+    },
+    {
+      "source": "/free-services.html",
+      "destination": "/pages/free-services.html"
+    },
+    {
+      "source": "/paid-services",
+      "destination": "/pages/paid-services.html"
+    },
+    {
+      "source": "/paid-services.html",
+      "destination": "/pages/paid-services.html"
+    },
+    {
+      "source": "/add-listing",
+      "destination": "/pages/add-listing.html"
+    },
+    {
+      "source": "/add-listing.html",
+      "destination": "/pages/add-listing.html"
+    },
+    {
+      "source": "/listing-details",
+      "destination": "/pages/listing-details.html"
+    },
+    {
+      "source": "/listing-details.html",
+      "destination": "/pages/listing-details.html"
+    },
+    {
+      "source": "/vendor-setup",
+      "destination": "/pages/vendor-setup.html"
+    },
+    {
+      "source": "/vendor-setup.html",
+      "destination": "/pages/vendor-setup.html"
+    },
+    {
+      "source": "/role-select",
+      "destination": "/pages/role-select.html"
+    },
+    {
+      "source": "/role-select.html",
+      "destination": "/pages/role-select.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/pages/contact.html"
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/pages/contact.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/robots.txt",
+      "headers": [
+        { "key": "Content-Type", "value": "text/plain; charset=utf-8" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+      ]
+    }
+  ]
+}

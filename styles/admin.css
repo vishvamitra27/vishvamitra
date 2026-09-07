@@ -1,0 +1,415 @@
+/* ============================================================
+   styles/admin.css
+   Admin panel specific styles.
+   ============================================================ */
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ────────────────────────────────────────────────── */
+.sidebar {
+  width: 230px;
+  background: var(--color-text-dark);
+  color: white;
+  padding: 25px 18px;
+  flex-shrink: 0;
+}
+
+.sidebar h2 {
+  margin-bottom: 25px;
+  font-size: 20px;
+}
+
+.sidebar a {
+  display: block;
+  padding: 12px 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  text-decoration: none;
+  color: var(--color-muted-light);
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background: var(--color-primary-dark);
+  color: white;
+}
+
+.close-sidebar {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* ── Main content ───────────────────────────────────────────── */
+.main-content {
+  flex: 1;
+  padding: var(--space-10);
+  background: var(--color-bg);
+}
+
+.main-content h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  margin: 0 0 var(--space-2);
+  color: var(--color-text-dark);
+}
+
+/* ── KPI grid for admin ─────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.kpi-card         { border-left: 5px solid var(--color-success); }
+.kpi-card.yellow  { border-left-color: var(--color-warning); }
+.kpi-card.blue    { border-left-color: var(--color-info); }
+.kpi-card.red     { border-left-color: var(--color-danger); }
+
+/* ── Section panels ─────────────────────────────────────────── */
+.section-panel          { display: none; }
+.section-panel.active   { display: block; }
+
+/* ── Filter bar ─────────────────────────────────────────────── */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-bar select,
+.filter-bar input {
+  min-height: var(--input-height);
+  padding: 0 var(--input-padding-x);
+  border: var(--input-border-width) solid var(--color-input-border);
+  border-radius: var(--input-radius);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  background: var(--color-white);
+}
+
+.filter-bar select:focus,
+.filter-bar input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-focus);
+  outline: none;
+}
+
+.filter-bar input { flex: 1; min-width: 180px; }
+
+/* ── Admin cards ────────────────────────────────────────────── */
+.admin-card {
+  padding: var(--card-padding);
+  margin-bottom: var(--space-4);
+  border-radius: var(--card-radius);
+}
+
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+.admin-card h3 { margin: 0 0 6px; color: var(--color-text-dark); }
+.admin-card p  { margin: 3px 0; font-size: .9rem; color: var(--color-muted); }
+
+.uid-label {
+  font-size: .8rem !important;
+  color: var(--color-muted-light) !important;
+}
+
+/* ── Role badges ────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.badge-active   { background: var(--color-success-bg); color: var(--color-success-text); }
+.badge-pending  { background: var(--color-warning-bg); color: var(--color-warning-text); }
+.badge-inactive { background: var(--color-danger-bg); color: var(--color-danger-text); }
+.badge-admin    { background: var(--color-primary-border-muted); color: var(--color-primary-dark); }
+.badge-vendor   { background: var(--color-success-bg); color: var(--color-success-text); }
+.badge-user     { background: var(--color-surface-muted); color: var(--color-muted); }
+
+/* ── Admin action buttons ───────────────────────────────────── */
+.card-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-btn {
+  background: var(--color-success);
+  border: none;
+  padding: 7px 13px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  transition: background 0.2s;
+}
+
+.action-btn:hover        { background: var(--color-success); }
+.action-btn.deactivate   { background: var(--color-warning); }
+.action-btn.deactivate:hover { background: var(--color-warning-dark); }
+.action-btn.blue         { background: var(--color-info); }
+.action-btn.blue:hover   { background: var(--color-info); }
+.action-btn:disabled     { opacity: .4; cursor: not-allowed; }
+
+.delete-btn {
+  background: var(--color-danger);
+  color: white;
+  border: none;
+  padding: 7px 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-size: .85rem;
+  transition: background 0.2s;
+}
+
+.delete-btn:hover { background: var(--color-danger-dark); }
+
+.role-select {
+  padding: 7px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Empty state: see components.css */
+
+/* ── Admins panel ───────────────────────────────────────────── */
+.admins-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.admins-panel-header h2 { margin: 0; }
+
+/* Reuses .btn-primary (components.css) for the "+ Add Admin" trigger. */
+
+/* ── Add Admin modal ────────────────────────────────────────── */
+.vm-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, .45);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.vm-modal {
+  background: var(--color-white);
+  border-radius: 20px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .2);
+}
+
+.vm-modal-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--color-navbar-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.vm-modal-header h3 { margin: 0; color: var(--color-text-dark); }
+
+.vm-modal-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--color-muted);
+}
+
+.vm-modal-body { padding: 20px 24px 24px; }
+
+.vm-modal-search {
+  width: 100%;
+  min-height: var(--input-height);
+  padding: 0 var(--input-padding-x);
+  border: var(--input-border-width) solid var(--color-input-border);
+  border-radius: var(--input-radius);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  background: var(--color-white);
+  box-sizing: border-box;
+  margin-bottom: 16px;
+}
+
+.vm-modal-search:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-focus);
+  outline: none;
+}
+
+.add-admin-results {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.add-admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.add-admin-row-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.add-admin-row-name {
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.add-admin-row-email {
+  font-size: .78rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Mobile header ──────────────────────────────────────────── */
+.mobile-header {
+  display: none;
+  background: var(--color-text-dark);
+  color: white;
+  padding: 14px;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001;
+  box-sizing: border-box;
+}
+
+.mobile-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .mobile-header    { display: flex; }
+
+  .admin-container  { flex-direction: column; }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -240px;
+    height: 100vh;
+    width: 230px;
+    transition: left 0.3s ease;
+    z-index: 1100;
+  }
+
+  .sidebar.active   { left: 0; }
+  .close-sidebar    { display: block; }
+
+  .main-content {
+    padding: var(--space-5);
+    margin-top: 56px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-bar input,
+  .filter-bar select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .card-actions .action-btn,
+  .card-actions .delete-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admins-panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admins-panel-header .btn-primary {
+    width: 100%;
+  }
+
+  .add-admin-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-admin-row .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
