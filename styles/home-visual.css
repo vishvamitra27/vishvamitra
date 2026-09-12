@@ -1,0 +1,1584 @@
+/* ============================================================
+   styles/home-visual.css
+   ------------------------------------------------------------
+   VISHVAMITRA — HOMEPAGE VISUAL LAYER
+
+   Loaded after main.css from pages/index.html and scoped to
+   `body.home-v2`, so it restyles the existing homepage markup
+   without touching structure, JavaScript hooks, or any other
+   page.
+
+   Design principles
+     · Quiet by default. Structure comes from spacing, borders
+       and type — not from colour, gradients or texture.
+     · One brand colour (purple) and one semantic accent
+       (green). Everything else is neutral.
+     · One type family, one spacing scale, one radius scale,
+       one shadow scale, one motion duration.
+     · Every section uses the same components. Nothing is
+       styled "specially" unless it carries meaning.
+   ============================================================ */
+
+
+/* ============================================================
+   1. DESIGN TOKENS  (scoped — cannot leak to other pages)
+   ============================================================ */
+
+body.home-v2 {
+  /* ── Neutrals ── */
+  --c-page:       #FBFAF9;   /* warm off-white page ground     */
+  --c-surface:    #FFFFFF;   /* cards, header, hero            */
+  --c-surface-2:  #F4F3F0;   /* subtle section separation      */
+  --c-line:       #E7E4DF;   /* default hairline               */
+  --c-line-2:     #D6D2CB;   /* hover / emphasis hairline      */
+
+  --c-line-soft:  #EFEDE9;   /* inner dividers                 */
+
+  /* ── Text ── */
+  --c-ink:        #16181F;   /* headings, primary text         */
+  --c-ink-2:      #3D4250;   /* body text                      */
+  --c-body:       #4F5563;   /* lead paragraphs                */
+  --c-muted:      #6B707E;   /* metadata, captions             */
+
+  /* ── Brand ── */
+  --c-brand:        #5B4BD6;
+  --c-brand-strong: #4737C0;
+  --c-brand-tint:   #F1EFFD;
+  --c-brand-line:   #DAD4F8;
+  --c-on-brand:     #FFFFFF;
+
+  /* ── Secondary accent (free / verified / positive) ── */
+  --c-accent:      #16794F;
+  --c-accent-tint: #E8F3ED;
+
+  /* ── Type ── */
+  --f-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* ── Radius ── */
+  --r-chip:   8px;
+  --r-btn:   12px;
+  --r-input: 14px;
+  --r-card:  16px;
+  --r-panel: 18px;
+
+  /* ── Shadow — layered and shallow; depth without weight ── */
+  --sh-xs:   0 1px 2px rgba(22, 24, 31, .05);
+  --sh-sm:   0 1px 2px rgba(22, 24, 31, .05), 0 2px 6px -2px rgba(22, 24, 31, .06);
+  --sh-md:   0 1px 2px rgba(22, 24, 31, .05), 0 8px 20px -8px rgba(22, 24, 31, .12);
+  --sh-lift: 0 2px 4px rgba(22, 24, 31, .05), 0 14px 30px -12px rgba(22, 24, 31, .18);
+
+  /* ── Focus ── */
+  --ring: 0 0 0 4px rgba(91, 75, 214, .12);
+
+  /* ── Motion ── */
+  --t:      180ms cubic-bezier(.4, 0, .2, 1);
+  --t-slow: 260ms cubic-bezier(.4, 0, .2, 1);
+
+  /* ── Rhythm ── */
+  --section-y: clamp(60px, 7vw, 96px);
+  --gutter:    clamp(20px, 4vw, 28px);
+}
+
+
+/* ============================================================
+   2. PAGE BASE
+   ============================================================ */
+
+body.home-v2 {
+  background: var(--c-page);
+  color: var(--c-ink-2);
+  font-family: var(--f-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.home-v2 button,
+body.home-v2 input,
+body.home-v2 select,
+body.home-v2 textarea { font-family: var(--f-sans); }
+
+body.home-v2 ::selection {
+  background: var(--c-brand-tint);
+  color: var(--c-brand-strong);
+}
+
+body.home-v2 a:focus-visible,
+body.home-v2 button:focus-visible,
+body.home-v2 input:focus-visible {
+  outline: 2px solid var(--c-brand);
+  outline-offset: 2px;
+  border-radius: var(--r-chip);
+}
+
+/* Shared press feedback — every actionable surface responds the same way */
+body.home-v2 .nav-cta:active,
+body.home-v2 .hero-btn-primary:active,
+body.home-v2 .hero-btn-ghost:active,
+body.home-v2 .home-search-bar button:active,
+body.home-v2 .cta-btn:active,
+body.home-v2 .promote-btn:active,
+body.home-v2 .popup-btn:active {
+  transform: translateY(0) scale(.985);
+  transition-duration: 80ms;
+}
+body.home-v2 #main-content:focus:not(:focus-visible) { outline: none; }
+
+
+/* ============================================================
+   3. ANNOUNCEMENT STRIP
+   ------------------------------------------------------------
+   A quiet line of type, not a coloured banner.
+   ============================================================ */
+
+body.home-v2 .top-bar {
+  background: var(--c-surface-2);
+  color: var(--c-muted);
+  border-bottom: 1px solid var(--c-line);
+  padding: 9px 16px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  gap: 10px;
+}
+body.home-v2 .top-bar-dot {
+  width: 3px;
+  height: 3px;
+  background: var(--c-line-2);
+  box-shadow: none;
+}
+
+
+/* ============================================================
+   4. HEADER
+   ------------------------------------------------------------
+   White, one hairline, no shadow at rest. A shadow fades in
+   only once the page has been scrolled.
+   ============================================================ */
+
+body.home-v2 .navbar {
+  height: 72px;
+  padding: 0 var(--gutter);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+  box-shadow: none;
+  transition: box-shadow var(--t);
+}
+
+@supports (animation-timeline: scroll()) {
+  body.home-v2 .navbar {
+    animation: nav-elevate linear both;
+    animation-timeline: scroll();
+    animation-range: 0 100px;
+  }
+  @keyframes nav-elevate {
+    from { box-shadow: 0 1px 0 rgba(22, 24, 31, 0); }
+    to   { box-shadow: 0 1px 0 rgba(22, 24, 31, .04), 0 8px 24px -18px rgba(22, 24, 31, .5); }
+  }
+}
+
+/* Logo */
+body.home-v2 .logo { gap: 11px; }
+body.home-v2 .logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--c-brand);
+  box-shadow: none;
+  transition: background var(--t), box-shadow var(--t), transform var(--t);
+}
+body.home-v2 .logo:hover .logo-icon {
+  background: var(--c-brand-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px -4px rgba(91, 75, 214, .55);
+}
+body.home-v2 .logo:active .logo-icon { transform: translateY(0); }
+body.home-v2 .logo-word {
+  font-family: var(--f-sans);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--c-ink);
+}
+body.home-v2 .logo:hover .logo-word { color: var(--c-ink); }
+
+/* Navigation */
+body.home-v2 .nav-list { gap: 4px; }
+body.home-v2 .nav-link {
+  position: relative;
+  font-family: var(--f-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--c-ink-2);
+  padding: 9px 15px;
+  border-radius: var(--r-chip);
+  background: transparent;
+  transition: color var(--t), background var(--t);
+}
+body.home-v2 .nav-link:hover {
+  color: var(--c-ink);
+  background: var(--c-surface-2);
+}
+body.home-v2 .nav-link.active {
+  color: var(--c-brand-strong);
+  background: var(--c-brand-tint);
+  font-weight: 600;
+}
+
+/* The single primary action in the header */
+body.home-v2 .nav-cta {
+  padding: 11px 20px;
+  background: var(--c-brand);
+  color: var(--c-on-brand) !important;
+  font-family: var(--f-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border-radius: var(--r-btn);
+  box-shadow: 0 1px 2px rgba(91, 75, 214, .28);
+  transition: background var(--t), box-shadow var(--t), transform var(--t);
+}
+body.home-v2 .nav-cta:hover {
+  background: var(--c-brand-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px rgba(91, 75, 214, .5);
+}
+
+/* Hamburger */
+body.home-v2 .menu-toggle {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: 10px;
+  transition: background var(--t), border-color var(--t);
+}
+body.home-v2 .menu-toggle:hover {
+  background: var(--c-surface-2);
+  border-color: var(--c-line-2);
+}
+body.home-v2 .menu-toggle.open {
+  background: var(--c-surface-2);
+  border-color: var(--c-line-2);
+}
+body.home-v2 .menu-toggle:active { transform: scale(.94); }
+body.home-v2 .bar { background: var(--c-ink); }
+body.home-v2 .menu-toggle.open .bar { background: var(--c-ink); }
+
+/* Mobile accent hairline above the header — removed */
+body.home-v2 .navbar::before { display: none; }
+
+/* Mobile drawer — light, quiet, same system as the page */
+body.home-v2 .nav-drawer {
+  background: var(--c-surface);
+  border-radius: 16px 0 0 16px;
+  box-shadow: -1px 0 0 var(--c-line), -20px 0 50px -30px rgba(22, 24, 31, .5);
+  transition: transform 320ms cubic-bezier(.32, .72, .34, 1);
+}
+body.home-v2 .nav-drawer-backdrop { transition: opacity 260ms cubic-bezier(.4, 0, .2, 1); }
+body.home-v2 .nav-drawer-header {
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+  padding: 22px 20px 20px;
+}
+body.home-v2 .nav-drawer-header::before { display: none; }
+body.home-v2 .nav-drawer-logo {
+  font-family: var(--f-sans);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--c-ink);
+}
+body.home-v2 .nav-drawer-tagline { color: var(--c-muted); }
+body.home-v2 .nav-drawer-close {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink-2);
+}
+body.home-v2 .nav-drawer-close:hover { background: var(--c-surface-2); }
+body.home-v2 .nav-drawer-link {
+  color: var(--c-ink-2);
+  font-weight: 500;
+  padding: 13px 14px;
+  border-radius: 10px;
+  transition: background var(--t), color var(--t);
+}
+body.home-v2 .nav-drawer-link:hover {
+  background: var(--c-surface-2);
+  color: var(--c-ink);
+  transform: none;
+}
+body.home-v2 .nav-drawer-link.active {
+  background: var(--c-brand-tint);
+  color: var(--c-brand-strong);
+  font-weight: 600;
+}
+body.home-v2 .nav-drawer-link.active::before { background: var(--c-brand); width: 3px; }
+body.home-v2 .nav-drawer-icon {
+  background: var(--c-surface-2);
+  color: var(--c-muted);
+  border-radius: 9px;
+}
+body.home-v2 .nav-drawer-link:hover .nav-drawer-icon { background: var(--c-line); color: var(--c-ink-2); }
+body.home-v2 .nav-drawer-link.active .nav-drawer-icon { background: var(--c-brand); color: var(--c-on-brand); }
+body.home-v2 .nav-drawer-divider { background: var(--c-line); }
+body.home-v2 .nav-drawer-footer { border-top-color: var(--c-line); }
+body.home-v2 .nav-drawer-cta {
+  font-family: var(--f-sans);
+  font-weight: 600;
+  background: var(--c-brand) !important;
+  color: var(--c-on-brand) !important;
+  border-radius: var(--r-btn);
+  box-shadow: none;
+}
+body.home-v2 .nav-drawer-backdrop { background: rgba(22, 24, 31, .4); }
+
+
+/* ============================================================
+   5. BUSINESS SPOTLIGHT / ADVERTISEMENT
+   ------------------------------------------------------------
+   A plain white container. The advertisement itself is the
+   only thing that should attract the eye.
+   ============================================================ */
+
+body.home-v2 .home-promo {
+  padding: 28px var(--gutter) 0;
+  max-width: 1140px;
+}
+
+body.home-v2 .promo-inner {
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-panel);
+  background: var(--c-surface);
+  padding: 8px;
+  box-shadow: var(--sh-sm);
+  overflow: hidden;
+  transition: box-shadow var(--t), border-color var(--t);
+}
+body.home-v2 .promo-inner:hover {
+  border-color: var(--c-line-2);
+  box-shadow: var(--sh-md);
+}
+body.home-v2 .promo-img {
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 400px;
+  background: var(--c-surface-2);
+}
+
+body.home-v2 .feat-carousel {
+  border-radius: 12px;
+  background: var(--c-surface-2);
+  border: none;
+  box-shadow: none;
+}
+body.home-v2 .feat-slide { transition: opacity var(--t-slow) ease-in-out; }
+body.home-v2 .feat-media-frame.is-portrait { box-shadow: var(--sh-sm); }
+
+/* Carousel controls */
+/* Controls recede until they are wanted: 55% opaque at rest, fully
+   present when the panel is hovered, focused or touched. The ad keeps
+   the eye; the chrome steps forward only on intent. */
+body.home-v2 .feat-carousel-arrow {
+  width: 36px;
+  height: 36px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  color: var(--c-ink-2);
+  font-size: 19px;
+  opacity: .55;
+  box-shadow: var(--sh-sm);
+  transition: background var(--t), border-color var(--t),
+              box-shadow var(--t), opacity var(--t), color var(--t);
+}
+body.home-v2 .promo-inner:hover .feat-carousel-arrow,
+body.home-v2 .feat-carousel-arrow:focus-visible { opacity: 1; }
+body.home-v2 .feat-carousel-arrow:hover {
+  background: var(--c-surface);
+  border-color: var(--c-line-2);
+  color: var(--c-ink);
+  opacity: 1;
+  box-shadow: var(--sh-md);
+}
+@media (hover: none) {
+  body.home-v2 .feat-carousel-arrow { opacity: 1; }
+}
+body.home-v2 .feat-carousel-arrow:active { transform: translateY(-50%) scale(.92); }
+body.home-v2 .feat-prev { left: 14px; }
+body.home-v2 .feat-next { right: 14px; }
+
+body.home-v2 .feat-carousel-dots {
+  bottom: 14px;
+  gap: 6px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, .92);
+  border: 1px solid var(--c-line);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border-radius: 999px;
+  box-shadow: var(--sh-xs);
+}
+body.home-v2 .feat-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--c-line-2);
+  transition: background var(--t), width var(--t), transform var(--t);
+}
+body.home-v2 .feat-dot:not(.active):hover { transform: scale(1.25); }
+body.home-v2 .feat-dot:hover { background: var(--c-muted); }
+body.home-v2 .feat-dot.active { background: var(--c-brand); width: 18px; border-radius: 999px; }
+
+/* Text-only advertisements — the business name leads */
+body.home-v2 .feat-text-card {
+  background: var(--c-surface);
+  color: var(--c-ink);
+  padding: 28px 30px;
+}
+body.home-v2 .feat-text-card-mobile::before {
+  font-family: var(--f-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  background: var(--c-brand-tint);
+  color: var(--c-brand-strong);
+  border-radius: var(--r-chip);
+  padding: 4px 10px;
+}
+body.home-v2 .feat-text-card-mobile-biz {
+  font-family: var(--f-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  text-shadow: none;
+}
+body.home-v2 .feat-text-card-mobile-service-line {
+  font-family: var(--f-sans);
+  font-weight: 500;
+  color: var(--c-ink-2);
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-chip);
+}
+body.home-v2 .feat-text-card-mobile-phone:not([hidden]) {
+  font-family: var(--f-sans);
+  font-weight: 600;
+  background: var(--c-brand);
+  color: var(--c-on-brand);
+  border-radius: var(--r-btn);
+  box-shadow: none;
+  padding: 11px 22px;
+}
+
+/* Secondary action — an owner action, so it stays understated */
+body.home-v2 .promote-btn {
+  gap: 8px;
+  margin-top: 18px;
+  padding: 11px 20px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink);
+  font-family: var(--f-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--r-btn);
+  box-shadow: var(--sh-xs);
+  transition: background var(--t), border-color var(--t), color var(--t);
+}
+body.home-v2 .promote-btn { margin-top: 18px; }
+body.home-v2 .promote-btn:hover {
+  background: var(--c-brand-tint);
+  border-color: var(--c-brand-line);
+  color: var(--c-brand-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--sh-sm);
+}
+body.home-v2 .promote-btn svg { color: var(--c-brand); }
+
+
+/* ============================================================
+   6. TICKER
+   ============================================================ */
+
+body.home-v2 .home-ticker {
+  background: var(--c-surface-2);
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+  height: 42px;
+  margin-top: 32px;
+}
+body.home-v2 .ticker-label {
+  background: transparent;
+  color: var(--c-muted);
+  border-right: 1px solid var(--c-line);
+  font-family: var(--f-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 0 16px;
+}
+body.home-v2 .ticker-inner {
+  color: var(--c-ink-2);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+body.home-v2 .home-ticker:hover .ticker-inner { animation-play-state: paused; }
+
+
+/* ============================================================
+   7. HERO
+   ------------------------------------------------------------
+   White and generous. Type and the search field carry the
+   section; the background treatment is a whisper, not a scene.
+   ============================================================ */
+
+body.home-v2 .home-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+  padding: clamp(60px, 7.2vw, 96px) var(--gutter) clamp(56px, 6.5vw, 88px);
+}
+
+/* Layer 1 — one barely-there brand halo behind the headline. */
+body.home-v2 .hero-bg-pattern {
+  display: block;
+  background-image:
+    radial-gradient(760px 340px at 50% -6%, rgba(91, 75, 214, .055) 0%, transparent 68%);
+}
+
+/* Layer 2 — the identity treatment: a street-plan geometry of orthogonal
+   survey lines with three location markers on the intersections. It is a
+   quiet nod to "find what's near you", drawn at 5.5% ink and 17% brand,
+   and radially masked so it is fully absent behind the copy and only
+   whispers toward the edges. You should find it, not be shown it. */
+body.home-v2 .hero-bg-pattern::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='520' viewBox='0 0 1440 520' fill='none'%3E%3Cg stroke='%2316181F' stroke-opacity='.055' stroke-width='1'%3E%3Cpath d='M0 88H1440M0 196H1440M0 300H1440M0 404H1440'/%3E%3Cpath d='M168 0V520M372 0V520M540 0V520M720 0V520M900 0V520M1084 0V520M1288 0V520'/%3E%3C/g%3E%3Cg fill='none' stroke='%235B4BD6' stroke-opacity='.17'%3E%3Ccircle cx='372' cy='196' r='13'/%3E%3Ccircle cx='1084' cy='300' r='13'/%3E%3Ccircle cx='168' cy='404' r='9'/%3E%3C/g%3E%3Cg stroke='none' fill='%235B4BD6' fill-opacity='.22'%3E%3Ccircle cx='372' cy='196' r='3.5'/%3E%3Ccircle cx='1084' cy='300' r='3.5'/%3E%3Ccircle cx='168' cy='404' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse 46% 58% at 50% 44%, transparent 0%, transparent 40%, #000 100%);
+  mask-image: radial-gradient(ellipse 46% 58% at 50% 44%, transparent 0%, transparent 40%, #000 100%);
+  pointer-events: none;
+}
+
+body.home-v2 .hero-inner { max-width: 720px; }
+
+body.home-v2 .hero-eyebrow {
+  gap: 9px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-bottom: 18px;
+  font-family: var(--f-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--c-brand);
+}
+body.home-v2 .eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--c-brand);
+  box-shadow: 0 0 0 3px rgba(91, 75, 214, .12);
+  animation: none;
+}
+
+body.home-v2 .hero-title {
+  font-family: var(--f-sans);
+  font-size: clamp(2.2rem, 4.7vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.034em;
+  color: var(--c-ink);
+  margin: 0 0 16px;
+  text-wrap: balance;
+  font-feature-settings: "ss01", "cv11";
+}
+body.home-v2 .hero-accent { color: var(--c-brand); }
+body.home-v2 .hero-accent::after { display: none; }
+
+body.home-v2 .hero-sub {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--c-body);
+  max-width: 33em;
+  margin: 0 auto 32px;
+  text-wrap: pretty;
+}
+
+/* ── Search — treated as the product's core control ── */
+body.home-v2 .home-search-bar {
+  max-width: 620px;
+  margin: 0 auto 22px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-input);
+  box-shadow: var(--sh-sm);
+  padding: 6px;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+body.home-v2 .home-search-bar:hover {
+  border-color: #C6C1B8;
+  box-shadow: var(--sh-md);
+}
+body.home-v2 .home-search-bar:focus-within {
+  border-color: var(--c-brand);
+  box-shadow: var(--ring), var(--sh-sm);
+}
+body.home-v2 .search-input-wrap { padding: 0 6px 0 17px; gap: 12px; }
+body.home-v2 .search-icon {
+  color: var(--c-muted);
+  stroke-width: 2.2;
+  transition: color var(--t);
+}
+body.home-v2 .home-search-bar:focus-within .search-icon { color: var(--c-brand); }
+body.home-v2 .home-search-bar input {
+  font-family: var(--f-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: var(--c-ink);
+  caret-color: var(--c-brand);
+  padding: 16px 0;
+}
+body.home-v2 .home-search-bar input::placeholder {
+  color: var(--c-muted);
+  opacity: 1;
+  font-weight: 400;
+}
+body.home-v2 .home-search-bar input::placeholder {
+  color: var(--c-muted);
+  font-weight: 400;
+}
+body.home-v2 .home-search-bar button {
+  padding: 15px 28px;
+  background: var(--c-brand);
+  color: var(--c-on-brand);
+  font-family: var(--f-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(91, 75, 214, .3);
+  transition: background var(--t), box-shadow var(--t), transform var(--t);
+}
+body.home-v2 .home-search-bar button:hover {
+  background: var(--c-brand-strong);
+  box-shadow: 0 4px 12px -4px rgba(91, 75, 214, .5);
+}
+
+/* ── Hero actions — one solid, one outlined ── */
+body.home-v2 .hero-actions { gap: 12px; margin-bottom: 40px; }
+body.home-v2 .hero-btn-primary {
+  padding: 14px 28px;
+  background: var(--c-ink);
+  color: #FFFFFF;
+  border: 1px solid var(--c-ink);
+  border-radius: var(--r-btn);
+  font-family: var(--f-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  box-shadow: var(--sh-xs);
+  transition: background var(--t), transform var(--t), box-shadow var(--t);
+}
+body.home-v2 .hero-btn-primary:hover {
+  background: #262A35;
+  transform: translateY(-2px);
+  box-shadow: var(--sh-md);
+}
+body.home-v2 .hero-btn-ghost {
+  padding: 14px 28px;
+  background: var(--c-surface);
+  color: var(--c-ink);
+  border: 1px solid var(--c-line-2);
+  border-radius: var(--r-btn);
+  font-family: var(--f-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  box-shadow: var(--sh-xs);
+  transition: background var(--t), border-color var(--t), transform var(--t), box-shadow var(--t);
+}
+body.home-v2 .hero-btn-ghost:hover {
+  background: var(--c-surface);
+  border-color: #BFB9AF;
+  color: var(--c-ink);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-md);
+}
+
+/* ── Stats ── */
+body.home-v2 .hero-stats {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-card);
+  padding: 17px 8px;
+  box-shadow: var(--sh-xs);
+}
+body.home-v2 .stat-item { padding: 0 26px; }
+body.home-v2 .stat-num {
+  font-family: var(--f-sans);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+body.home-v2 .stat-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--c-muted);
+  margin-top: 5px;
+}
+body.home-v2 .stat-divider { background: var(--c-line); height: 32px; }
+
+
+/* ============================================================
+   8. SECTIONS & HEADINGS
+   ------------------------------------------------------------
+   One heading system, used everywhere, with no decoration.
+   ============================================================ */
+
+body.home-v2 .home-section {
+  padding: var(--section-y) var(--gutter);
+  max-width: 1140px;
+}
+/* The tinted band carries a soft light-fall at its top edge so the tonal
+   change reads as depth rather than as a flat colour swap. */
+body.home-v2 .home-section-alt {
+  max-width: 100%;
+  background-color: var(--c-surface-2);
+  background-image: linear-gradient(180deg, #FAF9F6 0%, var(--c-surface-2) 150px);
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+}
+body.home-v2 .home-section-alt > * { max-width: 1084px; }
+
+body.home-v2 .section-header { margin-bottom: 36px; gap: 24px; }
+
+/* Each section opens with the same brand dot the hero opens with — one
+   small repeated mark that stitches the page together and tells you
+   where a new chapter starts. */
+body.home-v2 .section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--f-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--c-brand);
+  margin-bottom: 8px;
+}
+body.home-v2 .section-eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(91, 75, 214, .12);
+  flex-shrink: 0;
+}
+body.home-v2 .section-header.centered .section-eyebrow { justify-content: center; }
+/* The tinted band is the page's middle chapter — it earns a little more air. */
+body.home-v2 .home-section-alt { padding-block: calc(var(--section-y) + 8px); }
+
+body.home-v2 .section-title {
+  font-family: var(--f-sans);
+  font-size: clamp(1.55rem, 2.7vw, 2.05rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: var(--c-ink);
+  max-width: 20ch;
+}
+body.home-v2 .section-header.centered .section-title { max-width: 24ch; margin-inline: auto; }
+
+/* A text link, not a button — it is a secondary path */
+body.home-v2 .section-link {
+  gap: 6px;
+  font-family: var(--f-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--c-brand);
+  padding: 0 0 2px;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t), color var(--t);
+}
+body.home-v2 .section-link:hover {
+  color: var(--c-brand-strong);
+  border-bottom-color: var(--c-brand-line);
+}
+body.home-v2 .section-link svg { transition: transform var(--t); }
+body.home-v2 .section-link:hover svg { transform: translateX(2px); }
+
+
+/* ============================================================
+   9. FEATURED SERVICES  — one card style, no variation games
+   ============================================================ */
+
+body.home-v2 .featured-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+body.home-v2 .featured-grid .listing-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-card);
+  box-shadow: var(--sh-xs);
+  transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+body.home-v2 .featured-grid .listing-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-line-2);
+  box-shadow: var(--sh-lift);
+}
+
+body.home-v2 .featured-grid .c-img-wrap {
+  height: 168px;
+  overflow: hidden;
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-line-soft);
+}
+body.home-v2 .featured-grid .c-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--t-slow);
+}
+body.home-v2 .featured-grid .listing-card:hover .c-img { transform: scale(1.04); }
+body.home-v2 .featured-grid .c-img-placeholder { height: 168px; background: var(--c-surface-2); }
+body.home-v2 .c-img-placeholder::after { color: var(--c-muted); font-size: 0.8125rem; font-weight: 400; }
+
+body.home-v2 .c-card-body { padding: 18px 18px 16px; }
+
+body.home-v2 .c-type-pill {
+  font-family: var(--f-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: none;
+  padding: 3px 9px;
+  border-radius: var(--r-chip);
+  margin-bottom: 10px;
+}
+body.home-v2 .c-type-pill.paid { background: var(--c-brand-tint);  color: var(--c-brand-strong); }
+body.home-v2 .c-type-pill.free { background: var(--c-accent-tint); color: var(--c-accent); }
+
+body.home-v2 .featured-grid .c-name {
+  font-family: var(--f-sans);
+  font-size: 1.075rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.32;
+  color: var(--c-ink);
+  margin-bottom: 6px;
+}
+body.home-v2 .featured-grid .c-loc {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--c-muted);
+}
+
+body.home-v2 .c-card-footer {
+  padding: 14px 18px 16px;
+  border-top: 1px solid var(--c-line-soft);
+}
+body.home-v2 .c-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--c-line);
+  color: var(--c-ink);
+  border-radius: 10px;
+  font-family: var(--f-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background var(--t), border-color var(--t), color var(--t);
+}
+/* A small arrow that steps forward with the card — an affordance, not an ornament */
+body.home-v2 .c-view-btn::after {
+  content: "";
+  width: 13px;
+  height: 13px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--t);
+}
+body.home-v2 .featured-grid .listing-card:hover .c-view-btn::after { transform: translateX(2px); }
+body.home-v2 .featured-grid .listing-card:hover .c-view-btn,
+body.home-v2 .c-view-btn:hover {
+  background: var(--c-brand);
+  border-color: var(--c-brand);
+  color: var(--c-on-brand);
+}
+
+/* Loading + empty */
+body.home-v2 .featured-grid .skeleton-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-card);
+  box-shadow: none;
+  padding: 18px;
+  min-height: 200px;
+}
+body.home-v2 .featured-grid .skeleton-line {
+  background: var(--c-surface-2);
+  border-radius: 6px;
+}
+/* A compact, deliberately-composed component: icon on the left, two lines
+   of copy on the right, the whole group optically centred in the grid. It
+   reads as a designed "nothing here yet" rather than an empty database
+   response. The section header already carries "View all", so the empty
+   state does not repeat that call to action. */
+body.home-v2 .empty-state {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto minmax(0, auto);
+  justify-content: center;
+  align-items: center;
+  gap: 2px 16px;
+  text-align: left;
+  background: var(--c-page);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-card);
+  padding: 26px 28px;
+}
+body.home-v2 .empty-state::before {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: var(--c-brand);
+  background-image: none;
+  border: none;
+  margin-bottom: 0;
+  -webkit-mask-size: 52%;
+  mask-size: 52%;
+  opacity: .5;
+}
+body.home-v2 .empty-state h3 {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  font-family: var(--f-sans);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.3;
+  color: var(--c-ink);
+  margin: 0;
+}
+body.home-v2 .empty-state p {
+  grid-column: 2;
+  grid-row: 2;
+  align-self: start;
+  color: var(--c-muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  max-width: 42ch;
+  margin: 0;
+}
+
+
+/* ============================================================
+   10. LISTING TYPES  — a clean comparison, not three posters
+   ============================================================ */
+
+body.home-v2 .listing-types-grid { gap: 24px; }
+
+body.home-v2 .lt-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-top: 2px solid var(--c-line-2);
+  border-radius: var(--r-card);
+  padding: 30px 28px;
+  box-shadow: var(--sh-xs);
+  transition: transform var(--t), box-shadow var(--t), border-color var(--t);
+}
+/* The plan's colour lives in one 2px edge — enough to tell them apart,
+   not enough to turn the card into a poster. */
+body.home-v2 .lt-paid   { border-top-color: var(--c-brand); }
+body.home-v2 .lt-free   { border-top-color: var(--c-accent); }
+body.home-v2 .lt-coming { border-top-color: var(--c-line-2); background: var(--c-surface); }
+
+body.home-v2 .lt-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-line-2);
+  box-shadow: var(--sh-lift);
+}
+body.home-v2 .lt-paid:hover { border-top-color: var(--c-brand); }
+body.home-v2 .lt-free:hover { border-top-color: var(--c-accent); }
+body.home-v2 .lt-coming {
+  cursor: default;
+  background: var(--c-page);
+}
+body.home-v2 .lt-coming:hover {
+  transform: none;
+  box-shadow: var(--sh-xs);
+  border-color: var(--c-line);
+  border-top-color: var(--c-line-2);
+}
+body.home-v2 .lt-coming h3 { color: var(--c-ink-2); }
+
+/* Only the two real destinations get the "go" affordance */
+body.home-v2 a.lt-card { position: relative; }
+body.home-v2 a.lt-card::after {
+  content: "";
+  position: absolute;
+  right: 26px;
+  bottom: 35px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--c-muted);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity var(--t), transform var(--t), background-color var(--t);
+}
+body.home-v2 a.lt-card:hover::after { opacity: 1; transform: translateX(0); }
+body.home-v2 a.lt-paid:hover::after { background-color: var(--c-brand); }
+body.home-v2 a.lt-free:hover::after { background-color: var(--c-accent); }
+
+body.home-v2 .lt-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 0 1px rgba(22, 24, 31, .04);
+  transition: transform var(--t);
+}
+body.home-v2 .lt-card:hover .lt-icon { transform: translateY(-1px); }
+body.home-v2 .lt-coming:hover .lt-icon { transform: none; }
+/* Icon colour is the only difference between plans */
+body.home-v2 .lt-paid .lt-icon   { background: var(--c-brand-tint);  color: var(--c-brand); }
+body.home-v2 .lt-free .lt-icon   { background: var(--c-accent-tint); color: var(--c-accent); }
+body.home-v2 .lt-coming .lt-icon { background: var(--c-surface-2);   color: var(--c-muted); }
+body.home-v2 .lt-icon svg { width: 22px; height: 22px; stroke-width: 1.75; }
+
+body.home-v2 .lt-card h3 {
+  font-family: var(--f-sans);
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--c-ink);
+  margin-bottom: 8px;
+}
+body.home-v2 .lt-card p {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--c-muted);
+  max-width: 34ch;
+  margin-bottom: 22px;
+}
+body.home-v2 .lt-coming h3 { color: var(--c-ink); }
+
+body.home-v2 .lt-tag {
+  font-family: var(--f-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 5px 11px;
+  border-radius: var(--r-chip);
+}
+body.home-v2 .lt-paid .lt-tag { background: var(--c-brand-tint);  color: var(--c-brand-strong); }
+body.home-v2 .lt-free .lt-tag { background: var(--c-accent-tint); color: var(--c-accent); }
+body.home-v2 .lt-coming-tag   { background: var(--c-surface-2);   color: var(--c-muted); border: 1px solid var(--c-line); }
+
+
+/* ============================================================
+   11. WHY CHOOSE US  — 2 × 2, one card style
+   ============================================================ */
+
+body.home-v2 .why-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+body.home-v2 .why-card {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-card);
+  padding: 28px 26px;
+  box-shadow: var(--sh-xs);
+  transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+}
+body.home-v2 .why-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-line-2);
+  box-shadow: var(--sh-md);
+}
+
+body.home-v2 .why-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--c-brand-tint);
+  color: var(--c-brand);
+  margin-bottom: 18px;
+  box-shadow: inset 0 0 0 1px rgba(91, 75, 214, .08);
+  transition: transform var(--t), box-shadow var(--t), background var(--t), color var(--t);
+}
+body.home-v2 .why-card:hover .why-icon {
+  transform: translateY(-1px);
+  background: #E8E4FB;
+  color: var(--c-brand-strong);
+  box-shadow: inset 0 0 0 1px rgba(91, 75, 214, .18);
+}
+body.home-v2 .why-icon svg { width: 22px; height: 22px; stroke-width: 1.75; }
+
+body.home-v2 .why-card h4 {
+  font-family: var(--f-sans);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  color: var(--c-ink);
+  margin-bottom: 7px;
+}
+body.home-v2 .why-card p {
+  font-size: 0.9375rem;
+  line-height: 1.62;
+  color: var(--c-muted);
+  max-width: 36ch;
+}
+
+
+/* ============================================================
+   12. GET LISTED / CTA
+   ------------------------------------------------------------
+   The one saturated moment on the page, at the point of
+   conversion. Flat brand colour — no gradient.
+   ============================================================ */
+
+/* The CTA carries the same street-plan motif as the hero, inverted. That
+   repetition is what makes it read as *this* product's closing statement
+   rather than a purple rectangle — no new shapes, no new colours. */
+body.home-v2 .home-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: var(--c-brand);
+  background-image:
+    radial-gradient(900px 420px at 50% -20%, rgba(255, 255, 255, .10) 0%, transparent 72%),
+    linear-gradient(180deg, rgba(255, 255, 255, .035) 0%, transparent 45%, rgba(22, 24, 31, .07) 100%);
+  padding: clamp(58px, 6.6vw, 84px) var(--gutter);
+}
+/* A single hairline of light along the top edge — the band reads as a
+   surface rather than a printed rectangle. */
+body.home-v2 .home-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: rgba(255, 255, 255, .16);
+  z-index: 1;
+  pointer-events: none;
+}
+body.home-v2 .home-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1440' height='520' viewBox='0 0 1440 520' fill='none'%3E%3Cg stroke='%23FFFFFF' stroke-opacity='.075' stroke-width='1'%3E%3Cpath d='M0 88H1440M0 196H1440M0 300H1440M0 404H1440'/%3E%3Cpath d='M168 0V520M372 0V520M540 0V520M720 0V520M900 0V520M1084 0V520M1288 0V520'/%3E%3C/g%3E%3Cg fill='none' stroke='%23FFFFFF' stroke-opacity='.16'%3E%3Ccircle cx='372' cy='196' r='13'/%3E%3Ccircle cx='1084' cy='300' r='13'/%3E%3Ccircle cx='168' cy='404' r='9'/%3E%3C/g%3E%3Cg stroke='none' fill='%23FFFFFF' fill-opacity='.20'%3E%3Ccircle cx='372' cy='196' r='3.5'/%3E%3Ccircle cx='1084' cy='300' r='3.5'/%3E%3Ccircle cx='168' cy='404' r='2.5'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse 48% 62% at 50% 50%, transparent 0%, transparent 38%, #000 100%);
+  mask-image: radial-gradient(ellipse 48% 62% at 50% 50%, transparent 0%, transparent 38%, #000 100%);
+  pointer-events: none;
+}
+/* Content must sit above the motif — .home-cta-inner is otherwise static
+   and would be painted under the absolutely-positioned ::after. */
+body.home-v2 .home-cta-inner { position: relative; z-index: 2; max-width: 640px; }
+body.home-v2 .home-cta h2 {
+  font-family: var(--f-sans);
+  font-size: clamp(1.65rem, 3.1vw, 2.15rem);
+  font-weight: 700;
+  letter-spacing: -0.032em;
+  line-height: 1.16;
+  color: #FFFFFF;
+  margin-bottom: 12px;
+  text-wrap: balance;
+}
+body.home-v2 .home-cta p {
+  color: rgba(255, 255, 255, .84);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  max-width: 34em;
+  margin: 0 auto 30px;
+}
+body.home-v2 .cta-btn {
+  padding: 15px 32px;
+  background: #FFFFFF;
+  color: var(--c-brand-strong);
+  border-radius: var(--r-btn);
+  font-family: var(--f-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  box-shadow: 0 1px 2px rgba(22, 24, 31, .12);
+  transition: background var(--t), transform var(--t), box-shadow var(--t);
+}
+body.home-v2 .cta-btn:hover {
+  background: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -8px rgba(22, 24, 31, .3);
+}
+
+
+/* ============================================================
+   13. FOOTER  — a light, quiet ending
+   ============================================================ */
+
+body.home-v2 .footer {
+  background: var(--c-surface);
+  border-top: 1px solid var(--c-line);
+  color: var(--c-muted);
+  padding: 0;
+}
+/* The flex "space-between" left ~470px of dead air between the brand and
+   two narrow link columns. A two-track grid with the link block spread
+   across its own half puts the columns on a real rhythm and squares the
+   footer with the 1140px content width used everywhere above. */
+body.home-v2 .footer-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(0, 1fr));
+  align-items: start;
+  max-width: 1140px;
+  padding: 60px var(--gutter) 44px;
+  gap: clamp(40px, 6vw, 88px);
+  text-align: left;
+}
+/* The two link columns become direct grid tracks, so the footer is laid out
+   on one rhythm across the full width instead of a brand block and a small
+   cluster marooned at the far right. */
+body.home-v2 .footer-links { display: contents; }
+
+body.home-v2 .footer-brand { max-width: 340px; }
+body.home-v2 .footer-logo {
+  font-family: var(--f-sans);
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--c-ink);
+  margin-bottom: 10px;
+}
+body.home-v2 .footer-tagline {
+  color: var(--c-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+body.home-v2 .footer-col { gap: 12px; }
+body.home-v2 .footer-col h5 {
+  font-family: var(--f-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--c-ink);
+  margin-bottom: 4px;
+}
+body.home-v2 .footer-col a {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--c-muted);
+  width: fit-content;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: color var(--t), text-decoration-color var(--t);
+}
+body.home-v2 .footer-col a:hover {
+  color: var(--c-ink);
+  text-decoration-color: var(--c-line-2);
+}
+
+body.home-v2 .social-links { gap: 10px; justify-content: flex-start; margin-top: 0; }
+body.home-v2 .social-links a {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink-2);
+  box-shadow: var(--sh-xs);
+  transition: background var(--t), border-color var(--t), color var(--t), transform var(--t), box-shadow var(--t);
+}
+body.home-v2 .social-links a:hover {
+  background: var(--c-brand-tint);
+  border-color: var(--c-brand-line);
+  color: var(--c-brand-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--sh-sm);
+}
+body.home-v2 .social-links a:active { transform: translateY(0); }
+/* Recolour the inline marks without breaking their fill/stroke mix */
+body.home-v2 .social-links a svg[fill="white"] path   { fill: currentColor; }
+body.home-v2 .social-links a svg[stroke="white"]      { stroke: currentColor; }
+body.home-v2 .social-links a svg circle[fill="white"] { fill: currentColor; }
+body.home-v2 .social-links a svg { width: 17px; height: 17px; }
+
+body.home-v2 .footer-bottom {
+  border-top: 1px solid var(--c-line);
+  color: var(--c-muted);
+  font-size: 0.875rem;
+  text-align: left;
+  padding: 22px var(--gutter) 26px;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+body.home-v2 .footer-bottom p { margin: 0; }
+
+
+/* ============================================================
+   14. POPUP
+   ============================================================ */
+
+body.home-v2 .popup-overlay { background: rgba(22, 24, 31, .5); backdrop-filter: blur(3px); }
+body.home-v2 .popup-box {
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-panel);
+  padding: 34px 30px 30px;
+  max-width: 380px;
+  color: var(--c-ink-2);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: 0 20px 50px -20px rgba(22, 24, 31, .4);
+}
+body.home-v2 .popup-box h2 {
+  font-family: var(--f-sans);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--c-ink);
+  margin: 0 0 10px;
+}
+body.home-v2 .popup-box p {
+  color: var(--c-muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: 0;
+}
+body.home-v2 .close-btn {
+  color: var(--c-muted);
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  line-height: 1;
+  transition: background var(--t), color var(--t);
+}
+body.home-v2 .close-btn:hover { background: var(--c-surface-2); color: var(--c-ink); }
+body.home-v2 .popup-btn {
+  margin-top: 22px;
+  padding: 12px 26px;
+  background: var(--c-brand);
+  color: var(--c-on-brand);
+  font-family: var(--f-sans);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: var(--r-btn);
+  transition: background var(--t);
+}
+body.home-v2 .popup-btn:hover {
+  background: var(--c-brand-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -4px rgba(91, 75, 214, .5);
+}
+
+
+/* ============================================================
+   15. ENTRANCE ANIMATION
+   ------------------------------------------------------------
+   AOS is already on the page; this only makes it gentler.
+   ============================================================ */
+
+body.home-v2 [data-aos] {
+  transition-duration: .5s !important;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1) !important;
+}
+body.home-v2 [data-aos="fade-up"] { transform: translate3d(0, 16px, 0); }
+body.home-v2 [data-aos="fade-up"].aos-animate { transform: translate3d(0, 0, 0); }
+
+
+/* ============================================================
+   16. RESPONSIVE
+   ------------------------------------------------------------
+   The same composition at every width, re-proportioned. These
+   blocks also re-assert main.css's mobile rules, which this
+   higher-specificity layer would otherwise override.
+   ============================================================ */
+
+/* ── ≤ 1024px ── */
+@media (max-width: 1024px) {
+  body.home-v2 .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── ≤ 768px ── */
+@media (max-width: 768px) {
+  body.home-v2 .navbar { height: 62px; padding: 0 18px; }
+  body.home-v2 .logo-icon { width: 34px; height: 34px; border-radius: 9px; }
+  body.home-v2 .logo-word { font-size: 1.15rem; }
+
+  body.home-v2 .top-bar { font-size: 0.75rem; padding: 8px 14px; }
+
+  body.home-v2 .home-promo { padding: 22px 18px 0; }
+  body.home-v2 .promo-inner { padding: 6px; border-radius: var(--r-card); }
+  body.home-v2 .feat-carousel-arrow { width: 34px; height: 34px; font-size: 18px; }
+  body.home-v2 .feat-prev { left: 10px; }
+  body.home-v2 .feat-next { right: 10px; }
+  body.home-v2 .home-ticker { margin-top: 24px; }
+
+  body.home-v2 .hero-stats { padding: 14px 4px; }
+  body.home-v2 .stat-item  { padding: 0 14px; }
+
+  body.home-v2 .listing-types-grid { grid-template-columns: 1fr; }
+  body.home-v2 .why-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  body.home-v2 .featured-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+
+  body.home-v2 .section-header { margin-bottom: 30px; gap: 16px; flex-wrap: wrap; }
+
+  body.home-v2 .footer-inner { grid-template-columns: 1fr; gap: 36px; padding: 44px 20px 32px; }
+  body.home-v2 .footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+  body.home-v2 .footer-brand { max-width: none; }
+}
+
+/* ── ≤ 600px : phones ── */
+@media (max-width: 600px) {
+  body.home-v2 .home-hero { padding: 44px 20px 48px; }
+  body.home-v2 .hero-eyebrow { font-size: 0.8125rem; margin-bottom: 14px; }
+  body.home-v2 .hero-title {
+    font-size: clamp(1.9rem, 8.2vw, 2.3rem);
+    line-height: 1.14;
+    letter-spacing: -0.03em;
+    max-width: 18ch;
+    margin-inline: auto;
+  }
+  body.home-v2 .hero-sub { font-size: 1rem; max-width: 30ch; margin-bottom: 26px; }
+  body.home-v2 .hero-bg-pattern {
+    background-image: radial-gradient(420px 240px at 50% -4%, rgba(91, 75, 214, .05) 0%, transparent 70%);
+  }
+  /* "cover" would crop the street plan into a few stray lines on a phone.
+     Pin it to a fixed scale instead so the geometry still reads. */
+  body.home-v2 .hero-bg-pattern::before {
+    background-size: 780px auto;
+    background-position: center 30%;
+    -webkit-mask-image: radial-gradient(ellipse 62% 46% at 50% 42%, transparent 0%, transparent 34%, #000 100%);
+    mask-image: radial-gradient(ellipse 62% 46% at 50% 42%, transparent 0%, transparent 34%, #000 100%);
+  }
+  body.home-v2 .section-title { max-width: 22ch; }
+  body.home-v2 a.lt-card::after { right: 22px; bottom: 31px; opacity: .5; transform: none; }
+
+  /* Search: full-width field over a full-width action */
+  body.home-v2 .home-search-bar {
+    flex-direction: column;
+    border-radius: var(--r-input);
+    padding: 6px;
+    gap: 6px;
+  }
+  body.home-v2 .search-input-wrap { padding: 2px 12px; }
+  body.home-v2 .home-search-bar input { padding: 13px 0; }
+  body.home-v2 .home-search-bar button {
+    width: 100%;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 14px 20px;
+  }
+
+  body.home-v2 .hero-actions { gap: 10px; margin-bottom: 34px; }
+  body.home-v2 .hero-btn-primary,
+  body.home-v2 .hero-btn-ghost { flex: 1 1 100%; text-align: center; padding: 14px 22px; }
+
+  /* Stats stay a single row — one three-part fact */
+  body.home-v2 .hero-stats { display: flex; flex-direction: row; width: 100%; padding: 14px 2px; }
+  body.home-v2 .stat-item { flex: 1; padding: 0 6px; }
+  body.home-v2 .stat-num { font-size: 1.15rem; }
+  body.home-v2 .stat-label { font-size: 0.75rem; }
+  body.home-v2 .stat-divider { width: 1px; height: 32px; }
+
+  body.home-v2 .home-section { padding: 48px 20px; }
+  body.home-v2 .home-section-alt { padding-block: 54px; }
+
+  /* One column: business cards deserve room */
+  body.home-v2 .featured-grid { grid-template-columns: 1fr; gap: 16px; }
+  body.home-v2 .featured-grid .c-img-wrap,
+  body.home-v2 .featured-grid .c-img-placeholder { height: 180px; }
+
+  body.home-v2 .why-grid { grid-template-columns: 1fr; gap: 14px; }
+  body.home-v2 .why-card { padding: 24px 22px; }
+  body.home-v2 .lt-card { padding: 26px 24px; }
+
+  body.home-v2 .home-cta { padding: 52px 20px; }
+  body.home-v2 .home-cta::after { background-size: 820px auto; }
+  body.home-v2 .cta-btn { width: 100%; text-align: center; }
+
+  body.home-v2 .footer-inner {
+    grid-template-columns: 1fr;
+    padding: 40px 20px 32px;
+    gap: 34px;
+  }
+  body.home-v2 .footer-brand { max-width: none; }
+  body.home-v2 .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+
+  body.home-v2 .empty-state { padding: 24px 20px; gap: 2px 14px; }
+  body.home-v2 .empty-state::before { width: 40px; height: 40px; }
+  body.home-v2 .empty-state p { font-size: 0.875rem; }
+  body.home-v2 .footer-bottom { text-align: center; padding: 18px 20px 24px; }
+}
+
+
+/* ============================================================
+   17. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  body.home-v2 .ticker-inner,
+  body.home-v2 .featured-grid .skeleton-line { animation: none !important; }
+
+  body.home-v2 .featured-grid .listing-card:hover,
+  body.home-v2 .lt-card:hover,
+  body.home-v2 .why-card:hover,
+  body.home-v2 .hero-btn-primary:hover,
+  body.home-v2 .hero-btn-ghost:hover,
+  body.home-v2 .cta-btn:hover { transform: none; }
+
+  body.home-v2 .featured-grid .listing-card:hover .c-img,
+  body.home-v2 .why-card:hover .why-icon,
+  body.home-v2 .lt-card:hover .lt-icon,
+  body.home-v2 .social-links a:hover,
+  body.home-v2 .nav-cta:hover,
+  body.home-v2 .logo:hover .logo-icon,
+  body.home-v2 .promote-btn:hover,
+  body.home-v2 .popup-btn:hover { transform: none; }
+
+  body.home-v2 [data-aos] { transition-duration: .01ms !important; }
+}

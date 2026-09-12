@@ -1,86 +1,103 @@
 /* ============================================================
    styles/theme.css
    Centralized design tokens for Vishvamitra
-   Brand refresh: "Fresh Canopy" — deep forest green + lime accent
+
+   Brand: Vishvamitra purple on warm neutrals.
+
+   This file is the single source of truth for colour, type,
+   radius, shadow, spacing and motion. There is no hard-coded
+   brand colour anywhere else in the codebase — if you need to
+   change how the product looks, change it here.
+
+   Palette discipline (roughly 75 / 20 / 5):
+     • neutrals carry the page
+     • purple marks the primary action and the brand
+     • green means "free / community" and nothing else
    ============================================================ */
 
 :root {
   /* ── Brand palette ───────────────────────────────────────── */
-  --color-primary:       #2D3E2C;
-  --color-primary-dark:  #233022;
-  --color-accent:        #D8F08C;
-  --color-text-dark:     #1E2A1C;
-  --color-bg:            #F7FAF5;
-  --color-border:        #D8E5D0;
+  --color-primary:       #5B4BD6;
+  --color-primary-dark:  #4737C0;
+  --color-accent:        #16794F;   /* secondary accent: "free" */
+  --color-text-dark:     #16181F;
+  --color-bg:            #FBFAF9;
+  --color-border:        #E7E4DF;
 
   /* RGB channels for rgba() */
-  --color-primary-rgb:   45, 62, 44;
-  --color-accent-rgb:    216, 240, 140;
-  --color-danger-rgb:    217, 83, 79;
-  --color-success-rgb:   79, 138, 69;
-  --color-premium-rgb:   183, 134, 42;
-  --color-premium-light-rgb: 232, 196, 104;
+  --color-primary-rgb:   91, 75, 214;
+  --color-accent-rgb:    22, 121, 79;
+  --color-danger-rgb:    193, 58, 51;
+  --color-success-rgb:   22, 121, 79;
+  --color-premium-rgb:   91, 75, 214;
+  --color-premium-light-rgb: 154, 140, 240;
 
   /* ── Semantic aliases ────────────────────────────────────── */
   --color-white:         #ffffff;
   --color-text:          var(--color-text-dark);
-  --color-muted:         #69756A;
-  --color-muted-light:   #99A695;
-  --color-danger:        #D9534F;
-  --color-warning:       #E7B23C;
+  --color-text-soft:     #4F5563;   /* lead paragraphs, card copy */
+  --color-muted:         #686D7B;
+  --color-muted-light:   #757B89;
+  --color-danger:        #C13A33;
+  --color-warning:       #A9760F;
   --color-on-primary:    #ffffff;
 
   /* ── Surfaces & layout ───────────────────────────────────── */
   --color-surface:       var(--color-white);
-  --color-surface-muted: #F1F5EC;
-  --color-navbar-border: #E7EFE1;
-  --color-input-bg:      var(--color-bg);
-  --color-input-border:  #C7D9BC;
+  --color-surface-muted: #F4F3F0;
+  --color-line-soft:     #EFEDE9;   /* dividers *inside* a surface */
+  --color-line-strong:   #D6D2CB;   /* hovered / emphasised edges */
+  --color-navbar-border: #E7E4DF;
+  --color-input-bg:      var(--color-white);
+  --color-input-border:  #D6D2CB;
 
   /* ── Primary derivatives (tints, hovers, focus) ───────────
-     Light/soft treatments lean on the lime accent so the brand's
-     "highlight" moments actually read as bright and premium,
-     while --color-primary itself stays a deep, trustworthy green. */
-  --color-primary-light:     #ECF6D2;
-  --color-primary-tint:      #F5FAEC;
-  --color-primary-hover-bg:  #EFF7DE;
-  --color-primary-border-soft: #CDE9A0;
-  --color-primary-border-muted: #E1F0C2;
+     Soft treatments are desaturated lilacs rather than a second
+     hue, so a tinted surface always reads as "the brand, quietly"
+     instead of as a new colour. */
+  --color-primary-light:     #E4DFFB;
+  --color-primary-tint:      #F1EFFD;
+  --color-primary-hover-bg:  #EAE6FC;
+  --color-primary-border-soft:  #C9C0F3;
+  --color-primary-border-muted: #DAD4F8;
   --color-primary-shadow:        rgba(var(--color-primary-rgb), 0.28);
   --color-primary-shadow-strong: rgba(var(--color-primary-rgb), 0.42);
-  --color-primary-focus:         rgba(var(--color-primary-rgb), 0.14);
-  --color-primary-focus-ring:    rgba(var(--color-primary-rgb), 0.16);
-  --color-primary-overlay:       rgba(var(--color-primary-rgb), 0.07);
+  --color-primary-focus:         rgba(var(--color-primary-rgb), 0.12);
+  --color-primary-focus-ring:    rgba(var(--color-primary-rgb), 0.14);
+  --color-primary-overlay:       rgba(var(--color-primary-rgb), 0.06);
 
-  /* ── Hero & marketing gradients ──────────────────────────── */
-  --color-hero-dark:     #233022;
-  --color-hero-mid:      var(--color-primary);
-  --color-hero-light:    #7FA36A;
-  --color-hero-accent-text: var(--color-accent);
-  --gradient-hero:       linear-gradient(135deg, var(--color-hero-dark) 0%, var(--color-primary) 55%, var(--color-hero-light) 100%);
-  --gradient-primary:    linear-gradient(145deg, var(--color-hero-light), var(--color-primary-dark));
-  --gradient-navbar-accent: linear-gradient(90deg, var(--color-primary), var(--color-hero-light));
-  --gradient-drawer-header: linear-gradient(135deg, var(--color-hero-dark), var(--color-primary));
-  --gradient-cta:        linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  --gradient-footer:     linear-gradient(135deg, #141C13, var(--color-primary-dark));
-  --gradient-festive:    linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  /* ── Page header band & brand surfaces ───────────────────────
+     "Gradient" here means a two-stop tonal shift of a few percent
+     — enough for a flat band to read as a lit surface, never
+     enough to read as decoration. */
+  --color-hero-dark:     #16181F;
+  --color-hero-mid:      #1D202B;
+  --color-hero-light:    #232634;
+  --color-hero-accent-text: #A99BF5;   /* brand accent on a dark band */
+  --gradient-hero:       linear-gradient(180deg, #232634 0%, #16181F 100%);
+  --gradient-primary:    linear-gradient(180deg, #6A5BDD 0%, var(--color-primary) 100%);
+  --gradient-navbar-accent: var(--color-primary);
+  --gradient-drawer-header: linear-gradient(180deg, #6A5BDD 0%, var(--color-primary) 100%);
+  --gradient-cta:        linear-gradient(180deg, #6152DC 0%, var(--color-primary) 100%);
+  --gradient-footer:     var(--color-white);
+  --gradient-festive:    var(--color-primary);
 
   /* ── Status & feedback ───────────────────────────────────── */
-  --color-success:        #4F8A45;
-  --color-success-dark:   #3D6C36;
-  --color-success-bg:     #E6F0E3;
-  --color-success-text:   #2C4A27;
-  --color-success-border: #C9DDC3;
+  --color-success:        #16794F;
+  --color-success-dark:   #11603E;
+  --color-success-bg:     #E8F3ED;
+  --color-success-text:   #0F5539;
+  --color-success-border: #BFDCCD;
 
-  --color-warning-dark:   #C6942A;
-  --color-warning-bg:     #FBF0D9;
-  --color-warning-text:   #7A5A14;
-  --color-warning-border: #F0D9A0;
+  --color-warning-dark:   #8A5F0B;
+  --color-warning-bg:     #FBF1DC;
+  --color-warning-text:   #6E4B08;
+  --color-warning-border: #EDD8A6;
 
-  --color-danger-dark:    #BC3F3B;
-  --color-danger-bg:      #FBE9E8;
-  --color-danger-text:    #8C2E2B;
-  --color-danger-border:  #F0C6C4;
+  --color-danger-dark:    #A32F29;
+  --color-danger-bg:      #FBEAE9;
+  --color-danger-text:    #8A2A24;
+  --color-danger-border:  #F0C8C5;
 
   /* Error is the same semantic red as danger — aliased so both
      naming conventions used around the codebase stay in sync. */
@@ -89,28 +106,27 @@
   --color-error-text:     var(--color-danger-text);
   --color-error-border:   var(--color-danger-border);
 
-  --color-info:           #2563EB;
-  --color-info-bg:        #E8F0FE;
-  --color-info-text:      #1E3A78;
-  --color-info-border:    #C3D9F7;
+  --color-info:           #3355C7;
+  --color-info-bg:        #ECEFFB;
+  --color-info-text:      #22398A;
+  --color-info-border:    #C8D3F2;
 
   /* ── Accent derivatives ──────────────────────────────────── */
-  --color-accent-hover:  #CDEB72;
+  --color-accent-hover:  #11603E;
   --color-accent-dark:   var(--color-accent-hover);
-  --color-accent-bg:     #F3FAE0;
-  --color-accent-border: #E5F2B8;
-  --color-accent-text:   var(--color-text-dark);
+  --color-accent-bg:     #E8F3ED;
+  --color-accent-border: #BFDCCD;
+  --color-accent-text:   var(--color-accent);
 
-  /* ── Premium / paid-tier accent (gold) ─────────────────────
-     Kept deliberately separate from the brand accent: gold reads
-     universally as "paid/premium tier" and stays legible against
-     both light and dark surfaces without competing with the lime
-     brand highlight. */
-  --color-premium:        #B7862A;
-  --color-premium-dark:   #8A6412;
-  --color-premium-light:  #E8C468;
-  --color-premium-bg:     #FBF3DE;
-  --color-premium-border: #EEDCA0;
+  /* ── Premium / paid-tier accent ────────────────────────────
+     Paid placement is a brand feature, so it wears the brand
+     colour. Keeping a separate gold here only added a third hue
+     that competed with the purple for the same meaning. */
+  --color-premium:        #5B4BD6;
+  --color-premium-dark:   #4737C0;
+  --color-premium-light:  #9A8CF0;
+  --color-premium-bg:     #F1EFFD;
+  --color-premium-border: #DAD4F8;
 
   /* ── Categorical tags ───────────────────────────────────────
      A small, muted qualitative palette for telling item "types"
@@ -121,38 +137,48 @@
   --color-tag-sky:       #3E8FBF;
   --color-tag-teal:      #3E7D74;
 
-  /* ── Shadows & radius ────────────────────────────────────── */
-  --shadow-sm:           0 1px 3px rgba(30, 42, 28, 0.06), 0 1px 2px rgba(30, 42, 28, 0.04);
-  --shadow-md:           0 6px 16px rgba(30, 42, 28, 0.07), 0 2px 6px rgba(30, 42, 28, 0.04);
-  --shadow-lg:           0 16px 40px rgba(30, 42, 28, 0.10), 0 4px 10px rgba(30, 42, 28, 0.05);
-  --shadow-card-hover:   0 20px 48px rgba(30, 42, 28, 0.13);
+  /* ── Shadows & radius ─────────────────────────────────────
+     Every level is layered: a tight contact shadow plus a wider
+     ambient one. That is what makes a card read as sitting on
+     the page rather than printed onto it. */
+  --shadow-xs:           0 1px 2px rgba(22, 24, 31, 0.05);
+  --shadow-sm:           0 1px 2px rgba(22, 24, 31, 0.05),
+                         0 2px 6px -2px rgba(22, 24, 31, 0.06);
+  --shadow-md:           0 1px 2px rgba(22, 24, 31, 0.05),
+                         0 2px 6px -2px rgba(22, 24, 31, 0.06),
+                         0 8px 20px -8px rgba(22, 24, 31, 0.12);
+  --shadow-lg:           0 2px 4px rgba(22, 24, 31, 0.05),
+                         0 14px 30px -12px rgba(22, 24, 31, 0.18);
+  --shadow-card-hover:   var(--shadow-lg);
+
   --radius-sm:           10px;
-  --radius-md:           14px;
-  --radius-lg:           18px;
-  --radius-xl:           24px;
+  --radius-md:           12px;
+  --radius-lg:           16px;
+  --radius-xl:           20px;
   --radius-full:         9999px;
-  --transition:          0.2s ease;
-  --transition-slow:     0.3s ease;
+
+  --transition:          180ms cubic-bezier(.4, 0, .2, 1);
+  --transition-slow:     260ms cubic-bezier(.4, 0, .2, 1);
 
   /* ── Typography ──────────────────────────────────────────── */
-  --font-sans:           'Poppins', system-ui, -apple-system, sans-serif;
-  --font-display:        'Plus Jakarta Sans', var(--font-sans);
+  --font-sans:           'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display:        var(--font-sans);
   --text-xs:             0.75rem;
   --text-sm:             0.875rem;
   --text-base:           1rem;
   --text-lg:             1.125rem;
   --text-xl:             1.25rem;
   --text-2xl:            1.5rem;
-  --text-3xl:            clamp(1.75rem, 4vw, 2.25rem);
-  --leading-tight:       1.25;
-  --leading-normal:      1.55;
+  --text-3xl:            clamp(1.7rem, 3.6vw, 2.15rem);
+  --leading-tight:       1.2;
+  --leading-normal:      1.6;
   --leading-relaxed:     1.7;
-  --tracking-tight:      -0.02em;
-  --tracking-wide:       0.06em;
+  --tracking-tight:      -0.028em;
+  --tracking-wide:       0.04em;
   --weight-medium:       500;
   --weight-semibold:     600;
   --weight-bold:         700;
-  --weight-extrabold:    800;
+  --weight-extrabold:    700;
 
   /* ── Spacing scale ───────────────────────────────────────── */
   --space-1:             0.25rem;
@@ -165,20 +191,21 @@
   --space-10:            2.5rem;
   --space-12:            3rem;
   --space-16:            4rem;
-  --page-gutter:         clamp(1rem, 4vw, 1.5rem);
-  --section-y:           clamp(2.5rem, 6vw, 4rem);
+  --page-gutter:         clamp(1.25rem, 4vw, 1.75rem);
+  --section-y:           clamp(3.25rem, 6vw, 5.5rem);
+  --content-max:         1140px;
 
   /* ── Forms & buttons ─────────────────────────────────────── */
-  --input-height:        2.75rem;
-  --input-height-lg:     3rem;
-  --input-padding-x:     0.875rem;
-  --input-radius:        var(--radius-sm);
-  --input-border-width:  1.5px;
-  --btn-height:          2.75rem;
-  --btn-height-sm:       2.25rem;
-  --btn-padding-x:       1.25rem;
+  --input-height:        2.875rem;
+  --input-height-lg:     3.125rem;
+  --input-padding-x:     0.9375rem;
+  --input-radius:        var(--radius-md);
+  --input-border-width:  1px;
+  --btn-height:          2.875rem;
+  --btn-height-sm:       2.375rem;
+  --btn-padding-x:       1.375rem;
   --btn-padding-x-lg:    1.75rem;
-  --btn-radius:          var(--radius-sm);
+  --btn-radius:          var(--radius-md);
   --btn-font-size:       var(--text-sm);
   --btn-font-weight:     var(--weight-semibold);
 
