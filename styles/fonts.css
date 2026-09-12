@@ -2,6 +2,10 @@
    styles/fonts.css
    Single Google Fonts request (display=swap for CLS)
    Loaded via main.css — remove duplicate <link> tags from HTML.
+
+   One family across the whole product. Plus Jakarta Sans covers
+   display and body at 400–800, so a second family only cost a
+   request and made the pages disagree with each other.
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');

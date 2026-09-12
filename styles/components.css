@@ -27,14 +27,16 @@ h1, h2, h3, h4, h5, h6 {
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
   margin-top: 0;
+  text-wrap: balance;
 }
 
-h1 { font-size: var(--text-3xl); font-weight: var(--weight-extrabold); }
-h2 { font-size: var(--text-2xl); font-weight: var(--weight-bold); }
-h3 { font-size: var(--text-xl); font-weight: var(--weight-bold); }
-h4 { font-size: var(--text-lg); font-weight: var(--weight-semibold); }
+h1 { font-size: var(--text-3xl); font-weight: var(--weight-bold); }
+h2 { font-size: var(--text-2xl); font-weight: var(--weight-bold); letter-spacing: -0.03em; }
+h3 { font-size: var(--text-xl); font-weight: var(--weight-semibold); letter-spacing: -0.022em; }
+h4 { font-size: var(--text-lg); font-weight: var(--weight-semibold); letter-spacing: -0.018em; }
+h5, h6 { font-weight: var(--weight-semibold); letter-spacing: -0.01em; }
 
-p { margin-top: 0; margin-bottom: var(--space-4); }
+p { margin-top: 0; margin-bottom: var(--space-4); text-wrap: pretty; }
 
 .vm-label,
 label {
@@ -83,10 +85,18 @@ textarea,
 select {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B707E' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  padding-right: 2.25rem;
+  background-position: right 0.875rem center;
+  padding-right: 2.375rem;
+}
+
+/* A field should answer the pointer before it is even clicked. */
+.vm-input:hover:not(:focus):not(:disabled),
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="submit"]):not([type="button"]):hover:not(:focus):not(:disabled),
+select:hover:not(:focus):not(:disabled),
+textarea:hover:not(:focus):not(:disabled) {
+  border-color: var(--color-line-strong);
 }
 
 .vm-input:focus,
@@ -95,13 +105,20 @@ select:focus,
 textarea:focus {
   border-color: var(--color-primary);
   background: var(--color-white);
-  box-shadow: 0 0 0 3px var(--color-primary-focus);
+  box-shadow: 0 0 0 4px var(--color-primary-focus);
+}
+
+.vm-input,
+input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]):not([type="submit"]):not([type="button"]),
+textarea {
+  caret-color: var(--color-primary);
 }
 
 .vm-input::placeholder,
 input::placeholder,
 textarea::placeholder {
   color: var(--color-muted-light);
+  opacity: 1;
 }
 
 /* Composite search bars — inner inputs stay borderless */
@@ -213,10 +230,22 @@ textarea.error,
   box-sizing: border-box;
 }
 
+/* One press response for every button on the site. */
 .vm-btn:active:not(:disabled),
 .btn-primary:active:not(:disabled),
-.btn-submit:active:not(:disabled) {
-  transform: translateY(0);
+.btn-outline:active:not(:disabled),
+.btn-submit:active:not(:disabled),
+.google-btn:active:not(:disabled),
+.nav-cta:active,
+.sv-search-btn:active:not(:disabled),
+.sv-load-more-btn:active:not(:disabled),
+.adv-submit:active:not(:disabled),
+.ct-submit-btn:active:not(:disabled),
+.promote-btn:active,
+.rs-card-cta:active,
+.btn-view:active {
+  transform: translateY(0) scale(0.985);
+  transition-duration: 80ms;
 }
 
 .vm-btn--primary,
@@ -236,7 +265,8 @@ textarea.error,
   background: var(--color-primary);
   color: var(--color-on-primary);
   border-color: var(--color-primary);
-  box-shadow: 0 2px 8px var(--color-primary-shadow);
+  letter-spacing: -0.005em;
+  box-shadow: 0 1px 2px rgba(var(--color-primary-rgb), 0.30);
 }
 
 .vm-btn--primary:hover:not(:disabled),
@@ -255,7 +285,7 @@ textarea.error,
 .dashboard-buttons button:not(#homeBtn):hover {
   background: var(--color-primary-dark);
   border-color: var(--color-primary-dark);
-  box-shadow: 0 4px 14px var(--color-primary-shadow);
+  box-shadow: 0 4px 12px -4px rgba(var(--color-primary-rgb), 0.50);
   transform: translateY(-1px);
 }
 
@@ -266,16 +296,21 @@ textarea.error,
 .hero-btn-ghost {
   background: var(--color-white);
   color: var(--color-primary);
-  border-color: var(--color-primary);
+  border-color: var(--color-primary-border-soft);
+  box-shadow: var(--shadow-xs);
 }
 
+/* Deepen the tint rather than flooding the button — a secondary action
+   should stay secondary even while you are pointing at it. */
 .vm-btn--outline:hover:not(:disabled),
 .btn-outline:hover,
 .sv-load-more-btn:hover:not(:disabled),
 #homeBtn:hover,
 .hero-btn-ghost:hover {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
 
@@ -409,22 +444,25 @@ p.empty-state,
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: var(--space-12) var(--page-gutter);
+  padding: var(--space-8) var(--page-gutter);
   grid-column: 1 / -1;
   color: var(--color-muted);
-  gap: var(--space-3);
+  gap: var(--space-2);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--card-radius);
 }
 
 .empty-state::before,
 p.empty-state::before,
 .sv-empty::before {
   content: "";
-  width: 4rem;
-  height: 4rem;
-  border-radius: var(--radius-full);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
   background: var(--color-primary-tint);
   border: 1px solid var(--color-primary-border-muted);
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
   flex-shrink: 0;
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.5'%3E%3Cpath d='M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'/%3E%3C/svg%3E");
   mask-size: 50%;
@@ -434,7 +472,8 @@ p.empty-state::before,
   -webkit-mask-size: 50%;
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary);
+  opacity: 0.55;
 }
 
 .sv-empty::before {
@@ -446,8 +485,9 @@ p.empty-state::before,
 .sv-empty h3,
 .wip-page h1 {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.018em;
   color: var(--color-text-dark);
   margin: 0;
 }
@@ -457,9 +497,9 @@ p.empty-state::before,
 .wip-page p {
   font-size: var(--text-sm);
   color: var(--color-muted);
-  max-width: 22rem;
+  max-width: 30ch;
   margin: 0;
-  line-height: var(--leading-relaxed);
+  line-height: var(--leading-normal);
 }
 
 .empty-state .btn-primary,
@@ -474,12 +514,14 @@ p.empty-state::before,
 }
 
 .vm-inline-error {
-  color: var(--color-error);
+  color: var(--color-error-text);
   background: var(--color-error-bg);
-  border: 1px solid rgba(var(--color-danger-rgb), 0.2);
+  border: 1px solid var(--color-error-border);
   border-radius: var(--radius-md);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-5) var(--space-6);
 }
+.vm-inline-error h3 { color: var(--color-error-text); }
+.vm-inline-error p  { color: var(--color-error-text); opacity: .85; }
 
 .vm-inline-error::before {
   display: none;
@@ -498,7 +540,7 @@ p.empty-state::before,
 /* ── Auth & form panels ────────────────────────────────────── */
 .auth-container,
 .form-container {
-  padding: var(--space-8) var(--space-6);
+  padding: var(--space-10) var(--space-8);
   max-width: 28rem;
   margin: var(--space-12) auto;
 }
@@ -506,7 +548,8 @@ p.empty-state::before,
 .auth-container h2,
 .form-container h2 {
   font-size: var(--text-2xl);
-  font-weight: var(--weight-extrabold);
+  font-weight: var(--weight-bold);
+  letter-spacing: -0.03em;
   color: var(--color-text-dark);
   margin-bottom: var(--space-2);
 }
@@ -616,6 +659,15 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 .rs-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--btn-radius);
+}
+
+/* Links and any other interactive element share the same ring. */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }

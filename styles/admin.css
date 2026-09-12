@@ -166,7 +166,7 @@
   color: white;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-sans);
   font-size: .85rem;
   transition: background 0.2s;
 }
@@ -185,7 +185,7 @@
   padding: 7px 13px;
   border-radius: 6px;
   cursor: pointer;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-sans);
   font-size: .85rem;
   transition: background 0.2s;
 }
@@ -196,7 +196,7 @@
   padding: 7px 10px;
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* Empty state: see components.css */
