@@ -203,9 +203,9 @@
     let listing = null;
     let ad = null;
     try {
-      listing = await getListingById(itemId);
-      if (listing === null) {
-        ad = await getAdById(itemId);
+      ad = await getAdById(itemId);
+      if (ad === null) {
+        listing = await getListingById(itemId);
       }
     } catch (err) {
       reportError("listingDetails.fetch", err);
