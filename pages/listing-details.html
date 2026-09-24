@@ -41,7 +41,7 @@
 </div>
 
 <!-- MAIN AD DETAIL — reuses listing-details.html's .ld-* layout -->
-<article id="adWrap" style="display:none;">
+<article id="listingDetailWrap" style="display:none;">
 
   <!-- BANNER -->
   <div class="ld-banner">
@@ -170,7 +170,7 @@
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
 <script type="module">
-  import { getAdById }                from "../scripts/ads.js";
+  import { getAdById }                from "../scripts/spotlight.js";
   import { toUserMessage, showToast } from "../scripts/utils.js";
   import { reportError }              from "../scripts/core/errors.js";
   import {
@@ -182,7 +182,7 @@
   const params   = new URLSearchParams(location.search);
   const adId     = params.get("id");
   const skeleton = document.getElementById("skeletonWrap");
-  const wrap     = document.getElementById("adWrap");
+  const wrap     = document.getElementById("listingDetailWrap");
   const errWrap  = document.getElementById("errorWrap");
 
   const $ = id => document.getElementById(id);

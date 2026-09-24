@@ -3,7 +3,7 @@
  * Shared homepage / services ad carousel — admin + advertise.html submissions.
  */
 
-import { subscribeToActiveAds } from "./ads.js";
+import { subscribeToActiveAds } from "./spotlight.js";
 
 const DEFAULT_INTERVAL_MS = 4000;
 

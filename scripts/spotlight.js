@@ -1,5 +1,5 @@
 // ============================================================
-//  scripts/ads.js  (v1)
+//  scripts/spotlight.js  (v1)
 //
 //  All Firestore + Storage operations for the "ads" collection.
 //
@@ -36,7 +36,7 @@ const MAX_SIZE_MB = 20;
 /**
  * Fetch a single ad by Firestore doc ID (for listing-details.html).
  * Mirrors listings.js's getListingById — no caching here since
- * ads.js doesn't use the service-layer cache elsewhere.
+ * spotlight.js doesn't use the service-layer cache elsewhere.
  * @param {string} id
  * @returns {Promise<Object|null>}
  */

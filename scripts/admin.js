@@ -335,7 +335,7 @@ function cleanup() {
 
 import {
   subscribeToAllAds, addAd, setAdActive, deleteAd, updateAd
-} from "./ads.js";
+} from "./spotlight.js";
 
 let unsubAds   = null;
 let allAds     = [];

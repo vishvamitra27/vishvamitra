@@ -2,7 +2,7 @@
  * Render active ads as services-grid cards (same layout as listings).
  */
 
-import { subscribeToActiveAds } from "./ads.js";
+import { subscribeToActiveAds } from "./spotlight.js";
 
 const _preloaded = new Set();
 
