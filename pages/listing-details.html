@@ -41,7 +41,7 @@
 </div>
 
 <!-- MAIN AD DETAIL — reuses listing-details.html's .ld-* layout -->
-<article id="adWrap" style="display:none;">
+<article id="listingDetailWrap" style="display:none;">
 
   <!-- BANNER -->
   <div class="ld-banner">
@@ -98,7 +98,7 @@
         <div class="ld-sidebar-value" id="sideCategory"></div>
       </div>
       <div class="ld-sidebar-section">
-        <div class="ld-sidebar-label">Ad Type</div>
+        <div class="ld-sidebar-label" id="sideTypeLabel">Ad Type</div>
         <div class="ld-sidebar-value"><span class="ld-type-pill paid" id="sideTypePill"></span></div>
       </div>
       <div class="ld-sidebar-section">
@@ -157,7 +157,7 @@
 
 <!-- ERROR STATE -->
 <div id="errorWrap" style="display:none;" class="ld-error-wrap">
-  <p class="ld-error-msg">Advertisement not found or no longer active.</p>
+  <p class="ld-error-msg">Listing or advertisement not found or no longer active.</p>
   <a href="services.html" class="btn-primary">Browse Services</a>
 </div>
 
@@ -170,6 +170,7 @@
 <script type="module" src="../scripts/navbar.js"></script>
 <script type="module" src="../scripts/auth.js"></script>
 <script type="module">
+  import { getListingById }           from "../scripts/listings.js";
   import { getAdById }                from "../scripts/ads.js";
   import { toUserMessage, showToast } from "../scripts/utils.js";
   import { reportError }              from "../scripts/core/errors.js";
@@ -179,11 +180,11 @@
     absoluteAssetUrl,
   } from "../scripts/seo-config.js";
 
-  const params   = new URLSearchParams(location.search);
-  const adId     = params.get("id");
-  const skeleton = document.getElementById("skeletonWrap");
-  const wrap     = document.getElementById("adWrap");
-  const errWrap  = document.getElementById("errorWrap");
+  const params            = new URLSearchParams(location.search);
+  const itemId            = params.get("id");
+  const skeleton          = document.getElementById("skeletonWrap");
+  const listingDetailWrap = document.getElementById("listingDetailWrap");
+  const errWrap           = document.getElementById("errorWrap");
 
   const $ = id => document.getElementById(id);
   function txt(id, v) { const el = $(id); if (el) el.textContent = v; }
@@ -195,37 +196,76 @@
     return String(cat).replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
   }
 
-  if (!adId) {
+  if (!itemId) {
     hide(skeleton); show(errWrap);
     applyPageMeta({ robots: "noindex, nofollow" });
   } else {
+    let listing = null;
     let ad = null;
     try {
-      ad = await getAdById(adId);
+      listing = await getListingById(itemId);
+      if (listing === null) {
+        ad = await getAdById(itemId);
+      }
     } catch (err) {
-      reportError("adDetails.fetch", err);
+      reportError("listingDetails.fetch", err);
       showToast(toUserMessage(err), { kind: "error" });
     }
 
     hide(skeleton);
 
-    // Only reachable ads are ones that are currently active — matches
-    // listing-details.html's `status !== "active"` gate.
-    if (!ad || ad.active !== true) {
+    const isListing = listing !== null;
+    const isActive = isListing
+      ? listing.status === "active"
+      : ad?.active === true;
+
+    if (!isActive) {
       show(errWrap);
       applyPageMeta({ robots: "noindex, nofollow" });
     } else {
-      const businessName = String(ad.businessName || "").trim();
-      const title         = String(ad.title || "").trim();
-      const displayName   = businessName || title || "Featured Business";
+      const item = isListing
+        ? {
+            businessName: listing.name,
+            title: listing.location,
+            description: listing.description,
+            phone: listing.phone,
+            email: listing.email,
+            link: listing.website || listing.link,
+            category: listing.category,
+            url: listing.image,
+            mediaType: "image",
+            typeLabel: listing.type ? `${formatCategory(listing.type)} Listing` : "Listing",
+            bannerType: listing.type ? `${formatCategory(listing.type)} Listing` : "Service Listing",
+            fallbackName: "Service Listing",
+            fallbackDescription: "Service listing on Vishvamitra.",
+          }
+        : {
+            businessName: ad.businessName,
+            title: ad.title,
+            description: ad.description,
+            phone: ad.phone,
+            email: ad.email,
+            link: ad.link,
+            category: ad.category,
+            url: ad.url,
+            mediaType: ad.type,
+            typeLabel: ad.type === "video" ? "Video Ad" : ad.type === "text" ? "Text Ad" : "Image Ad",
+            bannerType: "Featured Business",
+            fallbackName: "Featured Business",
+            fallbackDescription: "Featured business spotlight on Vishvamitra.",
+          };
+
+      const businessName = String(item.businessName || "").trim();
+      const title         = String(item.title || "").trim();
+      const displayName   = businessName || title || item.fallbackName;
       const tagline       = businessName && title && businessName.toLowerCase() !== title.toLowerCase()
         ? title
         : "";
 
       const pageTitle = `${displayName} | Vishvamitra`;
-      const pageDesc  = (ad.description || `${displayName} — featured business spotlight on Vishvamitra.`).slice(0, 160);
-      const pageUrl   = canonicalUrl(`listing-details.html?id=${adId}`);
-      const ogImage   = ad.url || absoluteAssetUrl("/assets/images/banner.svg");
+      const pageDesc  = String(item.description || `${displayName} — ${item.fallbackDescription}`).slice(0, 160);
+      const pageUrl   = canonicalUrl(`listing-details.html?id=${itemId}`);
+      const ogImage   = item.url || absoluteAssetUrl("/assets/images/banner.svg");
 
       document.title = pageTitle;
       applyPageMeta({
@@ -237,79 +277,76 @@
         robots: "noindex, follow",
       });
 
+      txt("bannerType", item.bannerType);
       txt("bannerName", displayName);
 
       const taglineEl = $("bannerTagline");
       if (tagline) taglineEl.textContent = tagline; else hide(taglineEl);
 
-      if (ad.phone) txt("bannerPhone", ad.phone);
+      if (item.phone) txt("bannerPhone", item.phone);
       else hide($("bannerPhone"));
 
       const callBtn = $("callBtnBanner");
-      if (ad.phone) callBtn.href = `tel:${ad.phone}`;
+      if (item.phone) callBtn.href = `tel:${item.phone}`;
       else hide(callBtn);
 
       const visitBtn = $("visitBtnBanner");
-      if (ad.link) visitBtn.href = ad.link;
+      if (item.link) visitBtn.href = item.link;
       else hide(visitBtn);
 
-      // Banner background: image/video ads show their media;
-      // text ads fall back to the branded gradient (same fallback
-      // rule listing-details.html already uses for listings with no photo).
-      if (ad.url && ad.type !== "video") $("bannerBg").style.backgroundImage = `url('${ad.url}')`;
+      if (item.url && item.mediaType !== "video") $("bannerBg").style.backgroundImage = `url('${item.url}')`;
 
-      // Photo strip
       const strip = $("photoStrip");
-      if (ad.url && ad.type === "video") {
+      if (item.url && item.mediaType === "video") {
         strip.innerHTML = `
           <div class="ld-photo-item">
-            <video src="${ad.url}" style="height:120px;width:auto;max-width:220px;object-fit:cover;display:block;" muted playsinline controls></video>
+            <video src="${item.url}" style="height:120px;width:auto;max-width:220px;object-fit:cover;display:block;" muted playsinline controls></video>
           </div>`;
-      } else if (ad.url) {
+      } else if (item.url) {
         strip.innerHTML = `
           <div class="ld-photo-item">
-            <img src="${ad.url}" alt="${displayName}" loading="eager" fetchpriority="high" decoding="async"/>
+            <img src="${item.url}" alt="${displayName}" loading="eager" fetchpriority="high" decoding="async"/>
           </div>`;
       } else {
         strip.classList.add("empty");
       }
 
-      txt("sideCategory", formatCategory(ad.category));
-      const pill = $("sideTypePill");
-      pill.textContent = ad.type === "video" ? "Video Ad" : ad.type === "text" ? "Text Ad" : "Image Ad";
+      txt("sideCategory", formatCategory(item.category));
+      txt("sideTypeLabel", isListing ? "Listing Type" : "Ad Type");
+      txt("sideTypePill", item.typeLabel);
 
-      if (ad.phone) {
-        $("sidePhone").textContent = ad.phone;
-        $("sidePhone").href        = `tel:${ad.phone}`;
+      if (item.phone) {
+        $("sidePhone").textContent = item.phone;
+        $("sidePhone").href        = `tel:${item.phone}`;
       } else {
         hide($("sidePhoneSection"));
       }
 
-      txt("mainDesc", ad.description || "No description provided for this advertisement.");
+      txt("mainDesc", item.description || `No description provided for this ${isListing ? "listing" : "advertisement"}.`);
 
-      if (ad.phone) {
-        $("cPhone").textContent = ad.phone;
-        $("cPhone").href        = `tel:${ad.phone}`;
+      if (item.phone) {
+        $("cPhone").textContent = item.phone;
+        $("cPhone").href        = `tel:${item.phone}`;
       } else {
         hide($("cRowPhone"));
       }
 
-      if (ad.email) {
-        $("cEmail").textContent = ad.email;
-        $("cEmail").href        = `mailto:${ad.email}`;
+      if (item.email) {
+        $("cEmail").textContent = item.email;
+        $("cEmail").href        = `mailto:${item.email}`;
       } else {
         hide($("cRowEmail"));
       }
 
-      if (ad.link) {
-        $("cLink").href = ad.link;
+      if (item.link) {
+        $("cLink").href = item.link;
       } else {
         hide($("cRowLink"));
       }
 
-      txt("cCategory", formatCategory(ad.category));
+      txt("cCategory", formatCategory(item.category));
 
-      show(wrap);
+      show(listingDetailWrap);
     }
   }
 
